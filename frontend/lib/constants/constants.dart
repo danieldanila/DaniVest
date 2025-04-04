@@ -17,12 +17,34 @@ class Strings {
   static const String usernameFieldLabel = "Username";
   static const String usernameFieldHint = "Enter a username";
 
+  static const String emailFieldLabel = "Email";
+  static const String emailFieldHint = "Enter your email";
+
+  static const String firstNameFieldLabel = "First name";
+  static const String firstNameFieldHint = "Enter your first name";
+
+  static const String lastNameFieldLabel = "Last name";
+  static const String lastNameFieldHint = "Enter your last name";
+
+  static const String phoneNumberFieldLabel = "Phone number";
+  static const String phoneNumberFieldHint = "Enter your phone number";
+
+  static const String birthdateFieldLabel = "Birthdate";
+  static const String birthdateFieldHint = "Enter your birthdate";
+
+  static const String passwordFieldLabel = "Password";
+  static const String passwordFieldHint = "Enter a password";
+
+  static const String confirmPasswordFieldLabel = "Confirm Password";
+  static const String confirmPasswordFieldHint = "Enter again the password";
+
   static const String fieldRequired = "This field is required";
   static const String fieldWithoutSpaces =
       "This field must not contain any spaces";
   static const String fieldWithoutLeadingNumber =
       "This field must not start with a number";
-  static const String fieldMinimumLength = "This field has a minimum length of";
+  static const String fieldMinimumLength =
+      "This field must have a minimum length of";
 }
 
 class Properties {
