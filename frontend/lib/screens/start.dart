@@ -24,12 +24,14 @@ class StartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 50),
+        margin: const EdgeInsets.symmetric(
+          horizontal: constants.Properties.containerMargin,
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(constants.Strings.logoUrl),
-            const SizedBox(height: 50),
+            const SizedBox(height: constants.Properties.sizedBoxHeight),
             ElevatedButton(
               onPressed: () {
                 _navigateToLoginPage(context);
