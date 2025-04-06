@@ -25,7 +25,7 @@ class StartScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         margin: const EdgeInsets.symmetric(
-          horizontal: constants.Properties.containerMargin,
+          horizontal: constants.Properties.containerHorizontalMargin,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

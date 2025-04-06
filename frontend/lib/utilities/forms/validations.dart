@@ -1,4 +1,5 @@
 import 'package:frontend/constants/constants.dart' as constants;
+import 'package:frontend/utilities/forms/validators/string_validator.dart';
 
 class Validations {
   static String? fieldRequired(String? value) {
@@ -25,6 +26,29 @@ class Validations {
   static String? fieldMinimumLength(String value, int minimumLength) {
     if (value.length < minimumLength) {
       return "${constants.Strings.fieldMinimumLength} $minimumLength";
+    }
+    return null;
+  }
+
+  static String? fieldValidEmail(String value) {
+    if (!value.contains('@') ||
+        value.indexOf('@') == 0 ||
+        value.indexOf('@') == value.length - 1) {
+      return constants.Strings.fieldValidEmail;
+    }
+    return null;
+  }
+
+  static String? fieldWithLettersOnly(String value) {
+    if (!StringValidator.isName(value)) {
+      return constants.Strings.fieldValidName;
+    }
+    return null;
+  }
+
+  static String? fieldValidPhoneNumber(String value) {
+    if (!StringValidator.isPhoneNumber(value)) {
+      return constants.Strings.fieldValidPhoneNumber;
     }
     return null;
   }

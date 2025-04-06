@@ -38,6 +38,8 @@ class Strings {
   static const String confirmPasswordFieldLabel = "Confirm Password";
   static const String confirmPasswordFieldHint = "Enter again the password";
 
+  static const String alreadyHasAccount = "Already have an account?";
+
   static const String fieldRequired = "This field is required";
   static const String fieldWithoutSpaces =
       "This field must not contain any spaces";
@@ -45,10 +47,17 @@ class Strings {
       "This field must not start with a number";
   static const String fieldMinimumLength =
       "This field must have a minimum length of";
+  static const String fieldValidEmail =
+      "This field must have the 'abc@xyz' format";
+  static const String fieldValidName = "This field must be a valid name";
+  static const String fieldValidPhoneNumber =
+      "This field must be a valid phone number";
 }
 
 class Properties {
   static const double buttonPadding = 50;
-  static const double containerMargin = 50;
+  static const double containerHorizontalMargin = 50;
+  static const double containerVerticalMargin = 50;
   static const double sizedBoxHeight = 50;
+  static const double columnSpacing = 10;
 }
