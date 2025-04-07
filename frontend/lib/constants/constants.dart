@@ -6,14 +6,18 @@ class Colors {
 }
 
 class Strings {
+  static const String applicationTitle = "DaviVest";
   static const String logoUrl = "assets/images/logo.png";
+  static const String dateDelimiter = '/';
 
   static const String loginButtonMessage = "Login";
   static const String signupButtonMessage = "Signup";
 
   static const String loginAppBarTitle = "Login into your account";
   static const String signupAppBarTitle = "Signup for a DaniVest account";
+  static const String alreadyHasAccount = "Already have an account?";
 
+  // Signup fields
   static const String usernameFieldLabel = "Username";
   static const String usernameFieldHint = "Enter a username";
 
@@ -38,8 +42,7 @@ class Strings {
   static const String confirmPasswordFieldLabel = "Confirm Password";
   static const String confirmPasswordFieldHint = "Enter again the password";
 
-  static const String alreadyHasAccount = "Already have an account?";
-
+  // Signup fields errors
   static const String fieldRequired = "This field is required";
   static const String fieldWithoutSpaces =
       "This field must not contain any spaces";
@@ -52,6 +55,24 @@ class Strings {
   static const String fieldValidName = "This field must be a valid name";
   static const String fieldValidPhoneNumber =
       "This field must be a valid phone number";
+  static const String fieldValidDate =
+      "This field must have the 'dd/mm/yyyy' date format";
+  static const String fieldWithLowercaseLetter =
+      "This field must have at least one lowercase character";
+  static const String fieldWithUppercaseLetter =
+      "This field must have at least one uppercase character";
+  static const String fieldWithNumber =
+      "This field must have at least one number";
+  static const String fieldWithSpecialCharacter =
+      "This field must have at least one special character";
+
+  // RegExp strings
+  static const String nameRegExp = r"^[A-Za-z]+(?:[ -][A-Za-z]+)*$";
+  static const String phoneNumberRegExp = r"^\+?[0-9]+$";
+  static const String lowercaseLetterRegExp = r"[a-z]";
+  static const String uppercaseLetterRegExp = r"[A-Z]";
+  static const String numberRegExp = r"[0-9]";
+  static const String specialCharacterRegExp = r"[!@#$%^&*()<>{}\|;:<>,]";
 }
 
 class Properties {
@@ -60,4 +81,12 @@ class Properties {
   static const double containerVerticalMargin = 50;
   static const double sizedBoxHeight = 50;
   static const double columnSpacing = 10;
+  static const int minimumBirthdateYear = 1920;
+  static const int minimumUsernameFieldLength = 6;
+  static const int minimumEmailFieldLength = 3;
+  static const int minimumFirstNameFieldLength = 3;
+  static const int minimumLastNameFieldLength = 3;
+  static const int minimumPhoneNumberFieldLength = 10;
+  static const int minimumBirthdateFieldLength = 10;
+  static const int minimumPasswordFieldLength = 8;
 }

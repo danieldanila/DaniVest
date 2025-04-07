@@ -52,4 +52,39 @@ class Validations {
     }
     return null;
   }
+
+  static String? fieldValidDate(String value) {
+    if (!StringValidator.isDate(value)) {
+      return constants.Strings.fieldValidDate;
+    }
+    return null;
+  }
+
+  static String? fieldWithLowercaseLetter(String value) {
+    if (!value.contains(RegExp(constants.Strings.lowercaseLetterRegExp))) {
+      return constants.Strings.fieldWithLowercaseLetter;
+    }
+    return null;
+  }
+
+  static String? fieldWithUppercaseLetter(String value) {
+    if (!value.contains(RegExp(constants.Strings.uppercaseLetterRegExp))) {
+      return constants.Strings.fieldWithUppercaseLetter;
+    }
+    return null;
+  }
+
+  static String? fieldWithNumber(String value) {
+    if (!value.contains(RegExp(constants.Strings.numberRegExp))) {
+      return constants.Strings.fieldWithNumber;
+    }
+    return null;
+  }
+
+  static String? fieldWithSpecialCharacter(String value) {
+    if (!value.contains(RegExp(constants.Strings.specialCharacterRegExp))) {
+      return constants.Strings.fieldWithSpecialCharacter;
+    }
+    return null;
+  }
 }

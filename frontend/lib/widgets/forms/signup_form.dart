@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/constants.dart' as constants;
-import 'package:frontend/utilities/forms/validators/birthdate_validator.dart';
-import 'package:frontend/utilities/forms/validators/confirm_password_validator.dart';
+import 'package:frontend/utilities/forms/validators/username_validator.dart';
 import 'package:frontend/utilities/forms/validators/email_validator.dart';
 import 'package:frontend/utilities/forms/validators/first_name_validator.dart';
 import 'package:frontend/utilities/forms/validators/last_name_validator.dart';
-import 'package:frontend/utilities/forms/validators/password_validator.dart';
 import 'package:frontend/utilities/forms/validators/phone_number_validator.dart';
-import 'package:frontend/utilities/forms/validators/username_validator.dart';
+import 'package:frontend/utilities/forms/validators/birthdate_validator.dart';
+import 'package:frontend/utilities/forms/validators/password_validator.dart';
+import 'package:frontend/utilities/forms/validators/confirm_password_validator.dart';
 
 class SignupForm extends StatefulWidget {
   const SignupForm({super.key});
@@ -55,6 +55,33 @@ class _SignupFormState extends State<SignupForm> {
     setState(() {
       _obscureConfirmPassword = !_obscureConfirmPassword;
     });
+  }
+
+  void _selectBirthdate() async {
+    DateTime? selectedBirthdate = await showDatePicker(
+      context: context,
+      firstDate: DateTime.utc(constants.Properties.minimumBirthdateYear),
+      lastDate: DateTime.now(),
+    );
+
+    DateTime parsedSelectedBirthdate = DateTime.parse(
+      selectedBirthdate.toString(),
+    );
+
+    String birthdateMonth =
+        parsedSelectedBirthdate.month < 10
+            ? "0${parsedSelectedBirthdate.month}"
+            : "${parsedSelectedBirthdate.month}";
+
+    String birthdateDay =
+        parsedSelectedBirthdate.day < 10
+            ? "0${parsedSelectedBirthdate.day}"
+            : "${parsedSelectedBirthdate.day}";
+
+    String formattedSelectedBirthdate =
+        "$birthdateDay${constants.Strings.dateDelimiter}$birthdateMonth${constants.Strings.dateDelimiter}${parsedSelectedBirthdate.year}";
+
+    birthdateController.text = formattedSelectedBirthdate;
   }
 
   @override
@@ -109,9 +136,18 @@ class _SignupFormState extends State<SignupForm> {
               hintText: constants.Strings.phoneNumberFieldHint,
             ),
           ),
-          InputDatePickerFormField(
-            firstDate: DateTime.utc(1920),
-            lastDate: DateTime.now(),
+          TextFormField(
+            controller: birthdateController,
+            validator: birthdateValidator,
+            keyboardType: TextInputType.datetime,
+            decoration: InputDecoration(
+              labelText: constants.Strings.birthdateFieldLabel,
+              hintText: constants.Strings.birthdateFieldHint,
+              suffixIcon: IconButton(
+                onPressed: _selectBirthdate,
+                icon: const Icon(Icons.calendar_month),
+              ),
+            ),
           ),
           TextFormField(
             controller: passwordController,
@@ -122,10 +158,10 @@ class _SignupFormState extends State<SignupForm> {
               labelText: constants.Strings.passwordFieldLabel,
               hintText: constants.Strings.passwordFieldHint,
               suffixIcon: IconButton(
+                onPressed: _changePasswordVisibility,
                 icon: Icon(
                   _obscurePassword ? Icons.visibility : Icons.visibility_off,
                 ),
-                onPressed: _changePasswordVisibility,
               ),
             ),
           ),
@@ -138,12 +174,12 @@ class _SignupFormState extends State<SignupForm> {
               labelText: constants.Strings.confirmPasswordFieldLabel,
               hintText: constants.Strings.confirmPasswordFieldHint,
               suffixIcon: IconButton(
+                onPressed: _changeConfirmPasswordVisibility,
                 icon: Icon(
                   _obscureConfirmPassword
                       ? Icons.visibility
                       : Icons.visibility_off,
                 ),
-                onPressed: _changeConfirmPasswordVisibility,
               ),
             ),
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/constants.dart' as constants;
+import 'package:frontend/utilities/navigation/app_navigator.dart';
 import 'package:frontend/widgets/app_bar_title.dart';
 import 'package:frontend/widgets/forms/signup_form.dart';
 
@@ -28,7 +29,9 @@ class SignupScreen extends StatelessWidget {
               Image.asset(constants.Strings.logoUrl),
               const SignupForm(),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  AppNavigator.replaceToLoginPage(context);
+                },
                 child: const Text(constants.Strings.alreadyHasAccount),
               ),
             ],
