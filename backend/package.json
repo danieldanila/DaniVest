@@ -1,0 +1,13 @@
+{
+  "type": "module",
+  "dependencies": {
+    "express": "^5.1.0",
+    "moment": "^2.30.1",
+    "moment-timezone": "^0.5.48",
+    "oracledb": "^6.8.0",
+    "sequelize": "^6.37.7"
+  },
+  "scripts": {
+    "start": "node --watch-path=./src --env-file .env src/server.js"
+  }
+}

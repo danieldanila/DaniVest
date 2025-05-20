@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/constants.dart' as constants;
+import 'package:frontend/models/signup_data.dart';
+import 'package:frontend/services/user_service.dart';
 import 'package:frontend/utilities/forms/validators/username_validator.dart';
 import 'package:frontend/utilities/forms/validators/email_validator.dart';
 import 'package:frontend/utilities/forms/validators/first_name_validator.dart';
@@ -8,6 +10,7 @@ import 'package:frontend/utilities/forms/validators/phone_number_validator.dart'
 import 'package:frontend/utilities/forms/validators/birthdate_validator.dart';
 import 'package:frontend/utilities/forms/validators/password_validator.dart';
 import 'package:frontend/utilities/forms/validators/confirm_password_validator.dart';
+import 'package:frontend/utilities/navigation/app_navigator.dart';
 
 class SignupForm extends StatefulWidget {
   const SignupForm({super.key});
@@ -31,6 +34,7 @@ class _SignupFormState extends State<SignupForm> {
 
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  String? _message;
 
   @override
   void dispose() {
@@ -82,6 +86,22 @@ class _SignupFormState extends State<SignupForm> {
         "$birthdateDay${constants.Strings.dateDelimiter}$birthdateMonth${constants.Strings.dateDelimiter}${parsedSelectedBirthdate.year}";
 
     birthdateController.text = formattedSelectedBirthdate;
+  }
+
+  void handleSignup(SignupData userBody) async {
+    final response = await UserService.createUser(userBody);
+
+    if (!mounted) return;
+
+    setState(() {
+      _message = response;
+    });
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(response)));
+
+    AppNavigator.replaceToLoginPage(context);
   }
 
   @override
@@ -167,7 +187,9 @@ class _SignupFormState extends State<SignupForm> {
           ),
           TextFormField(
             controller: confirmPasswordController,
-            validator: confirmPasswordValidator,
+            validator: (String? value) {
+              return confirmPasswordValidator(value, passwordController.text);
+            },
             keyboardType: TextInputType.visiblePassword,
             obscureText: _obscureConfirmPassword,
             decoration: InputDecoration(
@@ -186,7 +208,20 @@ class _SignupFormState extends State<SignupForm> {
           const SizedBox(height: constants.Properties.sizedBoxHeight),
           ElevatedButton(
             onPressed: () {
-              formKey.currentState?.validate();
+              bool areFieldsValidated = formKey.currentState!.validate();
+
+              if (areFieldsValidated) {
+                final signupData = SignupData(
+                  username: usernameController.text,
+                  email: emailController.text,
+                  firstName: firstNameController.text,
+                  lastName: lastNameController.text,
+                  phoneNumber: phoneNumberController.text,
+                  birthdate: birthdateController.text,
+                  password: passwordController.text,
+                );
+                handleSignup(signupData);
+              }
             },
             child: const Text(constants.Strings.signupButtonMessage),
           ),

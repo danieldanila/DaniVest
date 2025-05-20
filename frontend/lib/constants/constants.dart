@@ -42,6 +42,9 @@ class Strings {
   static const String confirmPasswordFieldLabel = "Confirm Password";
   static const String confirmPasswordFieldHint = "Enter again the password";
 
+  // Generic error
+  static const String genericError = "An unknown error has occured.";
+
   // Signup fields errors
   static const String fieldRequired = "This field is required";
   static const String fieldWithoutSpaces =
@@ -65,6 +68,8 @@ class Strings {
       "This field must have at least one number";
   static const String fieldWithSpecialCharacter =
       "This field must have at least one special character";
+  static const String fieldEqualToOtherValue =
+      "This field must match the original";
 
   // RegExp strings
   static const String nameRegExp = r"^[A-Za-z]+(?:[ -][A-Za-z]+)*$";
@@ -73,6 +78,18 @@ class Strings {
   static const String uppercaseLetterRegExp = r"[A-Z]";
   static const String numberRegExp = r"[0-9]";
   static const String specialCharacterRegExp = r"[!@#$%^&*()<>{}\|;:<>,]";
+
+  // Back-end server details
+  static const String backendScheme = "http";
+  static const String backendHost = "192.168.1.35";
+  static const String backendPort = "3000";
+  static const String backendURL = "$backendScheme://$backendHost:$backendPort";
+
+  // Resources paths
+  static const String createUserPath = "/api/user/create";
+
+  // Standard response field names
+  static const String responseMessageFieldName = "message";
 }
 
 class Properties {

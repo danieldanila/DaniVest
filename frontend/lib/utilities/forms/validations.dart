@@ -87,4 +87,11 @@ class Validations {
     }
     return null;
   }
+
+  static String? fieldEqualToOtherValue(String value, String otherValue) {
+    if (!(value.compareTo(otherValue) == 0)) {
+      return constants.Strings.fieldEqualToOtherValue;
+    }
+    return null;
+  }
 }
