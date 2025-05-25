@@ -99,7 +99,7 @@ class _SignupFormState extends State<SignupForm> {
 
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(SnackBar(content: Text(response)));
+    ).showSnackBar(SnackBar(content: Text(_message!)));
 
     AppNavigator.replaceToLoginPage(context);
   }
