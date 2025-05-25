@@ -1,3 +1,7 @@
 /.idea
 /.venv
 */__pycache__
+*/hmog_dataset
+*/hmog_dataset.zip
+*/Activity.csv_merged.csv
+*/analysis.py
