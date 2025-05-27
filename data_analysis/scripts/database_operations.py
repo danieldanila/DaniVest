@@ -266,7 +266,7 @@ def main():
     with get_database_connection() as connection:
         with connection.cursor() as cursor:
             execute_init = 0
-            execute_alter = 1
+            execute_alter = 0
 
             if execute_init == 1:
                 init(cursor)
