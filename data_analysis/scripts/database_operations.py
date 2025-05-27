@@ -30,9 +30,9 @@ def init(cursor):
                    "End_time NUMBER(13),"
                    "Relative_Start_time NUMBER(10),"
                    "Relative_End_time NUMBER(10),"
-                   "Gesture_scenario CHAR,"
-                   "TaskID CHAR(2),"
-                   "ContentID CHAR"
+                   "Gesture_scenario NUMBER(1),"
+                   "TaskID NUMBER(2),"
+                   "ContentID NUMBER(1)"
                    ")")
     printf("Successfully created Activity table")
 
@@ -46,7 +46,7 @@ def init(cursor):
                    "X NUMBER(17, 15),"
                    "Y NUMBER(17, 15),"
                    "Z NUMBER(17, 15),"
-                   "Phone_orientation CHAR"
+                   "Phone_orientation NUMBER(1)"
                    ")")
     printf("Successfully created Accelerometer table")
 
@@ -60,7 +60,7 @@ def init(cursor):
                    "X NUMBER(17, 15),"
                    "Y NUMBER(17, 15),"
                    "Z NUMBER(17, 15),"
-                   "Phone_orientation CHAR"
+                   "Phone_orientation NUMBER(1)"
                    ")")
     printf("Successfully created Gyroscope table")
 
@@ -74,7 +74,7 @@ def init(cursor):
                    "X NUMBER(10, 5),"
                    "Y NUMBER(10, 5),"
                    "Z NUMBER(10, 5),"
-                   "Phone_orientation CHAR"
+                   "Phone_orientation NUMBER(1)"
                    ")")
     printf("Successfully created Magnetometer table")
 
@@ -85,14 +85,14 @@ def init(cursor):
                    "Systime NUMBER(25),"
                    "EventTime NUMBER(15),"
                    "ActivityID NUMBER(15),"
-                   "Pointer_count CHAR,"
-                   "PointerID CHAR,"
-                   "ActionID CHAR,"
+                   "Pointer_count NUMBER(1),"
+                   "PointerID NUMBER(1),"
+                   "ActionID NUMBER(1),"
                    "X NUMBER(10, 5),"
                    "Y NUMBER(10, 5),"
                    "Pressure NUMBER(8, 6),"
                    "Contact_size NUMBER(8, 6),"
-                   "Phone_orientation CHAR"
+                   "Phone_orientation NUMBER(1)"
                    ")")
     printf("Successfully created TouchEvent table")
 
@@ -103,9 +103,9 @@ def init(cursor):
                    "Systime NUMBER(13),"
                    "PressTime NUMBER(10),"
                    "ActivityID NUMBER(15),"
-                   "PressType CHAR,"
+                   "PressType NUMBER(1),"
                    "KeyID NUMBER(4),"
-                   "Phone_orientation CHAR"
+                   "Phone_orientation NUMBER(1)"
                    ")")
     printf("Successfully created KeyPressEvent table")
 
@@ -117,13 +117,13 @@ def init(cursor):
                    "PressTime NUMBER(10),"
                    "ActivityID NUMBER(15),"
                    "TapID NUMBER(4),"
-                   "Tap_type CHAR,"
-                   "Action_type CHAR,"
+                   "Tap_type NUMBER(1),"
+                   "Action_type NUMBER(1),"
                    "X NUMBER(10, 5),"
                    "Y NUMBER(10, 5),"
                    "Pressure NUMBER(8, 6),"
                    "Contact_size NUMBER(8, 6),"
-                   "Phone_orientation CHAR"
+                   "Phone_orientation NUMBER(1)"
                    ")")
     printf("Successfully created OneFingerTouchEvent table")
 
@@ -134,7 +134,7 @@ def init(cursor):
                    "Systime NUMBER(13),"
                    "PressTime NUMBER(10),"
                    "ActivityID NUMBER(15),"
-                   "EventType CHAR,"
+                   "EventType NUMBER(1),"
                    "PinchID NUMBER(4),"
                    "Time_delta NUMBER(5),"
                    "Focus_X NUMBER(10, 5),"
@@ -143,7 +143,7 @@ def init(cursor):
                    "Span_X NUMBER(10, 5),"
                    "Span_Y NUMBER(10, 5),"
                    "ScaleFactor NUMBER(8, 6),"
-                   "Phone_orientation CHAR"
+                   "Phone_orientation NUMBER(1)"
                    ")")
     printf("Successfully created PinchEvent table")
 
@@ -156,19 +156,19 @@ def init(cursor):
                    "CurrentTime NUMBER(10),"
                    "ActivityID NUMBER(15),"
                    "ScrollID NUMBER(4),"
-                   "Start_action_type CHAR,"
+                   "Start_action_type NUMBER(1),"
                    "Start_X NUMBER(5),"
                    "Start_Y NUMBER(5),"
                    "Start_pressure NUMBER(8, 6),"
                    "Start_size NUMBER(8, 6),"
-                   "Current_action_type CHAR,"
+                   "Current_action_type NUMBER(1),"
                    "Current_X NUMBER(10, 5),"
                    "Current_Y NUMBER(10, 5),"
                    "Current_pressure NUMBER(8, 6),"
                    "Current_size NUMBER(8, 6),"
                    "Distance_X NUMBER(10, 6),"
                    "Distance_Y NUMBER(10, 6),"
-                   "Phone_orientation CHAR"
+                   "Phone_orientation NUMBER(1)"
                    ")")
     printf("Successfully created ScrollEvent table")
 
@@ -180,19 +180,19 @@ def init(cursor):
                    "Begin_time NUMBER(10),"
                    "End_time NUMBER(10),"
                    "ActivityID NUMBER(15),"
-                   "Start_action_type CHAR,"
+                   "Start_action_type NUMBER(1),"
                    "Start_X NUMBER(5),"
                    "Start_Y NUMBER(5),"
                    "Start_pressure NUMBER(8, 6),"
                    "Start_size NUMBER(8, 6),"
-                   "End_action_type CHAR,"
+                   "End_action_type NUMBER(1),"
                    "End_X NUMBER(10, 5),"
                    "End_Y NUMBER(10, 5),"
                    "End_pressure NUMBER(8, 6),"
                    "End_size NUMBER(12, 9),"
                    "Speed_X NUMBER(12, 6),"
                    "Speed_Y NUMBER(12, 6),"
-                   "Phone_orientation CHAR"
+                   "Phone_orientation NUMBER(1)"
                    ")")
     printf("Successfully created StrokeEvent table")
 
@@ -212,11 +212,67 @@ def insert_into_table(cursor, table_name, data_to_insert, file_metadata):
         f"Successfully inserted {len(data_to_insert)} rows in the {table_name} table from {file_full_path} file - {datasets_processed_number}/{datasets_total_occurrences} datasets completed.")
 
 
+def alter_tables(cursor):
+    cursor.execute("alter table Activity drop column Gesture_scenario")
+    cursor.execute("alter table Activity drop column TaskID")
+    printf("Successfully dropped Activity's Gesture_scenario and TaskID columns")
+
+    cursor.execute("drop table Accelerometer")
+    printf("Successfully dropped Accelerometer table")
+
+    cursor.execute("drop table Gyroscope")
+    printf("Successfully dropped Gyroscope table")
+
+    cursor.execute("drop table Magnetometer")
+    printf("Successfully dropped Magnetometer table")
+
+    # It is always 1
+    cursor.execute("alter table TouchEvent drop column Pressure")
+    printf("Successfully dropped TouchEvent's Pressure column")
+
+    # It is always 1
+    cursor.execute("alter table OneFingerTouchEvent drop column Pressure")
+    printf("Successfully dropped OneFingerTouchEvent's Pressure column")
+
+    cursor.execute("drop table PinchEvent")
+    printf("Successfully dropped PinchEvent table")
+
+    # They always have the same value
+    cursor.execute("alter table ScrollEvent drop column Start_action_type")
+    cursor.execute("alter table ScrollEvent drop column Start_pressure")
+    cursor.execute("alter table ScrollEvent drop column Current_action_type")
+    cursor.execute("alter table ScrollEvent drop column Current_pressure")
+    printf(
+        "Successfully dropped ScrollEvent's (Start_action_type, Start_pressure, Current_action_type, Current_pressure) columns")
+
+    # They always have the same value
+    cursor.execute("alter table StrokeEvent drop column Start_action_type")
+    cursor.execute("alter table StrokeEvent drop column Start_pressure")
+    cursor.execute("alter table StrokeEvent drop column End_action_type")
+    cursor.execute("alter table StrokeEvent drop column End_pressure")
+    printf(
+        "Successfully dropped StrokeEvent's (Start_action_type, Start_pressure, End_action_type, End_pressure) columns")
+
+
+def read_from_database(cursor, table_names):
+    results = []
+    for table_name in table_names:
+        results.append(cursor.execute(f"select * from {table_name}").fetchall())
+
+    return results
+
+
 def main():
     with get_database_connection() as connection:
         with connection.cursor() as cursor:
-            init(cursor)
-            connection.commit()
+            execute_init = 0
+            execute_alter = 1
+
+            if execute_init == 1:
+                init(cursor)
+
+            if execute_alter == 1:
+                alter_tables(cursor)
 
 
 if __name__ == "__main__":

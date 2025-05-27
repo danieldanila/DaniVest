@@ -4,6 +4,7 @@ import time
 import pandas as pd
 
 import scripts.database_operations as db
+import data.constants as constants
 
 
 def execute_with_confirmation(description, function_to_execute, *args, **kwargs):
@@ -166,32 +167,12 @@ def main():
     execute_with_confirmation(f"=== List all files with {extension_name} extension function ===",
                               list_all_files_with_extension, root_directory, extension_name=extension_name)
 
-    relevant_files = ["Activity.csv", "Accelerometer.csv", "Gyroscope.csv", "Magnetometer.csv", "TouchEvent.csv",
-                      "KeyPressEvent.csv", "OneFingerTouchEvent.csv", "PinchEvent.csv", "ScrollEvent.csv",
-                      "StrokeEvent.csv",
-                      ]
+    relevant_files = constants.relevant_files_from_hmog_dataset
+
     execute_with_confirmation("=== List file occurrences ===",
                               list_file_occurrences, root_directory, file_names_to_list=relevant_files)
 
-    file_headers = [["ID", "SubjectID", "Session_number", "Start_time", "End_time", "Relative_Start_time",
-                     "Relative_End_time", "Gesture_scenario", "TaskID", "ContentID"],
-                    ["Systime", "EventTime", "ActivityID", "X", "Y", "Z", "Phone_orientation"],
-                    ["Systime", "EventTime", "ActivityID", "X", "Y", "Z", "Phone_orientation"],
-                    ["Systime", "EventTime", "ActivityID", "X", "Y", "Z", "Phone_orientation"],
-                    ["Systime", "EventTime", "ActivityID", "Pointer_count", "PointerID", "ActionID", "X", "Y",
-                     "Pressure", "Contact_size", "Phone_orientation"],
-                    ["Systime", "PressTime", "ActivityID", "PressType", "KeyID", "Phone_orientation"],
-                    ["Systime", "PressTime", "ActivityID", "TapID", "Tap_type", "Action_type", "X", "Y", "Pressure",
-                     "Contact_size", "Phone_orientation"],
-                    ["Systime", "PressTime", "ActivityID", "EventType", "PinchID", "Time_delta", "Focus_X", "Focus_Y",
-                     "Span", "Span_X", "Span_Y", "ScaleFactor", "Phone_orientation"],
-                    ["Systime", "BeginTime", "CurrentTime", "ActivityID", "ScrollID", "Start_action_type", "Start_X",
-                     "Start_Y", "Start_pressure", "Start_size", "Current_action_type", "Current_X", "Current_Y",
-                     "Current_pressure", "Current_size", "Distance_X", "Distance_Y", "Phone_orientation"],
-                    ["Systime", "Begin_time", "End_time", "ActivityID", "Start_action_type", "Start_X", "Start_Y",
-                     "Start_pressure", "Start_size", "End_action_type", "End_X", "End_Y", "End_pressure", "End_size",
-                     "Speed_X", "Speed_Y", "Phone_orientation"]
-                    ]
+    file_headers = constants.file_headers_from_hmog_dataset
 
     files_data_as_dataframe = None
     files_data_as_tuples_list = None

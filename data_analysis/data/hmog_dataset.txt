@@ -1,1 +1,1 @@
-The dataset can be found at: https://github.com/hmog-dataset/hmog/
+The HMOG dataset can be found at: https://github.com/hmog-dataset/hmog/ (Qing Yang, Ge Peng, David T. Nguyen, Xin Qi, Gang Zhou, Zdeňka Sitová, Paolo Gasti, and Kiran S. Balagani. A Multimodal Data Set for Evaluating Continuous Authentication Performance in Smartphones. In Proceedings of the 12th ACM Conference on Embedded Network Sensor Systems (SenSys '14). ACM, New York, NY, USA, 358-359. DOI: 10.1145/2668332.2668366)
