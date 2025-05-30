@@ -85,7 +85,8 @@ def extract_touch_event_features(touch_event_df):
                                     "X_coord_first_avg": 0, "Y_coord_first_avg": 0,
                                     "X_coord_second_avg": 0, "Y_coord_second_avg": 0,
                                     "Contact_size_first_avg": 0, "Contact_size_second_avg": 0,
-                                    "Phone_orientation_avg": 0}
+                                    "Phone_orientation_avg": 0
+                                    }
 
             if start_touch_event_row["Action"] == "DOWN":
                 touch_event_features["start_timestamps"] = start_touch_event_row["Systime"]

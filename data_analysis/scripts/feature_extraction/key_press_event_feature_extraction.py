@@ -168,12 +168,12 @@ def extract_key_press_event_features(key_press_event_df):
 
             if second_next_row_valid is False:
                 # The bugged UP event(s) row is(are) the last row
-                i += (j - i)
+                i = j
                 continue
 
             if i + 2 < j:
                 # Skip the UP event row(s) in the next iteration which does(do) not have a DOWN event row pair
-                i += (j - i - 2)
+                i = j - 2
 
             # Skip the finger UP event
             i += 2
