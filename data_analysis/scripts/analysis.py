@@ -3,7 +3,9 @@ import pandas as pd
 import scripts.database_operations as db
 import data.constants as constants
 from scripts.feature_extraction.key_press_event_feature_extraction import extract_key_press_event_features
+from scripts.feature_extraction.one_finger_touch_event_feature_extraction import extract_one_finger_touch_event_features
 from scripts.feature_extraction.scroll_event_feature_extraction import extract_scroll_event_features
+from scripts.feature_extraction.stroke_event_features_extraction import extract_stroke_event_features
 from scripts.feature_extraction.touch_event_feature_extraction import preprocess_touch_events, \
     extract_touch_event_features
 
@@ -35,6 +37,12 @@ def main():
 
     scroll_event_features_df = extract_scroll_event_features(scroll_event_df)
     scroll_event_features_df.to_csv("..\\data\\scroll_event_features.csv")
+
+    stroke_event_features_df = extract_stroke_event_features(stroke_event_df)
+    stroke_event_features_df.to_csv("..\\data\\stroke_event_features.csv")
+
+    one_finger_touch_event_features_df = extract_one_finger_touch_event_features(one_finger_touch_event_df)
+    one_finger_touch_event_features_df.to_csv("..\\data\\one_finger_touch_event_features.csv")
 
 
 if __name__ == "__main__":
