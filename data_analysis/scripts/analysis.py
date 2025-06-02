@@ -6,8 +6,8 @@ from scripts.feature_extraction.key_press_event_feature_extraction import extrac
 from scripts.feature_extraction.one_finger_touch_event_feature_extraction import extract_one_finger_touch_event_features
 from scripts.feature_extraction.scroll_event_feature_extraction import extract_scroll_event_features
 from scripts.feature_extraction.stroke_event_features_extraction import extract_stroke_event_features
-from scripts.feature_extraction.touch_event_feature_extraction import preprocess_touch_events, \
-    extract_touch_event_features
+from scripts.feature_extraction.touch_event_feature_extraction import extract_touch_event_features
+from scripts.features_analysis.touch_event_analysis import touch_event_analysis
 
 
 def init():
@@ -28,8 +28,7 @@ def init():
 def main():
     activity_df, touch_event_df, key_press_event_df, one_finger_touch_event_df, scroll_event_df, stroke_event_df = init()
 
-    touch_event_df_clean = preprocess_touch_events(touch_event_df)
-    touch_event_features_df = extract_touch_event_features(touch_event_df_clean)
+    touch_event_features_df = extract_touch_event_features(touch_event_df)
     touch_event_features_df.to_csv("..\\data\\touch_event_features.csv")
 
     key_press_event_features_df = extract_key_press_event_features(key_press_event_df)
@@ -43,6 +42,10 @@ def main():
 
     one_finger_touch_event_features_df = extract_one_finger_touch_event_features(one_finger_touch_event_df)
     one_finger_touch_event_features_df.to_csv("..\\data\\one_finger_touch_event_features.csv")
+
+    touch_event_analysis(None, classifier_name="k-NN")
+    touch_event_analysis(None, classifier_name="Random Forest")
+
 
 
 if __name__ == "__main__":

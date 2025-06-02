@@ -70,6 +70,8 @@ def preprocess_touch_events(touch_event_df):
 def extract_touch_event_features(touch_event_df):
     features = []
 
+    touch_event_df = preprocess_touch_events(touch_event_df)
+
     for activity_id, touch_events_df_grouped in touch_event_df.groupby("ActivityID"):
         touch_events_df_grouped = touch_events_df_grouped.sort_values(by="EventTime").reset_index(drop=True)
 
@@ -156,7 +158,7 @@ def extract_touch_event_features(touch_event_df):
 
                     j += 1
 
-            features.append(touch_event_features)
+                features.append(touch_event_features)
             i += 1
 
     return pd.DataFrame(features)
