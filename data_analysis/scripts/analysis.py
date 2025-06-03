@@ -7,6 +7,7 @@ from scripts.feature_extraction.one_finger_touch_event_feature_extraction import
 from scripts.feature_extraction.scroll_event_feature_extraction import extract_scroll_event_features
 from scripts.feature_extraction.stroke_event_features_extraction import extract_stroke_event_features
 from scripts.feature_extraction.touch_event_feature_extraction import extract_touch_event_features
+from scripts.features_analysis.one_finger_touch_event_analysis import one_finger_touch_event_analysis
 from scripts.features_analysis.touch_event_analysis import touch_event_analysis
 
 
@@ -46,6 +47,8 @@ def main():
     touch_event_analysis(None, classifier_name="k-NN")
     touch_event_analysis(None, classifier_name="Random Forest")
 
+    one_finger_touch_event_analysis(None, classifier_name="k-NN")
+    one_finger_touch_event_analysis(None, classifier_name="Random Forest")
 
 
 if __name__ == "__main__":

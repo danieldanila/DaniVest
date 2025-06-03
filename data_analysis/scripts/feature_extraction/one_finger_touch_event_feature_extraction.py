@@ -89,18 +89,22 @@ def extract_one_finger_touch_event_features(one_finger_touch_event_df):
             one_finger_touch_event_features = {"activity_id": activity_id,
                                                "user_id": int(str(activity_id)[:6]),
                                                "session_number": int(str(activity_id)[6:8]),
-                                               "start_timestamps": 0, "scenario": 0, "duration_ms": 0,
+                                               "start_timestamps": 0, "scenario": 0,
+                                               "down_up_duration_ms": 0, "down_down_duration_ms": 0,
+                                               "up_down_duration_ms": 0,
                                                "X_coord_first_avg": 0, "Y_coord_first_avg": 0,
                                                "Contact_size_first_avg": 0,
                                                "X_coord_second_avg": 0, "Y_coord_second_avg": 0,
                                                "Contact_size_second_avg": 0, "move_actions_second": 0,
-                                               "Phone_orientation_avg": 0
+                                               "Phone_orientation_avg": 0,
+                                               "X_coord_distance_avg": 0, "Y_coord_distance_avg": 0
                                                }
 
             if start_row["Action"] == "FIRST_DOWN_SINGLE_TAP" or start_row["Action"] == "FIRST_DOWN_DOUBLE_TAP":
                 one_finger_touch_event_features["start_timestamps"] = start_row["Systime"]
                 one_finger_touch_event_features["scenario"] = start_row["Tap_type"]
-                one_finger_touch_event_features["duration_ms"] = start_row["PressTime"]
+                one_finger_touch_event_features["down_up_duration_ms"] = start_row["PressTime"]
+                one_finger_touch_event_features["down_down_duration_ms"] = start_row["PressTime"]
                 one_finger_touch_event_features["X_coord_first_avg"] = start_row["X"]
                 one_finger_touch_event_features["Y_coord_first_avg"] = start_row["Y"]
                 one_finger_touch_event_features["Contact_size_first_avg"] = start_row["Contact_size"]
@@ -120,14 +124,16 @@ def extract_one_finger_touch_event_features(one_finger_touch_event_df):
 
                         # Final row if it is a single tap scenario (one DOWN + one UP)
                         if start_row["Action"] == "FIRST_DOWN_SINGLE_TAP":
-                            one_finger_touch_event_features["duration_ms"] -= next_row["PressTime"]
-                            one_finger_touch_event_features["duration_ms"] = abs(
-                                one_finger_touch_event_features["duration_ms"])
+                            one_finger_touch_event_features["down_up_duration_ms"] -= next_row["PressTime"]
+                            one_finger_touch_event_features["down_up_duration_ms"] = abs(
+                                one_finger_touch_event_features["down_up_duration_ms"])
 
                             one_finger_touch_event_features["X_coord_first_avg"] /= 2
                             one_finger_touch_event_features["Y_coord_first_avg"] /= 2
                             one_finger_touch_event_features["Contact_size_first_avg"] /= 2
                             one_finger_touch_event_features["Phone_orientation_avg"] /= 2
+
+                            one_finger_touch_event_features["up_down_duration_ms"] = next_row["PressTime"]
 
                             i = j
                             break
@@ -148,9 +154,9 @@ def extract_one_finger_touch_event_features(one_finger_touch_event_df):
 
                         # Final row in the sequence of a double tap scenario (2 DOWN + 2 UP events + X MOVE events)
                         if next_row["Action"] == "SECOND_UP_DOUBLE_TAP":
-                            one_finger_touch_event_features["duration_ms"] -= next_row["PressTime"]
-                            one_finger_touch_event_features["duration_ms"] = abs(
-                                one_finger_touch_event_features["duration_ms"])
+                            one_finger_touch_event_features["down_up_duration_ms"] -= next_row["PressTime"]
+                            one_finger_touch_event_features["down_up_duration_ms"] = abs(
+                                one_finger_touch_event_features["down_up_duration_ms"])
 
                             move_actions = one_finger_touch_event_features["move_actions_second"]
 
@@ -162,11 +168,45 @@ def extract_one_finger_touch_event_features(one_finger_touch_event_df):
                             one_finger_touch_event_features["Contact_size_second_avg"] /= (2 + move_actions)
                             one_finger_touch_event_features["Phone_orientation_avg"] /= (4 + move_actions)
 
+                            one_finger_touch_event_features["up_down_duration_ms"] = next_row["PressTime"]
+
+                            one_finger_touch_event_features["X_coord_distance_avg"] = one_finger_touch_event_features[
+                                                                                          "X_coord_first_avg"] - \
+                                                                                      one_finger_touch_event_features[
+                                                                                          "X_coord_second_avg"]
+                            one_finger_touch_event_features["Y_coord_distance_avg"] = one_finger_touch_event_features[
+                                                                                          "Y_coord_first_avg"] - \
+                                                                                      one_finger_touch_event_features[
+                                                                                          "Y_coord_second_avg"]
+
                             i = j
                             break
 
                     j += 1
 
+                if j + 1 >= len(one_finger_touch_events_df_grouped):
+                    if len(features) > 0:
+                        one_finger_touch_event_features["down_down_duration_ms"] = features[-1]["down_down_duration_ms"]
+                        one_finger_touch_event_features["up_down_duration_ms"] = features[-1]["up_down_duration_ms"]
+                    else:
+                        one_finger_touch_event_features["down_down_duration_ms"] = one_finger_touch_event_features[
+                            "down_up_duration_ms"]
+                        one_finger_touch_event_features["up_down_duration_ms"] = one_finger_touch_event_features[
+                            "down_up_duration_ms"]
+                else:
+                    next_row = one_finger_touch_events_df_grouped.iloc[j + 1]
+                    if next_row["Action"] == "FIRST_DOWN_SINGLE_TAP" or next_row["Action"] == "FIRST_DOWN_DOUBLE_TAP":
+                        one_finger_touch_event_features["down_down_duration_ms"] -= next_row["PressTime"]
+                        one_finger_touch_event_features["down_down_duration_ms"] = abs(
+                            one_finger_touch_event_features["down_down_duration_ms"])
+
+                        one_finger_touch_event_features["up_down_duration_ms"] -= next_row["PressTime"]
+                        one_finger_touch_event_features["up_down_duration_ms"] = abs(
+                            one_finger_touch_event_features["up_down_duration_ms"])
+                    # For bugged situations where there are two consecutive UP events (second UP event doesn't have a DOWN pair)
+                    else:
+                        one_finger_touch_event_features["down_down_duration_ms"] = features[-1]["down_down_duration_ms"]
+                        one_finger_touch_event_features["up_down_duration_ms"] = features[-1]["up_down_duration_ms"]
                 features.append(one_finger_touch_event_features)
             i += 1
 

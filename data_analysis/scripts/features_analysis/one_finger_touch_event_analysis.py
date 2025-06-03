@@ -12,9 +12,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-def touch_event_analysis(touch_event_df, classifier_name):
+def one_finger_touch_event_analysis(touch_event_df, classifier_name):
     if touch_event_df is None:
-        touch_event_df = pd.read_csv("..\\data\\touch_event_features.csv")
+        touch_event_df = pd.read_csv("..\\data\\one_finger_touch_event_features.csv")
 
     # Drop the auto-generated index
     touch_event_df = touch_event_df.drop(columns=["Unnamed: 0"])
@@ -24,18 +24,15 @@ def touch_event_analysis(touch_event_df, classifier_name):
     touch_event_df["start_timestamps"] = touch_event_df["start_timestamps"].astype("int64")
 
     # In the scenarios where only one finger is used, replace 0 values for second finger with the mean
-    mask = touch_event_df["scenario"] != 2
-    columns = ["move_actions_second", "X_coord_second_avg", "Y_coord_second_avg", "Contact_size_second_avg",
-               "X_coord_distance_avg", "Y_coord_distance_avg"]
+    mask = touch_event_df["scenario"] != 1
+    columns = ["move_actions_second", "X_coord_second_avg", "Y_coord_second_avg", "Contact_size_second_avg"]
     touch_event_df.loc[mask, columns] = np.nan
     imputer = SimpleImputer(strategy='mean')
     touch_event_df[columns] = imputer.fit_transform(touch_event_df[columns])
 
     # Predicted value will be user_id
     y = touch_event_df["user_id"]
-    X = touch_event_df.drop(
-        columns=["user_id", "activity_id", "session_number", "start_timestamps", "move_actions", "X_coord_avg",
-                 "Y_coord_avg", "Contact_size_avg"])
+    X = touch_event_df.drop(columns=["user_id", "activity_id", "session_number", "start_timestamps"])
 
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
@@ -45,11 +42,8 @@ def touch_event_analysis(touch_event_df, classifier_name):
     y_pred = None
     classifier = None
     if classifier_name == "k-NN":
-        # With activity_id and session_number, the best k value was 10 with 75% accuracy in a cross validation scenario
-        # Without activity_id and session_number but with start_timestamps, the best k value was 5 with 87% accuracy in a cross validation scenario
-        # Without activity_id, session_number and start_timestamps, the best k value was 5 with 87% accuracy in a cross validation scenario
-        # Without activity_id, session_number and start_timestamps, the best k value was 27 with 59% accuracy in a cross validation scenario
-        best_k = 27
+        # Without activity_id, session_number and start_timestamps, the best k value was 33 with 30.08% accuracy in a cross validation scenario
+        best_k = 31
 
         if best_k == 0:
             k_max = math.floor(math.sqrt(len(X_train)) / 2)
@@ -71,25 +65,16 @@ def touch_event_analysis(touch_event_df, classifier_name):
 
         classifier = knn
 
-        # With activity_id and session_number, the best k value was 10 with 93% accuracy in a one shot test accuracy
-        # Without activity_id and session_number but with start_timestamp, the best k value was 5 with 91% accuracy in a one shot test accuracy
-        # Without activity_id, session_number and start_timestamps, the best k value was 5 with 91% accuracy in a one shot test accuracy
-        # Without activity_id, session_number and start_timestamps, the best k value was 27 with 63% accuracy in a one shot test accuracy
-        # After adding the new properties down_down_duration_ms and up_down_duration_ms, no change in accuracy reported for k-NN classifier (best k = 21)
-        # After adding the new properties move_actions, X_coord_avg, Y_coord_avg, Contact_size_avg and dropping the properties specific to the first/second touch,
-        #   the accuracy dropped to 58% (k = 21)
-        # After adding the new X_coord_distance_avg and Y_coord_distance_avg, the accuracy remained at 63% (k = 27)
+        # Without activity_id, session_number and start_timestamps, the best k value was 33 with 33.45% accuracy in a one shot test accuracy
+        # After adding the new properties down_down_duration_ms, up_down_duration_ms, X_coord_distance_avg and Y_coord_distance_avg, the accuracy increased to 34.16% (k = 31)
 
     elif classifier_name == "Random Forest":
         k = 200
 
-        # After k=100, the accuracy is relatively constant at around 68%
-        #   but k=190->200 showed the best accuracy of 68.4%+
-        # After adding the new properties down_down_duration_ms and up_down_duration_ms, an increase of 2% in accuracy
-        #   was recorded, from 68% to 70%
-        # After adding the new properties move_actions, X_coord_avg, Y_coord_avg, Contact_size_avg and dropping the properties specific to the first/second touch,
-        #   the accuracy dropped to 64%
-        # After adding the new X_coord_distance_avg and Y_coord_distance_avg, the accuracy remained at 70.31%
+        # After k=100, the accuracy is relatively constant at around 43%
+        #   but k=190->200 showed the best accuracy of 43%+
+        # After adding the new properties down_down_duration_ms, up_down_duration_ms, X_coord_distance_avg and Y_coord_distance_avg, an increase of 2% in accuracy
+        #   was recorded, from 43% to 45%
         if k == 0:
             scores = []
             for k in range(1, 200, 50):
