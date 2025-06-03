@@ -82,18 +82,24 @@ def extract_touch_event_features(touch_event_df):
             # ActivityID is composed as SubjectID (6 digits) + Session_number (between 01 and 24) + ContentID + Run-time determined Counter value
             touch_event_features = {"activity_id": activity_id,
                                     "user_id": int(str(activity_id)[:6]), "session_number": int(str(activity_id)[6:8]),
-                                    "start_timestamps": 0, "scenario": 0, "duration_ms": 0,
+                                    "start_timestamps": 0, "scenario": 0,
+                                    "down_up_duration_ms": 0, "down_down_duration_ms": 0,
+                                    "up_down_duration_ms": 0,
                                     "move_actions_first": 0, "move_actions_second": 0,
                                     "X_coord_first_avg": 0, "Y_coord_first_avg": 0,
                                     "X_coord_second_avg": 0, "Y_coord_second_avg": 0,
                                     "Contact_size_first_avg": 0, "Contact_size_second_avg": 0,
-                                    "Phone_orientation_avg": 0
+                                    "Phone_orientation_avg": 0,
+                                    "move_actions": 0, "X_coord_avg": 0, "Y_coord_avg": 0,
+                                    "Contact_size_avg": 0,
+                                    "X_coord_distance_avg": 0, "Y_coord_distance_avg": 0
                                     }
 
             if start_touch_event_row["Action"] == "DOWN":
                 touch_event_features["start_timestamps"] = start_touch_event_row["Systime"]
                 touch_event_features["scenario"] = start_touch_event_row["Pointer_count"]
-                touch_event_features["duration_ms"] = start_touch_event_row["EventTime"]
+                touch_event_features["down_up_duration_ms"] = start_touch_event_row["EventTime"]
+                touch_event_features["down_down_duration_ms"] = start_touch_event_row["EventTime"]
                 touch_event_features["X_coord_first_avg"] = start_touch_event_row["X"]
                 touch_event_features["Y_coord_first_avg"] = start_touch_event_row["Y"]
                 touch_event_features["Contact_size_first_avg"] = start_touch_event_row["Contact_size"]
@@ -130,8 +136,8 @@ def extract_touch_event_features(touch_event_df):
                     # The touch event end for first touch (the final event in sequence)
                     # PointerID can be either 0 or 1 (1 - second touch, it was found in the dataset, probably a bug but the case is handled in code also)
                     if next_row["Pointer_count"] == 1 and next_row["Action"] == "UP":
-                        touch_event_features["duration_ms"] -= next_row["EventTime"]
-                        touch_event_features["duration_ms"] = abs(touch_event_features["duration_ms"])
+                        touch_event_features["down_up_duration_ms"] -= next_row["EventTime"]
+                        touch_event_features["down_up_duration_ms"] = abs(touch_event_features["down_up_duration_ms"])
 
                         touch_event_features["Phone_orientation_avg"] /= (j - i + 1)
 
@@ -139,6 +145,21 @@ def extract_touch_event_features(touch_event_df):
                         total_down_up_actions = 2
                         if touch_event_features["scenario"] == 2:
                             total_down_up_actions = 6
+
+                        touch_event_features["move_actions"] = touch_event_features["move_actions_first"] + \
+                                                               touch_event_features["move_actions_second"]
+                        touch_event_features["X_coord_avg"] = (touch_event_features["X_coord_first_avg"] +
+                                                               touch_event_features["X_coord_second_avg"]) / (
+                                                                      touch_event_features[
+                                                                          "move_actions"] + total_down_up_actions)
+                        touch_event_features["Y_coord_avg"] = (touch_event_features["Y_coord_first_avg"] +
+                                                               touch_event_features["Y_coord_second_avg"]) / (
+                                                                      touch_event_features[
+                                                                          "move_actions"] + total_down_up_actions)
+                        touch_event_features["Contact_size_avg"] = (touch_event_features["Contact_size_first_avg"] +
+                                                                    touch_event_features["Contact_size_second_avg"]) / (
+                                                                           touch_event_features[
+                                                                               "move_actions"] + total_down_up_actions)
 
                         touch_event_features["X_coord_first_avg"] /= (
                                 touch_event_features["move_actions_first"] + total_down_up_actions)
@@ -153,10 +174,31 @@ def extract_touch_event_features(touch_event_df):
                         touch_event_features["Contact_size_second_avg"] /= (
                                 touch_event_features["move_actions_second"] + total_down_up_actions)
 
+                        touch_event_features["up_down_duration_ms"] = next_row["EventTime"]
+
+                        if touch_event_features["scenario"] == 2:
+                            touch_event_features["X_coord_distance_avg"] = touch_event_features["X_coord_first_avg"] - \
+                                                                           touch_event_features["X_coord_second_avg"]
+                            touch_event_features["Y_coord_distance_avg"] = touch_event_features["Y_coord_first_avg"] - \
+                                                                           touch_event_features["Y_coord_second_avg"]
+
                         i = j
                         break
 
                     j += 1
+
+                if j + 1 >= len(touch_events_df_grouped):
+                    touch_event_features["down_down_duration_ms"] = features[-1]["down_down_duration_ms"]
+                    touch_event_features["up_down_duration_ms"] = features[-1]["up_down_duration_ms"]
+                else:
+                    next_row = touch_events_df_grouped.iloc[j + 1]
+                    if next_row["Action"] == "DOWN":
+                        touch_event_features["down_down_duration_ms"] -= next_row["EventTime"]
+                        touch_event_features["down_down_duration_ms"] = abs(
+                            touch_event_features["down_down_duration_ms"])
+
+                        touch_event_features["up_down_duration_ms"] -= next_row["EventTime"]
+                        touch_event_features["up_down_duration_ms"] = abs(touch_event_features["up_down_duration_ms"])
 
                 features.append(touch_event_features)
             i += 1
