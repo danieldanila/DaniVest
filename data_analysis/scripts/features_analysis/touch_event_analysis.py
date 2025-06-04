@@ -3,10 +3,12 @@ import math
 import pandas as pd
 import numpy as np
 from sklearn.impute import SimpleImputer
-from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
+from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
 from sklearn.metrics import classification_report, accuracy_score
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -37,10 +39,12 @@ def touch_event_analysis(touch_event_df, classifier_name):
         columns=["user_id", "activity_id", "session_number", "start_timestamps", "move_actions", "X_coord_avg",
                  "Y_coord_avg", "Contact_size_avg"])
 
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
-
-    X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42, stratify=y)
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
 
     y_pred = None
     classifier = None
@@ -49,25 +53,27 @@ def touch_event_analysis(touch_event_df, classifier_name):
         # Without activity_id and session_number but with start_timestamps, the best k value was 5 with 87% accuracy in a cross validation scenario
         # Without activity_id, session_number and start_timestamps, the best k value was 5 with 87% accuracy in a cross validation scenario
         # Without activity_id, session_number and start_timestamps, the best k value was 27 with 59% accuracy in a cross validation scenario
-        best_k = 27
+        best_k = 20
 
         if best_k == 0:
-            k_max = math.floor(math.sqrt(len(X_train)) / 2)
+            k_max = math.floor(math.sqrt(len(X_train_scaled)) / 2)
             k_values = range(1, k_max)
             cv_scores = []
 
             for k in k_values:
                 knn = KNeighborsClassifier(n_neighbors=k)
-                scores = cross_val_score(knn, X_scaled, y, cv=5, scoring='accuracy')
+                scores = cross_val_score(knn, X_train_scaled, y_train, cv=5, scoring="accuracy")
                 cv_scores.append(scores.mean())
 
-            best_k = k_values[np.argmax(cv_scores)]
-            print(f"Best k: {best_k} with accuracy: {max(cv_scores)}")
+            best_index = np.argmax(cv_scores)
+            best_k = k_values[best_index]
+            best_score = cv_scores[best_index]
+            print(f"Best k: {best_k} with accuracy: {best_score}")
 
         knn = KNeighborsClassifier(n_neighbors=best_k)
-        knn.fit(X_train, y_train)
+        knn.fit(X_train_scaled, y_train)
 
-        y_pred = knn.predict(X_test)
+        y_pred = knn.predict(X_test_scaled)
 
         classifier = knn
 
@@ -78,10 +84,10 @@ def touch_event_analysis(touch_event_df, classifier_name):
         # After adding the new properties down_down_duration_ms and up_down_duration_ms, no change in accuracy reported for k-NN classifier (best k = 21)
         # After adding the new properties move_actions, X_coord_avg, Y_coord_avg, Contact_size_avg and dropping the properties specific to the first/second touch,
         #   the accuracy dropped to 58% (k = 21)
-        # After adding the new X_coord_distance_avg and Y_coord_distance_avg, the accuracy remained at 63% (k = 27)
+        # After adding the new X_coord_distance_avg and Y_coord_distance_avg, the accuracy increased by 1% to 64% (k = 20)
 
     elif classifier_name == "Random Forest":
-        k = 200
+        best_k = 151
 
         # After k=100, the accuracy is relatively constant at around 68%
         #   but k=190->200 showed the best accuracy of 68.4%+
@@ -89,21 +95,27 @@ def touch_event_analysis(touch_event_df, classifier_name):
         #   was recorded, from 68% to 70%
         # After adding the new properties move_actions, X_coord_avg, Y_coord_avg, Contact_size_avg and dropping the properties specific to the first/second touch,
         #   the accuracy dropped to 64%
-        # After adding the new X_coord_distance_avg and Y_coord_distance_avg, the accuracy remained at 70.31%
-        if k == 0:
-            scores = []
-            for k in range(1, 200, 50):
-                rfc = RandomForestClassifier(n_estimators=k)
-                rfc.fit(X_train, y_train)
-                y_pred = rfc.predict(X_test)
-                scores.append(accuracy_score(y_test, y_pred))
+        # After adding the new X_coord_distance_avg and Y_coord_distance_avg, the accuracy remained at 70.41% (k = 151)
+        if best_k == 0:
+            k_values = list(range(1, 201, 50))
+            cv_scores = []
 
-            plt.plot(range(1, 200, 50), scores)
+            for k in k_values:
+                rfc = RandomForestClassifier(n_estimators=k)
+                scores = cross_val_score(rfc, X_train, y_train, cv=5, scoring="accuracy")
+                cv_scores.append(scores.mean())
+
+            best_index = np.argmax(cv_scores)
+            best_k = k_values[best_index]
+            best_score = cv_scores[best_index]
+            print(f"Best k: {best_k} with accuracy: {best_score}")
+
+            plt.plot(k_values, cv_scores)
             plt.xlabel('Value of n_estimators for Random Forest Classifier')
             plt.ylabel('Testing Accuracy')
             plt.show()
 
-        rf = RandomForestClassifier(n_estimators=k, random_state=42)
+        rf = RandomForestClassifier(n_estimators=best_k, random_state=42)
         rf.fit(X_train, y_train)
 
         y_pred = rf.predict(X_test)
@@ -120,6 +132,52 @@ def touch_event_analysis(touch_event_df, classifier_name):
         plt.ylabel("Feature")
         plt.tight_layout()
         plt.show()
+
+    elif classifier_name == "SVM":
+        best_c = 0
+        best_gamma = 0
+        best_kernel = "rbf"
+
+        if best_c == 0 and best_gamma == 0:
+            svm = SVC()
+
+            pipeline = Pipeline([
+                ("scaler", scaler),
+                ("svm", svm)
+            ])
+
+            # After 7 hours of executing, the best params are: svm__C: 100, svm__gama: 0.1 and svm__kernel: rbf with 63.93% accuracy
+            param_grid_old = {"svm__C": [0.001, 0.01, 0.1, 1, 10, 100],
+                           "svm__gamma": [0.0001, 0.001, 0.01, 0.1, 1.0],
+                           "svm__kernel": ["linear", "rbf"]}
+
+            # After 1.5 hours of executing, the best params are: svm__C: 1000, svm__gama: 1.0 and svm__kernel: rbf with 66.39% accuracy
+            param_grid_old = {"svm__C": [10, 100, 1000],
+                              "svm__gamma": [0.01, 0.1, 1.0, 10.0],
+                              "svm__kernel": ["rbf"]}
+
+            # Executed for more than 3 hours, left it for the moment
+            param_grid = {"svm__C": [1000, 10000, 100000],
+                          "svm__gamma": [0.01, 0.1, 1.0, 10.0],
+                          "svm__kernel": ["rbf"]}
+
+            grid = GridSearchCV(pipeline, param_grid, cv=5, scoring="accuracy", n_jobs=-1)
+
+            grid.fit(X, y)
+
+            best_c = grid.best_params_['svm__C']
+            best_gamma = grid.best_params_['svm__gamma']
+            best_kernel = grid.best_params_['svm__kernel']
+
+            print("Best parameters:", grid.best_params_)
+            print("Best cross-val accuracy:", grid.best_score_)
+
+        svm = SVC(kernel=best_kernel, C=best_c, gamma=best_gamma)
+        svm.fit(X_train_scaled, y_train)
+
+        y_pred = svm.predict(X_test_scaled)
+
+        classifier = svm
     else:
         print(f"{classifier_name} is not implemented.")
 

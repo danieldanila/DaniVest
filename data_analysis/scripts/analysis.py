@@ -46,6 +46,7 @@ def main():
 
     touch_event_analysis(None, classifier_name="k-NN")
     touch_event_analysis(None, classifier_name="Random Forest")
+    touch_event_analysis(None, classifier_name="SVM")
 
     one_finger_touch_event_analysis(None, classifier_name="k-NN")
     one_finger_touch_event_analysis(None, classifier_name="Random Forest")
