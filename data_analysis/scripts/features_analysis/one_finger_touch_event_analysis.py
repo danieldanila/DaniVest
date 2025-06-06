@@ -3,10 +3,12 @@ import math
 import pandas as pd
 import numpy as np
 from sklearn.impute import SimpleImputer
-from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
+from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
 from sklearn.metrics import classification_report, accuracy_score
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -34,61 +36,71 @@ def one_finger_touch_event_analysis(touch_event_df, classifier_name):
     y = touch_event_df["user_id"]
     X = touch_event_df.drop(columns=["user_id", "activity_id", "session_number", "start_timestamps"])
 
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
-
-    X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42, stratify=y)
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
 
     y_pred = None
     classifier = None
     if classifier_name == "k-NN":
         # Without activity_id, session_number and start_timestamps, the best k value was 33 with 30.08% accuracy in a cross validation scenario
-        best_k = 31
+        best_k = 0
 
         if best_k == 0:
-            k_max = math.floor(math.sqrt(len(X_train)) / 2)
+            k_max = math.floor(math.sqrt(len(X_train_scaled)) / 2)
             k_values = range(1, k_max)
             cv_scores = []
 
             for k in k_values:
                 knn = KNeighborsClassifier(n_neighbors=k)
-                scores = cross_val_score(knn, X_scaled, y, cv=5, scoring='accuracy')
+                scores = cross_val_score(knn, X_train_scaled, y_train, cv=5, scoring="accuracy")
                 cv_scores.append(scores.mean())
 
-            best_k = k_values[np.argmax(cv_scores)]
-            print(f"Best k: {best_k} with accuracy: {max(cv_scores)}")
+            best_index = np.argmax(cv_scores)
+            best_k = k_values[best_index]
+            best_score = cv_scores[best_index]
+            print(f"Best k: {best_k} with accuracy: {best_score}")
 
         knn = KNeighborsClassifier(n_neighbors=best_k)
-        knn.fit(X_train, y_train)
+        knn.fit(X_train_scaled, y_train)
 
-        y_pred = knn.predict(X_test)
+        y_pred = knn.predict(X_test_scaled)
 
         classifier = knn
 
         # Without activity_id, session_number and start_timestamps, the best k value was 33 with 33.45% accuracy in a one shot test accuracy
-        # After adding the new properties down_down_duration_ms, up_down_duration_ms, X_coord_distance_avg and Y_coord_distance_avg, the accuracy increased to 34.16% (k = 31)
+        # After adding the new properties down_down_duration_ms, up_down_duration_ms, X_coord_distance_avg and Y_coord_distance_avg, the accuracy increased to 34.02% (k = 24)
 
     elif classifier_name == "Random Forest":
-        k = 200
+        best_k = 0
 
         # After k=100, the accuracy is relatively constant at around 43%
         #   but k=190->200 showed the best accuracy of 43%+
         # After adding the new properties down_down_duration_ms, up_down_duration_ms, X_coord_distance_avg and Y_coord_distance_avg, an increase of 2% in accuracy
-        #   was recorded, from 43% to 45%
-        if k == 0:
-            scores = []
-            for k in range(1, 200, 50):
-                rfc = RandomForestClassifier(n_estimators=k)
-                rfc.fit(X_train, y_train)
-                y_pred = rfc.predict(X_test)
-                scores.append(accuracy_score(y_test, y_pred))
+        #   was recorded, from 43% to 45.18% (k=151)
+        if best_k == 0:
+            k_values = list(range(1, 201, 50))
+            cv_scores = []
 
-            plt.plot(range(1, 200, 50), scores)
+            for k in k_values:
+                rfc = RandomForestClassifier(n_estimators=k)
+                scores = cross_val_score(rfc, X_train, y_train, cv=5, scoring="accuracy")
+                cv_scores.append(scores.mean())
+
+            best_index = np.argmax(cv_scores)
+            best_k = k_values[best_index]
+            best_score = cv_scores[best_index]
+            print(f"Best k: {best_k} with accuracy: {best_score}")
+
+            plt.plot(k_values, cv_scores)
             plt.xlabel('Value of n_estimators for Random Forest Classifier')
             plt.ylabel('Testing Accuracy')
             plt.show()
 
-        rf = RandomForestClassifier(n_estimators=k, random_state=42)
+        rf = RandomForestClassifier(n_estimators=best_k, random_state=42)
         rf.fit(X_train, y_train)
 
         y_pred = rf.predict(X_test)
@@ -105,6 +117,41 @@ def one_finger_touch_event_analysis(touch_event_df, classifier_name):
         plt.ylabel("Feature")
         plt.tight_layout()
         plt.show()
+    elif classifier_name == "SVM":
+        best_c = 0
+        best_gamma = 0
+        best_kernel = "rbf"
+
+        if best_c == 0 and best_gamma == 0:
+            svm = SVC()
+
+            pipeline = Pipeline([
+                ("scaler", scaler),
+                ("svm", svm)
+            ])
+
+            # After 10 hours of executing, the best params are: svm__C: 1000, svm__gama: 1.0 and svm__kernel: rbf with 37.68% accuracy
+            param_grid = {"svm__C": [10, 100, 1000],
+                          "svm__gamma": [0.01, 0.1, 1.0, 10.0],
+                          "svm__kernel": ["rbf"]}
+
+            grid = GridSearchCV(pipeline, param_grid, cv=5, scoring="accuracy", n_jobs=8)
+
+            grid.fit(X, y)
+
+            best_c = grid.best_params_['svm__C']
+            best_gamma = grid.best_params_['svm__gamma']
+            best_kernel = grid.best_params_['svm__kernel']
+
+            print("Best parameters:", grid.best_params_)
+            print("Best cross-val accuracy:", grid.best_score_)
+
+        svm = SVC(kernel=best_kernel, C=best_c, gamma=best_gamma)
+        svm.fit(X_train_scaled, y_train)
+
+        y_pred = svm.predict(X_test_scaled)
+
+        classifier = svm
     else:
         print(f"{classifier_name} is not implemented.")
 

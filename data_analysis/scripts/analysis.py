@@ -50,6 +50,7 @@ def main():
 
     one_finger_touch_event_analysis(None, classifier_name="k-NN")
     one_finger_touch_event_analysis(None, classifier_name="Random Forest")
+    one_finger_touch_event_analysis(None, classifier_name="SVM")
 
 
 if __name__ == "__main__":

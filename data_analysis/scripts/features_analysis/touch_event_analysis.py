@@ -49,9 +49,6 @@ def touch_event_analysis(touch_event_df, classifier_name):
     y_pred = None
     classifier = None
     if classifier_name == "k-NN":
-        # With activity_id and session_number, the best k value was 10 with 75% accuracy in a cross validation scenario
-        # Without activity_id and session_number but with start_timestamps, the best k value was 5 with 87% accuracy in a cross validation scenario
-        # Without activity_id, session_number and start_timestamps, the best k value was 5 with 87% accuracy in a cross validation scenario
         # Without activity_id, session_number and start_timestamps, the best k value was 27 with 59% accuracy in a cross validation scenario
         best_k = 20
 
@@ -77,9 +74,6 @@ def touch_event_analysis(touch_event_df, classifier_name):
 
         classifier = knn
 
-        # With activity_id and session_number, the best k value was 10 with 93% accuracy in a one shot test accuracy
-        # Without activity_id and session_number but with start_timestamp, the best k value was 5 with 91% accuracy in a one shot test accuracy
-        # Without activity_id, session_number and start_timestamps, the best k value was 5 with 91% accuracy in a one shot test accuracy
         # Without activity_id, session_number and start_timestamps, the best k value was 27 with 63% accuracy in a one shot test accuracy
         # After adding the new properties down_down_duration_ms and up_down_duration_ms, no change in accuracy reported for k-NN classifier (best k = 21)
         # After adding the new properties move_actions, X_coord_avg, Y_coord_avg, Contact_size_avg and dropping the properties specific to the first/second touch,
