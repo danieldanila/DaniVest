@@ -11,17 +11,6 @@ from sklearn.svm import SVC
 from sklearn.metrics import classification_report, accuracy_score
 import matplotlib.pyplot as plt
 import seaborn as sns
-import ast
-
-
-def parse_np_int_list(s):
-    if pd.isna(s):  # Handle NaNs
-        return []
-    try:
-        s_clean = s.replace("np.int64", "")
-        return [int(x) for x in ast.literal_eval(s_clean)]
-    except (ValueError, SyntaxError):
-        return []
 
 
 def key_press_event_analysis(key_press_event_df, classifier_name):
