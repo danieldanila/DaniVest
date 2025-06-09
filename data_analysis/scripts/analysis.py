@@ -7,6 +7,7 @@ from scripts.feature_extraction.one_finger_touch_event_feature_extraction import
 from scripts.feature_extraction.scroll_event_feature_extraction import extract_scroll_event_features
 from scripts.feature_extraction.stroke_event_features_extraction import extract_stroke_event_features
 from scripts.feature_extraction.touch_event_feature_extraction import extract_touch_event_features
+from scripts.features_analysis.key_press_event_analysis import key_press_event_analysis
 from scripts.features_analysis.one_finger_touch_event_analysis import one_finger_touch_event_analysis
 from scripts.features_analysis.scroll_event_analysis import scroll_event_analysis
 from scripts.features_analysis.stroke_event_analysis import stroke_event_analysis
@@ -58,9 +59,13 @@ def main():
     # scroll_event_analysis(None, classifier_name="Random Forest")
     # scroll_event_analysis(None, classifier_name="SVM")
 
-    stroke_event_analysis(None, classifier_name="k-NN")
-    stroke_event_analysis(None, classifier_name="Random Forest")
-    stroke_event_analysis(None, classifier_name="SVM")
+    # stroke_event_analysis(None, classifier_name="k-NN")
+    # stroke_event_analysis(None, classifier_name="Random Forest")
+    # stroke_event_analysis(None, classifier_name="SVM")
+
+    key_press_event_analysis(None, classifier_name="k-NN")
+    key_press_event_analysis(None, classifier_name="Random Forest")
+    key_press_event_analysis(None, classifier_name="SVM")
 
 
 if __name__ == "__main__":
