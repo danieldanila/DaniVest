@@ -66,12 +66,20 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
         classifier = knn
 
         # Without activity_id, session_number and start_timestamps, the best k value was 1 with 46% accuracy in a one shot test accuracy
+        # After changing how data is processed and adding the new properties down_down_duration_ms and up_down_duration_ms, the k = 20 with 42.78% accuracy
+        # After adding the new properties X_coord_distance and Y_coord_distance, the best k = 20 with 44.65% accuracy
+        # After adding the new properties start_quadrant, end_quadrant and direction, the best k = 13 with 43.14% accuracy
+        # After transforming the properties start_quadrant, end_quadrant and direction into one hot encodings, the best k = 12 with 42.07% accuracy
 
     elif classifier_name == "Random Forest":
         best_k = 0
 
         # After k=100, the accuracy is relatively constant at around 52%
         #   but k=201 showed the best accuracy of 50.75%
+        # After changing how data is processed and adding the new properties down_down_duration_ms and up_down_duration_ms, the best k = 201 with 54.02% accuracy
+        # After adding the new properties X_coord_distance and Y_coord_distance, the best k = 201 with 55.53% accuracy
+        # After adding the new properties start_quadrant, end_quadrant and direction, the best k = 201 with 55.10% accuracy
+        # After transforming the properties start_quadrant, end_quadrant and direction into one hot encodings, the best k = 201 with 55.20% accuracy
         if best_k == 0:
             k_values = list(range(1, 202, 50))
             cv_scores = []
@@ -123,6 +131,10 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
             ])
 
             # After 1 hour of executing, the best params are: svm__C: 10, svm__gama: 0.1 and svm__kernel: rbf with 50.75% accuracy
+            # After changing how data is processed and adding the new properties down_down_duration_ms and up_down_duration_ms, the best params are: svm__C: 100, svm__gama: 0.1 and svm__kernel: rbf with 47.89% accuracy
+            # After adding the new properties X_coord_distance and Y_coord_distance, the best params are: svm__C: 10, svm__gama: 0.1 and svm__kernel: rbf with 48.99% accuracy
+            # After adding the new properties start_quadrant, end_quadrant and direction, the best params are: svm__C: 10, svm__gama: 0.1 and svm__kernel: rbf with 49.38% accuracy
+            # After transforming the properties start_quadrant, end_quadrant and direction into one hot encodings, the best params are: svm__C: 1000, svm__gama: 0.01 and svm__kernel: rbf with 47.59% accuracy
             param_grid = {"svm__C": [10, 100, 1000],
                               "svm__gamma": [0.01, 0.1, 1.0, 10.0],
                               "svm__kernel": ["rbf"]}
