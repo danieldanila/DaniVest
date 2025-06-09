@@ -8,6 +8,7 @@ from scripts.feature_extraction.scroll_event_feature_extraction import extract_s
 from scripts.feature_extraction.stroke_event_features_extraction import extract_stroke_event_features
 from scripts.feature_extraction.touch_event_feature_extraction import extract_touch_event_features
 from scripts.features_analysis.one_finger_touch_event_analysis import one_finger_touch_event_analysis
+from scripts.features_analysis.scroll_event_features_extraction import scroll_event_analysis
 from scripts.features_analysis.touch_event_analysis import touch_event_analysis
 
 
@@ -27,30 +28,34 @@ def init():
 
 
 def main():
-    activity_df, touch_event_df, key_press_event_df, one_finger_touch_event_df, scroll_event_df, stroke_event_df = init()
+    # activity_df, touch_event_df, key_press_event_df, one_finger_touch_event_df, scroll_event_df, stroke_event_df = init()
+    #
+    # touch_event_features_df = extract_touch_event_features(touch_event_df)
+    # touch_event_features_df.to_csv("..\\data\\touch_event_features.csv")
+    #
+    # key_press_event_features_df = extract_key_press_event_features(key_press_event_df)
+    # key_press_event_features_df.to_csv("..\\data\\key_press_event_features.csv")
+    #
+    # scroll_event_features_df = extract_scroll_event_features(scroll_event_df)
+    # scroll_event_features_df.to_csv("..\\data\\scroll_event_features.csv")
+    #
+    # stroke_event_features_df = extract_stroke_event_features(stroke_event_df)
+    # stroke_event_features_df.to_csv("..\\data\\stroke_event_features.csv")
+    #
+    # one_finger_touch_event_features_df = extract_one_finger_touch_event_features(one_finger_touch_event_df)
+    # one_finger_touch_event_features_df.to_csv("..\\data\\one_finger_touch_event_features.csv")
+    #
+    # touch_event_analysis(None, classifier_name="k-NN")
+    # touch_event_analysis(None, classifier_name="Random Forest")
+    # touch_event_analysis(None, classifier_name="SVM")
+    #
+    # one_finger_touch_event_analysis(None, classifier_name="k-NN")
+    # one_finger_touch_event_analysis(None, classifier_name="Random Forest")
+    # one_finger_touch_event_analysis(None, classifier_name="SVM")
 
-    touch_event_features_df = extract_touch_event_features(touch_event_df)
-    touch_event_features_df.to_csv("..\\data\\touch_event_features.csv")
-
-    key_press_event_features_df = extract_key_press_event_features(key_press_event_df)
-    key_press_event_features_df.to_csv("..\\data\\key_press_event_features.csv")
-
-    scroll_event_features_df = extract_scroll_event_features(scroll_event_df)
-    scroll_event_features_df.to_csv("..\\data\\scroll_event_features.csv")
-
-    stroke_event_features_df = extract_stroke_event_features(stroke_event_df)
-    stroke_event_features_df.to_csv("..\\data\\stroke_event_features.csv")
-
-    one_finger_touch_event_features_df = extract_one_finger_touch_event_features(one_finger_touch_event_df)
-    one_finger_touch_event_features_df.to_csv("..\\data\\one_finger_touch_event_features.csv")
-
-    touch_event_analysis(None, classifier_name="k-NN")
-    touch_event_analysis(None, classifier_name="Random Forest")
-    touch_event_analysis(None, classifier_name="SVM")
-
-    one_finger_touch_event_analysis(None, classifier_name="k-NN")
-    one_finger_touch_event_analysis(None, classifier_name="Random Forest")
-    one_finger_touch_event_analysis(None, classifier_name="SVM")
+    scroll_event_analysis(None, classifier_name="k-NN")
+    scroll_event_analysis(None, classifier_name="Random Forest")
+    scroll_event_analysis(None, classifier_name="SVM")
 
 
 if __name__ == "__main__":

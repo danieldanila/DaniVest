@@ -2,7 +2,6 @@ import math
 
 import pandas as pd
 import numpy as np
-from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
@@ -14,30 +13,22 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-def touch_event_analysis(touch_event_df, classifier_name):
-    if touch_event_df is None:
-        touch_event_df = pd.read_csv("..\\data\\touch_event_features.csv")
+def scroll_event_analysis(scroll_event_df, classifier_name):
+    if scroll_event_df is None:
+        scroll_event_df = pd.read_csv("..\\data\\scroll_event_features.csv")
 
     # Drop the auto-generated index
-    touch_event_df = touch_event_df.drop(columns=["Unnamed: 0"])
+    scroll_event_df = scroll_event_df.drop(columns=["Unnamed: 0"])
 
     # When read from CSV, start_timestamps type is string
-    touch_event_df["start_timestamps"] = pd.to_numeric(touch_event_df["start_timestamps"], errors="coerce")
-    touch_event_df["start_timestamps"] = touch_event_df["start_timestamps"].astype("int64")
-
-    # In the scenarios where only one finger is used, replace 0 values for second finger with the mean
-    mask = touch_event_df["scenario"] != 2
-    columns = ["move_actions_second", "X_coord_second_avg", "Y_coord_second_avg", "Contact_size_second_avg",
-               "X_coord_distance_avg", "Y_coord_distance_avg"]
-    touch_event_df.loc[mask, columns] = np.nan
-    imputer = SimpleImputer(strategy='mean')
-    touch_event_df[columns] = imputer.fit_transform(touch_event_df[columns])
+    scroll_event_df["start_timestamps"] = pd.to_numeric(scroll_event_df["start_timestamps"], errors="coerce")
+    scroll_event_df["start_timestamps"] = scroll_event_df["start_timestamps"].astype("int64")
 
     # Predicted value will be user_id
-    y = touch_event_df["user_id"]
-    X = touch_event_df.drop(
-        columns=["user_id", "activity_id", "session_number", "start_timestamps", "move_actions", "X_coord_avg",
-                 "Y_coord_avg", "Contact_size_avg"])
+    y = scroll_event_df["user_id"]
+    X = scroll_event_df.drop(
+        columns=["user_id", "activity_id", "session_number", "start_timestamps", "scroll_id"]
+    )
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 
@@ -49,8 +40,8 @@ def touch_event_analysis(touch_event_df, classifier_name):
     y_pred = None
     classifier = None
     if classifier_name == "k-NN":
-        # Without activity_id, session_number and start_timestamps, the best k value was 27 with 59% accuracy in a cross validation scenario
-        best_k = 20
+        # Without activity_id, session_number, start_timestamps and scroll_id, the best k value was 15 with 45.94% accuracy in a cross validation scenario
+        best_k = 0
 
         if best_k == 0:
             k_max = math.floor(math.sqrt(len(X_train_scaled)) / 2)
@@ -74,22 +65,13 @@ def touch_event_analysis(touch_event_df, classifier_name):
 
         classifier = knn
 
-        # Without activity_id, session_number and start_timestamps, the best k value was 27 with 63% accuracy in a one shot test accuracy
-        # After adding the new properties down_down_duration_ms and up_down_duration_ms, no change in accuracy reported for k-NN classifier (best k = 21)
-        # After adding the new properties move_actions, X_coord_avg, Y_coord_avg, Contact_size_avg and dropping the properties specific to the first/second touch,
-        #   the accuracy dropped to 58% (k = 21)
-        # After adding the new X_coord_distance_avg and Y_coord_distance_avg, the accuracy increased by 1% to 64% (k = 20)
+        # Without activity_id, session_number, start_timestamps and scroll_id, the best k value was 15 with 46.16% accuracy in a one shot test accuracy
 
     elif classifier_name == "Random Forest":
-        best_k = 151
+        best_k = 0
 
-        # After k=100, the accuracy is relatively constant at around 68%
-        #   but k=190->200 showed the best accuracy of 68.4%+
-        # After adding the new properties down_down_duration_ms and up_down_duration_ms, an increase of 2% in accuracy
-        #   was recorded, from 68% to 70%
-        # After adding the new properties move_actions, X_coord_avg, Y_coord_avg, Contact_size_avg and dropping the properties specific to the first/second touch,
-        #   the accuracy dropped to 64%
-        # After adding the new X_coord_distance_avg and Y_coord_distance_avg, the accuracy remained at 70.41% (k = 151)
+        # After k=100, the accuracy is relatively constant at around 52%
+        #   but k=151 showed the best accuracy of 52.07%
         if best_k == 0:
             k_values = list(range(1, 202, 50))
             cv_scores = []
@@ -140,20 +122,11 @@ def touch_event_analysis(touch_event_df, classifier_name):
                 ("svm", svm)
             ])
 
-            # After 7 hours of executing, the best params are: svm__C: 100, svm__gama: 0.1 and svm__kernel: rbf with 63.93% accuracy
-            param_grid_old = {"svm__C": [0.001, 0.01, 0.1, 1, 10, 100],
-                           "svm__gamma": [0.0001, 0.001, 0.01, 0.1, 1.0],
-                           "svm__kernel": ["linear", "rbf"]}
-
-            # After 1.5 hours of executing, the best params are: svm__C: 1000, svm__gama: 1.0 and svm__kernel: rbf with 66.39% accuracy
-            param_grid_old = {"svm__C": [10, 100, 1000],
+            # After 2 hours of executing, the best params are: svm__C: 1000, svm__gama: 0.1 and svm__kernel: rbf with 52.85% accuracy
+            param_grid = {"svm__C": [10, 100, 1000],
                               "svm__gamma": [0.01, 0.1, 1.0, 10.0],
                               "svm__kernel": ["rbf"]}
 
-            # Executed for more than 3 hours, left it for the moment
-            param_grid = {"svm__C": [1000, 10000, 100000],
-                          "svm__gamma": [0.01, 0.1, 1.0, 10.0],
-                          "svm__kernel": ["rbf"]}
 
             grid = GridSearchCV(pipeline, param_grid, cv=5, scoring="accuracy", n_jobs=-1)
 

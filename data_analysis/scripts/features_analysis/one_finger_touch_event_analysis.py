@@ -82,7 +82,7 @@ def one_finger_touch_event_analysis(touch_event_df, classifier_name):
         # After adding the new properties down_down_duration_ms, up_down_duration_ms, X_coord_distance_avg and Y_coord_distance_avg, an increase of 2% in accuracy
         #   was recorded, from 43% to 45.18% (k=151)
         if best_k == 0:
-            k_values = list(range(1, 201, 50))
+            k_values = list(range(1, 202, 50))
             cv_scores = []
 
             for k in k_values:
