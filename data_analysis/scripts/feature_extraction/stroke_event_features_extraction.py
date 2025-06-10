@@ -1,5 +1,8 @@
 import pandas as pd
 import math
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
 
 
 # Screen example
@@ -17,30 +20,30 @@ def get_stroke_event_quadrant(x, y, max_x, max_y):
     half_screen_y = max_y / 2
 
     if x < half_screen_x and y < half_screen_y:
-        return 1 # Top-left
+        return 1  # Top-left
     elif x >= half_screen_x and y < half_screen_y:
-        return 2 # Top-right
+        return 2  # Top-right
     elif x < half_screen_x and y >= half_screen_y:
-        return 3 # Bottom-left
+        return 3  # Bottom-left
     else:
-        return 4 # Bottom-right
+        return 4  # Bottom-right
 
 
 def movement_direction(row):
-    if row['Speed_X'] > 0 and row['Speed_Y'] > 0:
-        return 0 # "down-right"
-    elif row['Speed_X'] < 0 and row['Speed_Y'] > 0:
-        return 1 # "down-left"
-    elif row['Speed_X'] > 0 and row['Speed_Y'] < 0:
-        return 2 # "up-right"
-    elif row['Speed_X'] < 0 and row['Speed_Y'] < 0:
-        return 3 # "up-left"
+    if row["Speed_X"] > 0 and row["Speed_Y"] > 0:
+        return 0  # "down-right"
+    elif row["Speed_X"] < 0 and row["Speed_Y"] > 0:
+        return 1  # "down-left"
+    elif row["Speed_X"] > 0 and row["Speed_Y"] < 0:
+        return 2  # "up-right"
+    elif row["Speed_X"] < 0 and row["Speed_Y"] < 0:
+        return 3  # "up-left"
     else:
-        return 4 # "straight"
+        return 4  # "straight"
 
 
 # The table has some rows with NULL values
-def preprocess_stroke_events(stroke_event_df):
+def preprocess_stroke_events(stroke_event_df, one_hot_encodings=False):
     max_x = math.ceil(stroke_event_df[["Start_X", "End_X"]].max().max() / 1000) * 1000
     max_y = math.ceil(stroke_event_df[['Start_Y', "End_Y"]].max().max() / 1000) * 1000
 
@@ -54,17 +57,81 @@ def preprocess_stroke_events(stroke_event_df):
 
     stroke_event_df["Direction"] = stroke_event_df.apply(movement_direction, axis=1)
 
-    stroke_event_df = pd.get_dummies(stroke_event_df, columns=["Direction", "Start_Quadrant", "End_Quadrant"])
+    # Calculate the magnitude of the speed vector
+    # Magnitude = sqrt(Speed_X^2 + Speed_Y^2)
+    stroke_event_df["Magnitude_Speed"] = np.sqrt(stroke_event_df["Speed_X"] ** 2 + stroke_event_df["Speed_Y"] ** 2)
+
+    if one_hot_encodings:
+        stroke_event_df = pd.get_dummies(stroke_event_df, columns=["Direction", "Start_Quadrant", "End_Quadrant"])
 
     stroke_event_df = stroke_event_df.dropna()
 
     return stroke_event_df
 
 
+def show_relationship_between_speed_and_quadrant(stroke_event_df):
+    print("DataFrame with Magnitude_Speed:")
+    print(stroke_event_df.head())
+
+    mean_speeds_components = stroke_event_df.groupby("Start_Quadrant")[
+        ["Speed_X", "Speed_Y", "Magnitude_Speed"]].mean().reset_index()
+    print("\nMean Speeds (X, Y, and Magnitude) by Start Quadrant:")
+    print(mean_speeds_components)
+
+    sns.set_theme(style="whitegrid")
+
+    # Box Plots
+    fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(18, 5))
+
+    sns.boxplot(x="Start_Quadrant", y='Speed_X', data=stroke_event_df, ax=axes[0])
+    axes[0].set_title("Speed_X Distribution by Start Quadrant")
+    axes[0].set_xlabel("Start Quadrant")
+    axes[0].set_ylabel("Speed_X")
+
+    sns.boxplot(x='Start_Quadrant', y='Speed_Y', data=stroke_event_df, ax=axes[1])
+    axes[1].set_title('Speed_Y Distribution by Start Quadrant')
+    axes[1].set_xlabel('Start Quadrant')
+    axes[1].set_ylabel('Speed_Y')
+
+    sns.boxplot(x='Start_Quadrant', y='Magnitude_Speed', data=stroke_event_df, ax=axes[2])
+    axes[2].set_title('Magnitude Speed Distribution by Start Quadrant')
+    axes[2].set_xlabel('Start Quadrant')
+    axes[2].set_ylabel('Magnitude Speed')
+
+    plt.tight_layout()
+    plt.show()
+
+    # Violin Plots
+    fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+
+    sns.violinplot(x='Start_Quadrant', y='Speed_X', data=stroke_event_df, ax=axes[0])
+    axes[0].set_title('Speed_X Distribution by Start Quadrant')
+    axes[0].set_xlabel('Start Quadrant')
+    axes[0].set_ylabel('Speed_X')
+
+    sns.violinplot(x='Start_Quadrant', y='Speed_Y', data=stroke_event_df, ax=axes[1])
+    axes[1].set_title('Speed_Y Distribution by Start Quadrant')
+    axes[1].set_xlabel('Start Quadrant')
+    axes[1].set_ylabel('Speed_Y')
+
+    sns.violinplot(x='Start_Quadrant', y='Magnitude_Speed', data=stroke_event_df, ax=axes[2])
+    axes[2].set_title('Magnitude Speed Distribution by Start Quadrant')
+    axes[2].set_xlabel('Start Quadrant')
+    axes[2].set_ylabel('Magnitude Speed')
+
+    plt.tight_layout()
+    plt.show()
+
+
 def extract_stroke_event_features(stroke_event_df):
     features = []
 
-    stroke_event_df = preprocess_stroke_events(stroke_event_df)
+    one_hot_encodings = False
+    show_relationships = False
+    stroke_event_df = preprocess_stroke_events(stroke_event_df, one_hot_encodings)
+
+    if not one_hot_encodings and show_relationships:
+        show_relationship_between_speed_and_quadrant(stroke_event_df)
 
     for activity_id, stroke_event_df_grouped in stroke_event_df.groupby("ActivityID"):
         stroke_event_df_grouped = stroke_event_df_grouped.sort_values(
@@ -95,22 +162,25 @@ def extract_stroke_event_features(stroke_event_df):
                                          "Start_X"],
                                      "Y_coord_distance": stroke_event_start_row["End_Y"] - stroke_event_start_row[
                                          "Start_Y"],
-                                     # "start_quadrant": stroke_event_start_row["Start_Quadrant"],
-                                     # "end_quadrant": stroke_event_start_row["End_Quadrant"],
-                                     # "direction": stroke_event_start_row["Direction"]
-                                     "start_quadrant_0": stroke_event_start_row["Start_Quadrant_1"],
-                                     "start_quadrant_1": stroke_event_start_row["Start_Quadrant_2"],
-                                     "start_quadrant_2": stroke_event_start_row["Start_Quadrant_3"],
-                                     "start_quadrant_3": stroke_event_start_row["Start_Quadrant_4"],
-                                     "end_quadrant_0": stroke_event_start_row["End_Quadrant_1"],
-                                     "end_quadrant_1": stroke_event_start_row["End_Quadrant_2"],
-                                     "end_quadrant_2": stroke_event_start_row["End_Quadrant_3"],
-                                     "end_quadrant_3": stroke_event_start_row["End_Quadrant_4"],
-                                     "direction_0": stroke_event_start_row["Direction_1"],
-                                     "direction_1": stroke_event_start_row["Direction_2"],
-                                     "direction_2": stroke_event_start_row["Direction_3"],
-                                     "direction_3": stroke_event_start_row["Direction_4"]
+                                     "magnitude_speed": stroke_event_start_row["Magnitude_Speed"]
                                      }
+            if one_hot_encodings:
+                stroke_event_features["start_quadrant_0"] = stroke_event_start_row["Start_Quadrant_1"]
+                stroke_event_features["start_quadrant_1"] = stroke_event_start_row["Start_Quadrant_2"]
+                stroke_event_features["start_quadrant_2"] = stroke_event_start_row["Start_Quadrant_3"]
+                stroke_event_features["start_quadrant_3"] = stroke_event_start_row["Start_Quadrant_4"]
+                stroke_event_features["end_quadrant_0"] = stroke_event_start_row["End_Quadrant_1"]
+                stroke_event_features["end_quadrant_1"] = stroke_event_start_row["End_Quadrant_2"]
+                stroke_event_features["end_quadrant_2"] = stroke_event_start_row["End_Quadrant_3"]
+                stroke_event_features["end_quadrant_3"] = stroke_event_start_row["End_Quadrant_4"]
+                stroke_event_features["direction_0"] = stroke_event_start_row["Direction_1"]
+                stroke_event_features["direction_1"] = stroke_event_start_row["Direction_2"]
+                stroke_event_features["direction_2"] = stroke_event_start_row["Direction_3"]
+                stroke_event_features["direction_3"] = stroke_event_start_row["Direction_4"]
+            else:
+                stroke_event_features["start_quadrant"] = stroke_event_start_row["Start_Quadrant"]
+                stroke_event_features["end_quadrant"] = stroke_event_start_row["End_Quadrant"]
+                stroke_event_features["direction"] = stroke_event_start_row["Direction"]
 
             if i + 1 >= len(stroke_event_df_grouped):
                 if len(features) > 0:

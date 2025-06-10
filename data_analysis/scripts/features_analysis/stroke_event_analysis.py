@@ -12,6 +12,10 @@ from sklearn.metrics import classification_report, accuracy_score
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from scripts.algorithms.equal_error_rate import calculate_overall_eer
+from scripts.algorithms.false_acceptance_rate import calculate_overall_far
+from scripts.algorithms.false_rejection_rate import calculate_overall_frr
+
 
 def stroke_event_analysis(stroke_event_df, classifier_name):
     if stroke_event_df is None:
@@ -39,6 +43,8 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
 
     y_pred = None
     classifier = None
+    y_scores = None
+    model_classes = None
     if classifier_name == "k-NN":
         # Without activity_id, session_number and start_timestamps, the best k value was 1 with 43.48% accuracy in a cross validation scenario
         best_k = 0
@@ -62,6 +68,8 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
         knn.fit(X_train_scaled, y_train)
 
         y_pred = knn.predict(X_test_scaled)
+        y_scores = knn.predict_proba(X_test_scaled)
+        model_classes = knn.classes_
 
         classifier = knn
 
@@ -70,7 +78,7 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
         # After adding the new properties X_coord_distance and Y_coord_distance, the best k = 20 with 44.65% accuracy
         # After adding the new properties start_quadrant, end_quadrant and direction, the best k = 13 with 43.14% accuracy
         # After transforming the properties start_quadrant, end_quadrant and direction into one hot encodings, the best k = 12 with 42.07% accuracy
-
+        # After adding magnitude_speed and turning off the one hot encodings, the best k = 16 with 42.74% accuracy, 0.03 FAR, 0.57 FRR and 0.20 EER
     elif classifier_name == "Random Forest":
         best_k = 0
 
@@ -80,6 +88,7 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
         # After adding the new properties X_coord_distance and Y_coord_distance, the best k = 201 with 55.53% accuracy
         # After adding the new properties start_quadrant, end_quadrant and direction, the best k = 201 with 55.10% accuracy
         # After transforming the properties start_quadrant, end_quadrant and direction into one hot encodings, the best k = 201 with 55.20% accuracy
+        # After adding magnitude_speed and turning off the one hot encodings, the best k = 201 with 55.63% accuracy, 0.02 FAR, 0.44 FRR and 0.15 EER
         if best_k == 0:
             k_values = list(range(1, 202, 50))
             cv_scores = []
@@ -103,6 +112,8 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
         rf.fit(X_train, y_train)
 
         y_pred = rf.predict(X_test)
+        y_scores = rf.predict_proba(X_test)
+        model_classes = rf.classes_
 
         classifier = rf
 
@@ -135,6 +146,7 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
             # After adding the new properties X_coord_distance and Y_coord_distance, the best params are: svm__C: 10, svm__gama: 0.1 and svm__kernel: rbf with 48.99% accuracy
             # After adding the new properties start_quadrant, end_quadrant and direction, the best params are: svm__C: 10, svm__gama: 0.1 and svm__kernel: rbf with 49.38% accuracy
             # After transforming the properties start_quadrant, end_quadrant and direction into one hot encodings, the best params are: svm__C: 1000, svm__gama: 0.01 and svm__kernel: rbf with 47.59% accuracy
+            # After adding magnitude_speed and turning off the one hot encodings,the best params are: svm__C: 10, svm__gama: 0.1 and svm__kernel: rbf with 49.32% accuracy, 0.03 FAR, 0.50 FRR and 0.19 EER
             param_grid = {"svm__C": [10, 100, 1000],
                               "svm__gamma": [0.01, 0.1, 1.0, 10.0],
                               "svm__kernel": ["rbf"]}
@@ -155,6 +167,8 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
         svm.fit(X_train_scaled, y_train)
 
         y_pred = svm.predict(X_test_scaled)
+        y_scores = svm.decision_function(X_test_scaled)
+        model_classes = svm.classes_
 
         classifier = svm
     else:
@@ -165,6 +179,12 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
 
     accuracy = accuracy_score(y_test, y_pred)
     print("Accuracy:", accuracy)
+    far = calculate_overall_far(y_true=y_test, y_pred=y_pred)
+    print("FAR (False Acceptance Rate):", far)
+    frr = calculate_overall_frr(y_true=y_test, y_pred=y_pred)
+    print("FRR (False Rejection Rate):", frr)
+    eer = calculate_overall_eer(y_true=y_test, y_scores=y_scores, model_classes=model_classes)
+    print("EER (Equal Error Rate):", eer)
 
     cv = cross_val_score(classifier, X_scaled, y, cv=5)
     print(f"{classifier_name} 5-fold CV accuracy:", np.round(cv.mean(), decimals=4))
