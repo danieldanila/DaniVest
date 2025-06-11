@@ -12,7 +12,7 @@ from sklearn.metrics import classification_report, accuracy_score
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from scripts.algorithms.equal_error_rate import calculate_overall_eer
+from scripts.algorithms.equal_error_rate import compute_multiclass_eer
 from scripts.algorithms.false_acceptance_rate import calculate_overall_far
 from scripts.algorithms.false_rejection_rate import calculate_overall_frr
 
@@ -183,8 +183,8 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
     print("FAR (False Acceptance Rate):", far)
     frr = calculate_overall_frr(y_true=y_test, y_pred=y_pred)
     print("FRR (False Rejection Rate):", frr)
-    eer = calculate_overall_eer(y_true=y_test, y_scores=y_scores, model_classes=model_classes)
-    print("EER (Equal Error Rate):", eer)
+    mean_eer, mean_threshold = compute_multiclass_eer(y_test, y_scores)
+    print(f"EER (Equal Error Rate): {mean_eer} with EER threshold: {mean_threshold}")
 
     cv = cross_val_score(classifier, X_scaled, y, cv=5)
     print(f"{classifier_name} 5-fold CV accuracy:", np.round(cv.mean(), decimals=4))
