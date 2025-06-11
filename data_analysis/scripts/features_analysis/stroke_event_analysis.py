@@ -34,6 +34,16 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
         columns=["user_id", "activity_id", "session_number", "start_timestamps"]
     )
 
+    # Drop Test 8
+    # X = stroke_event_df.drop(columns=["user_id", "activity_id", "session_number", "start_timestamps", "start_size",
+    #                                   "end_size", "speed_x", "speed_y"])
+
+    # Drop Test 9
+    X = stroke_event_df.drop(
+        columns=["user_id", "activity_id", "session_number", "start_timestamps", "start_size", "end_size", "speed_x",
+                 "speed_y", "phone_orientation", "start_quadrant", "end_quadrant",
+                 "direction"])
+
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 
     scaler = StandardScaler()
@@ -78,6 +88,8 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
         # After transforming the properties start_quadrant, end_quadrant and direction into one hot encodings, the best k = 12 with 42.07% accuracy
         # After adding magnitude_speed and turning off the one hot encodings, the best k = 16 with 42.74% accuracy, 0.03 FAR, 0.57 FRR and 0.20 EER with 0.0922 threshold
         # After adding magnitude_speed and turning on the one hot encodings, the best k = 12 with 42.25% accuracy, 0.0370 FAR, 0.5774 FRR and 0.2180 EER with 0.1031 threshold
+        # After adding avg_size, stroke_length, stroke_angle and removing start_size, end_size and speed_x and speed_y, the best k = 11 with 43.12% accuracy, 0.0365 FAR, 0.5687 FRR and 0.2104 EER with 0.1082 threshold
+        #   after also removing  "phone_orientation", "start_quadrant", "end_quadrant" and "direction", the best k = 11 with 43.83% accuracy, 0.0359 FAR, 0.5616 FRR and 0.2104 EER with 0.1125 threshold
     elif classifier_name == "Random Forest":
         best_k = 0
 
@@ -89,6 +101,8 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
         # After transforming the properties start_quadrant, end_quadrant and direction into one hot encodings, the best k = 201 with 55.20% accuracy
         # After adding magnitude_speed and turning off the one hot encodings, the best k = 201 with 55.63% accuracy, 0.02 FAR, 0.44 FRR and 0.15 EER with 0.0670 threshold
         # After adding magnitude_speed and turning on the one hot encodings, the best k = 201 with 56.08% accuracy, 0.0289 FAR, 0.4391 FRR and 0.1522 EER with 0.0682 threshold
+        # After adding avg_size, stroke_length, stroke_angle and removing start_size, end_size and speed_x and speed_y, the best k = 151 with 54.71% accuracy, 0.0295 FAR, 0.4528 FRR and 0.1579 EER with 0.0678 threshold
+        #   after also removing  "phone_orientation", "start_quadrant", "end_quadrant" and "direction", the best k = 201 with 53.98% accuracy, 0.0299 FAR, 0.4601 FRR and 0.1636 EER with 0.0660 threshold
         if best_k == 0:
             k_values = list(range(1, 202, 50))
             cv_scores = []
@@ -147,10 +161,11 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
             # After transforming the properties start_quadrant, end_quadrant and direction into one hot encodings, the best params are: svm__C: 1000, svm__gama: 0.01 and svm__kernel: rbf with 47.59% accuracy
             # After adding magnitude_speed and turning off the one hot encodings,the best params are: svm__C: 10, svm__gama: 0.1 and svm__kernel: rbf with 49.32% accuracy, 0.03 FAR, 0.50 FRR and 0.18 EER with 15.2321 threshold
             # After adding magnitude_speed and turning on the one hot encodings,the best params are: svm__C: 1000, svm__gama: 0.01 and svm__kernel: rbf with 47.81% accuracy, 0.0330 FAR, 0.5218 FRR and 0.19156 EER with 14.9110 threshold
+            # After adding avg_size, stroke_length, stroke_angle and removing start_size, end_size and speed_x and speed_y, the best params are: svm__C: 10, svm__gama: 0.1 and svm__kernel: rbf with 48.16% accuracy, 0.0329 FAR, 0.5218 FRR and 0.1897 EER with 15.3758 threshold
+            #   after also removing  "phone_orientation", "start_quadrant", "end_quadrant" and "direction", the best params are: svm__C: 10, svm__gama: 0.1 and svm__kernel: rbf with 47.33% accuracy, 0.0338 FAR, 0.5266 FRR and 0.1964 EER with 15.2814 threshold
             param_grid = {"svm__C": [10, 100, 1000],
-                              "svm__gamma": [0.01, 0.1, 1.0, 10.0],
-                              "svm__kernel": ["rbf"]}
-
+                          "svm__gamma": [0.01, 0.1, 1.0, 10.0],
+                          "svm__kernel": ["rbf"]}
 
             grid = GridSearchCV(pipeline, param_grid, cv=5, scoring="accuracy", n_jobs=-1)
 

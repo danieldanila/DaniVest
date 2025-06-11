@@ -57,10 +57,16 @@ def preprocess_stroke_events(stroke_event_df, one_hot_encodings=False):
 
     stroke_event_df["Direction"] = stroke_event_df.apply(movement_direction, axis=1)
 
-    # Calculate the magnitude of the speed vector
     # Magnitude = sqrt(Speed_X^2 + Speed_Y^2)
     stroke_event_df["Magnitude_Speed"] = np.sqrt(stroke_event_df["Speed_X"] ** 2 + stroke_event_df["Speed_Y"] ** 2)
 
+    # Stroke length = sqrt((End_X - Start_X)² + (End_Y - Start_Y)²)
+    stroke_event_df["Stroke_Length"] = np.sqrt((stroke_event_df["End_X"] - stroke_event_df["Start_X"]) ** 2 + (
+            stroke_event_df["End_Y"] - stroke_event_df["Start_Y"]) ** 2)
+
+    # Stroke angle = atan2(End_Y - Start_Y, End_X - Start_X)
+    stroke_event_df["Stroke_Angle"] = np.atan2(stroke_event_df["End_Y"] - stroke_event_df["Start_Y"],
+                                               stroke_event_df["End_X"] - stroke_event_df["Start_X"])
     if one_hot_encodings:
         stroke_event_df = pd.get_dummies(stroke_event_df, columns=["Direction", "Start_Quadrant", "End_Quadrant"])
 
@@ -151,18 +157,22 @@ def extract_stroke_event_features(stroke_event_df):
                                      "up_down_duration_ms": stroke_event_start_row["End_time"],
                                      "start_x": stroke_event_start_row["Start_X"],
                                      "start_y": stroke_event_start_row["Start_Y"],
-                                     "start_size": stroke_event_start_row["Start_size"],
                                      "end_x": stroke_event_start_row["End_X"],
                                      "end_y": stroke_event_start_row["End_Y"],
-                                     "end_size": stroke_event_start_row["End_size"],
-                                     "speed_x": stroke_event_start_row["Speed_X"],
-                                     "speed_y": stroke_event_start_row["Speed_Y"],
-                                     "phone_orientation": stroke_event_start_row["Phone_orientation"],
                                      "X_coord_distance": stroke_event_start_row["End_X"] - stroke_event_start_row[
                                          "Start_X"],
                                      "Y_coord_distance": stroke_event_start_row["End_Y"] - stroke_event_start_row[
                                          "Start_Y"],
-                                     "magnitude_speed": stroke_event_start_row["Magnitude_Speed"]
+                                    "start_size": stroke_event_start_row["Start_size"],
+                                     "end_size": stroke_event_start_row["End_size"],
+                                     "avg_size": (stroke_event_start_row["Start_size"] + stroke_event_start_row[
+                                         "End_size"]) / 2,
+                                     "speed_x": stroke_event_start_row["Speed_X"],
+                                     "speed_y": stroke_event_start_row["Speed_Y"],
+                                     "magnitude_speed": stroke_event_start_row["Magnitude_Speed"],
+                                     "stroke_length": stroke_event_start_row["Stroke_Length"],
+                                     "stroke_angle": stroke_event_start_row["Stroke_Angle"],
+                                     "phone_orientation": stroke_event_start_row["Phone_orientation"]
                                      }
             if one_hot_encodings:
                 stroke_event_features["start_quadrant_0"] = stroke_event_start_row["Start_Quadrant_1"]
