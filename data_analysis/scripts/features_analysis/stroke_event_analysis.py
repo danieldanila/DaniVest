@@ -39,10 +39,31 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
     #                                   "end_size", "speed_x", "speed_y"])
 
     # Drop Test 9
+    # X = stroke_event_df.drop(
+    #     columns=["user_id", "activity_id", "session_number", "start_timestamps", "start_size", "end_size", "speed_x",
+    #              "speed_y", "phone_orientation", "start_quadrant", "end_quadrant", "direction"])
+
+    # Drop Test 10
+    # X = stroke_event_df.drop(
+    #     columns=["user_id", "activity_id", "session_number", "start_timestamps", "start_size", "end_size", "speed_x",
+    #              "speed_y", "phone_orientation", "start_quadrant", "end_quadrant", "direction", "start_x", "start_y",
+    #              "end_x", "end_y", "X_coord_distance", "Y_coord_distance"])
+
+    # Drop Test 11
+    # X = stroke_event_df.drop(
+    #     columns=["user_id", "activity_id", "session_number", "start_timestamps", "start_size", "end_size", "speed_x",
+    #              "speed_y", "phone_orientation", "start_quadrant", "end_quadrant", "direction", "X_coord_distance",
+    #              "Y_coord_distance"])
+
+    # Drop Test 12 + 13 (with new properties: one hot encoding also for phone_orientation +
+    #   part_of_day, hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend)
     X = stroke_event_df.drop(
-        columns=["user_id", "activity_id", "session_number", "start_timestamps", "start_size", "end_size", "speed_x",
-                 "speed_y", "phone_orientation", "start_quadrant", "end_quadrant",
-                 "direction"])
+        columns=["user_id", "activity_id", "session_number", "start_timestamps"])
+
+    # Drop Test 14
+    # X = stroke_event_df.drop(
+    #     columns=["user_id", "activity_id", "session_number", "hour_sin", "hour_cos", "dow_sin", "dow_cos", "month_sin",
+    #              "month_cos", "is_weekend", "part_of_day"])
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 
@@ -90,6 +111,12 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
         # After adding magnitude_speed and turning on the one hot encodings, the best k = 12 with 42.25% accuracy, 0.0370 FAR, 0.5774 FRR and 0.2180 EER with 0.1031 threshold
         # After adding avg_size, stroke_length, stroke_angle and removing start_size, end_size and speed_x and speed_y, the best k = 11 with 43.12% accuracy, 0.0365 FAR, 0.5687 FRR and 0.2104 EER with 0.1082 threshold
         #   after also removing  "phone_orientation", "start_quadrant", "end_quadrant" and "direction", the best k = 11 with 43.83% accuracy, 0.0359 FAR, 0.5616 FRR and 0.2104 EER with 0.1125 threshold
+        #   after also removing  "start_x", "start_y", "end_x", "end_y", "X_coord_distance" and "Y_coord_distance", the best k = 30 with 30.09% accuracy, 0.0463 FAR, 0.6990 FRR and 0.2690 EER with 0.0761 threshold
+        #   after re-adding "start_x", "start_y", "end_x" and "end_y", the best k = 17 with 43.53% accuracy, 0.0364 FAR, 0.5646 FRR and 0.2077 EER with 0.0896 threshold
+        # After dropping only activity_id, session_number and start_timestamps, the best k = 15 with 43.10% accuracy, 0.0365 FAR, 0.5689 FRR and 0.2111 EER with 0.0952 threshold
+        #   after adding new properties: part_of_day, hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend and activated one hot encodings (for Direction, Start_Quadrant, End_Quadrant, Phone_orientation, Part_Of_Day), the best k = 1 with 79.12% accuracy, 0.0118 FAR, 0.2087 FRR and 0.1318 EER with 1.0 threshold
+        #   after running the same setup except one hot encoding was False, the best k = 1 with 79.64% accuracy, 0.0112 FAR, 0.2035 FRR and 0.1271 EER with 1.0 threshold
+        #   after dropping all time related properties and re-adding start_timestamp, the best k = 7 with 61.33% accuracy, 0.0245 FAR, 0.3866 FRR and 0.1298 EER with 0.1564 threshold
     elif classifier_name == "Random Forest":
         best_k = 0
 
@@ -103,6 +130,12 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
         # After adding magnitude_speed and turning on the one hot encodings, the best k = 201 with 56.08% accuracy, 0.0289 FAR, 0.4391 FRR and 0.1522 EER with 0.0682 threshold
         # After adding avg_size, stroke_length, stroke_angle and removing start_size, end_size and speed_x and speed_y, the best k = 151 with 54.71% accuracy, 0.0295 FAR, 0.4528 FRR and 0.1579 EER with 0.0678 threshold
         #   after also removing  "phone_orientation", "start_quadrant", "end_quadrant" and "direction", the best k = 201 with 53.98% accuracy, 0.0299 FAR, 0.4601 FRR and 0.1636 EER with 0.0660 threshold
+        #   after also removing  "start_x", "start_y", "end_x", "end_y", "X_coord_distance" and "Y_coord_distance", the best k = 201 with 40.12% accuracy, 0.0386 FAR, 0.5987 FRR and 0.2209 EER with 0.0566 threshold
+        #   after re-adding "start_x", "start_y", "end_x" and "end_y", the best k = 201 with 53.03% accuracy, 0.0306 FAR, 0.4696 FRR and 0.1606 EER with 0.0660 threshold
+        # After dropping only activity_id, session_number and start_timestamps, the best k = 201 with 55.81% accuracy, 0.0289 FAR, 0.4418 FRR and 0.1506 EER with 0.0684 threshold
+        #   after adding new properties: part_of_day, hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend and activated one hot encodings (for Direction, Start_Quadrant, End_Quadrant, Phone_orientation, Part_Of_Day), the best k = 201 with 87.78% accuracy, 0.0073 FAR, 0.1212 FRR and 0.02588 EER with 0.1864 threshold
+        #   after running the same setup except one hot encoding was False, the best k = 151 with 87.42% accuracy, 0.0076 FAR, 0.1257 FRR and 0.0263 EER with 0.1822 threshold
+        #   after dropping all time related properties and re-adding start_timestamp, the best k = 201 with 90.57% accuracy, 0.0056 FAR, 0.0942 FRR and 0.0248 EER with 0.1425 threshold
         if best_k == 0:
             k_values = list(range(1, 202, 50))
             cv_scores = []
@@ -163,6 +196,12 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
             # After adding magnitude_speed and turning on the one hot encodings,the best params are: svm__C: 1000, svm__gama: 0.01 and svm__kernel: rbf with 47.81% accuracy, 0.0330 FAR, 0.5218 FRR and 0.19156 EER with 14.9110 threshold
             # After adding avg_size, stroke_length, stroke_angle and removing start_size, end_size and speed_x and speed_y, the best params are: svm__C: 10, svm__gama: 0.1 and svm__kernel: rbf with 48.16% accuracy, 0.0329 FAR, 0.5218 FRR and 0.1897 EER with 15.3758 threshold
             #   after also removing  "phone_orientation", "start_quadrant", "end_quadrant" and "direction", the best params are: svm__C: 10, svm__gama: 0.1 and svm__kernel: rbf with 47.33% accuracy, 0.0338 FAR, 0.5266 FRR and 0.1964 EER with 15.2814 threshold
+            #   after also removing  "start_x", "start_y", "end_x", "end_y", "X_coord_distance" and "Y_coord_distance", the best params are: svm__C: 1000, svm__gama: 0.1 and svm__kernel: rbf with 34.40% accuracy, 0.0436 FAR, 0.6598 FRR and 0.2498 EER with 14.0028 threshold
+            #   after re-adding "start_x", "start_y", "end_x" and "end_y", the best params are: svm__C: 100, svm__gama: 0.1 and svm__kernel: rbf with 47.93% accuracy, 0.0326 FAR, 0.5206 FRR and 0.1986 EER with 14.9073 threshold
+            # After dropping only activity_id, session_number and start_timestamps, the best params are: svm__C: 1000, svm__gama: 0.01 and svm__kernel: rbf with 49.23% accuracy, 0.0318 FAR, 0.5076 FRR and 0.1870 EER with 15.2906 threshold
+            #   after adding new properties: part_of_day, hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend and activated one hot encodings (for Direction, Start_Quadrant, End_Quadrant, Phone_orientation, Part_Of_Day), the best params are: svm__C: 10, svm__gama: 0.1 and svm__kernel: rbf with 85.37% accuracy, 0.0084 FAR, 0.1462 FRR and 0.0573 EER with 18.3253 threshold
+            #   after running the same setup except one hot encoding was False, the best params are: svm__C: 10, svm__gama: 0.01 and svm__kernel: rbf with 82.89% accuracy, 0.0104 FAR, 0.1710 FRR and 0.0553 EER with 18.556 threshold
+            #   after dropping all time related properties and re-adding start_timestamp, the best params are: svm__C: 100, svm__gama: 0.01 and svm__kernel: rbf with 86.04% accuracy, 0.0077 FAR, 0.1395 FRR and 0.0469 EER with 19.0322 threshold
             param_grid = {"svm__C": [10, 100, 1000],
                           "svm__gamma": [0.01, 0.1, 1.0, 10.0],
                           "svm__kernel": ["rbf"]}
