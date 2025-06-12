@@ -1,48 +1,10 @@
 import pandas as pd
 import math
-import matplotlib.pyplot as plt
-import seaborn as sns
-import numpy as np
 
+from scripts.Utils.coordinates_operations import get_stroke_event_quadrant, get_magnitude_speed, \
+    get_euclidean_distance, get_angle, get_movement_direction
 from scripts.Utils.date_transformation import timestamp_to_date
 from scripts.Utils.show_relationships import show_relationship_between_speed_and_quadrant
-
-
-# Screen example
-# +-----------+-----------+
-# |           |           |
-# |    Box 1  |   Box 2   |
-# |           |           |
-# |-----------+-----------|
-# |           |           |
-# |   Box 3   |   Box 4   |
-# |           |           |
-# +-----------+-----------+
-def get_stroke_event_quadrant(x, y, max_x, max_y):
-    half_screen_x = max_x / 2
-    half_screen_y = max_y / 2
-
-    if x < half_screen_x and y < half_screen_y:
-        return 1  # Top-left
-    elif x >= half_screen_x and y < half_screen_y:
-        return 2  # Top-right
-    elif x < half_screen_x and y >= half_screen_y:
-        return 3  # Bottom-left
-    else:
-        return 4  # Bottom-right
-
-
-def movement_direction(row):
-    if row["Speed_X"] > 0 and row["Speed_Y"] > 0:
-        return 0  # "down-right"
-    elif row["Speed_X"] < 0 and row["Speed_Y"] > 0:
-        return 1  # "down-left"
-    elif row["Speed_X"] > 0 and row["Speed_Y"] < 0:
-        return 2  # "up-right"
-    elif row["Speed_X"] < 0 and row["Speed_Y"] < 0:
-        return 3  # "up-left"
-    else:
-        return 4  # "straight"
 
 
 # The table has some rows with NULL values
@@ -58,19 +20,19 @@ def preprocess_stroke_events(stroke_event_df, one_hot_encodings=False):
         lambda row: get_stroke_event_quadrant(row["End_X"], row["End_Y"], max_x, max_y), axis=1
     )
 
-    stroke_event_df["Direction"] = stroke_event_df.apply(movement_direction, axis=1)
+    stroke_event_df["Direction"] = stroke_event_df.apply(
+        lambda row: get_movement_direction(row["Speed_X"], row["Speed_Y"]), axis=1)
 
-    # Magnitude = sqrt(Speed_X^2 + Speed_Y^2)
-    stroke_event_df["Magnitude_Speed"] = np.sqrt(stroke_event_df["Speed_X"] ** 2 + stroke_event_df["Speed_Y"] ** 2)
+    stroke_event_df["Magnitude_Speed"] = stroke_event_df.apply(
+        lambda row: get_magnitude_speed(row["Speed_X"], row["Speed_Y"]), axis=1)
 
-    # Stroke length = sqrt((End_X - Start_X)² + (End_Y - Start_Y)²)
-    stroke_event_df["Stroke_Length_Euclidean_Distance"] = np.sqrt(
-        (stroke_event_df["End_X"] - stroke_event_df["Start_X"]) ** 2 + (
-                stroke_event_df["End_Y"] - stroke_event_df["Start_Y"]) ** 2)
+    stroke_event_df["Stroke_Length_Euclidean_Distance"] = stroke_event_df.apply(
+        lambda row: get_euclidean_distance(row["Start_X"], row["Start_Y"], row["End_X"], row["End_Y"]),
+        axis=1)
 
-    # Stroke angle = atan2(End_Y - Start_Y, End_X - Start_X)
-    stroke_event_df["Stroke_Angle"] = np.atan2(stroke_event_df["End_Y"] - stroke_event_df["Start_Y"],
-                                               stroke_event_df["End_X"] - stroke_event_df["Start_X"])
+    stroke_event_df["Stroke_Angle"] = stroke_event_df.apply(
+        lambda row: get_angle(row["Start_X"], row["Start_Y"], row["End_X"], row["End_Y"]),
+        axis=1)
 
     stroke_event_df = timestamp_to_date(stroke_event_df)
 
@@ -130,7 +92,7 @@ def extract_stroke_event_features(stroke_event_df):
                                      "stroke_angle": stroke_event_start_row["Stroke_Angle"],
                                      "start_size": stroke_event_start_row["Start_size"],
                                      "end_size": stroke_event_start_row["End_size"],
-                                     "avg_size": (stroke_event_start_row["Start_size"] + stroke_event_start_row[
+                                     "contact_size_avg": (stroke_event_start_row["Start_size"] + stroke_event_start_row[
                                          "End_size"]) / 2,
                                      "speed_x": stroke_event_start_row["Speed_X"],
                                      "speed_y": stroke_event_start_row["Speed_Y"],
