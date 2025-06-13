@@ -75,13 +75,26 @@
 
 import pandas as pd
 
+from scripts.Utils.date_transformation import timestamp_to_date
+
+
+def preprocess_key_press_events(key_press_event_df):
+    key_press_event_df = timestamp_to_date(key_press_event_df)
+
+    return key_press_event_df
+
 
 def extract_key_press_event_features(key_press_event_df):
     features = []
 
+    key_press_event_df = preprocess_key_press_events(key_press_event_df)
+
+    one_hot_encodings = False
+
     for activity_id, key_press_event_df_grouped in key_press_event_df.groupby("ActivityID"):
         key_press_event_df_grouped = key_press_event_df_grouped.sort_values(by=["PressTime", "Systime"]).reset_index(
             drop=True)
+
         key_press_event_df_grouped_length = len(key_press_event_df_grouped)
 
         # ActivityID is composed as SubjectID (6 digits) + Session_number (between 01 and 24) + ContentID + Run-time determined Counter value
@@ -89,13 +102,24 @@ def extract_key_press_event_features(key_press_event_df):
                                     "user_id": int(str(activity_id)[:6]),
                                     "session_number": int(str(activity_id)[6:8]),
                                     "start_timestamps": key_press_event_df_grouped.iloc[0]["Systime"],
-                                    "duration_ms": key_press_event_df_grouped.iloc[0]["PressTime"],
-                                    "key_press_release_avg_ms": 0, "key_release_press_avg_time_ms": 0,
-                                    "key_press_press_avg_time_ms": 0,
+                                    "session_duration_ms": key_press_event_df_grouped.iloc[0]["PressTime"],
+                                    "hour_sin": key_press_event_df_grouped.iloc[0]["Hour_Sin"],
+                                    "hour_cos": key_press_event_df_grouped.iloc[0]["Hour_Cos"],
+                                    "dow_sin": key_press_event_df_grouped.iloc[0]["DoW_Sin"],
+                                    "dow_cos": key_press_event_df_grouped.iloc[0]["DoW_Cos"],
+                                    "month_sin": key_press_event_df_grouped.iloc[0]["Month_Sin"],
+                                    "month_cos": key_press_event_df_grouped.iloc[0]["Month_Cos"],
+                                    "is_weekend": key_press_event_df_grouped.iloc[0]["Is_Weekend"],
+                                    "part_of_day": key_press_event_df_grouped.iloc[0]["Part_Of_Day"],
+                                    "down_up_duration_ms_avg": 0,
+                                    "down_down_duration_ms_avg": 0,
+                                    "up_down_duration_ms_avg": 0,
                                     "key_ids": [],
                                     "key_ids_occurrences": [],
+                                    "total_unique_keys_used": 0,
+                                    "total_keys_pressed": 0,
                                     "characters_per_second": 0,
-                                    "Phone_orientation_avg": 0
+                                    "phone_orientation": 0
                                     }
 
         i = 0
@@ -118,21 +142,10 @@ def extract_key_press_event_features(key_press_event_df):
                 i += 1
                 continue
 
-            key_press_event_features["Phone_orientation_avg"] += row["Phone_orientation"]
-
-            current_row_key_id = row["KeyID"]
-            if current_row_key_id in key_press_event_features["key_ids"]:
-                index = key_press_event_features["key_ids"].index(current_row_key_id)
-                key_press_event_features["key_ids_occurrences"][index] += 1
-            else:
-                key_press_event_features["key_ids"].append(current_row_key_id)
-                key_press_event_features["key_ids_occurrences"].append(1)
-
-            key_press_event_features["key_press_release_avg_ms"] += (next_row["PressTime"] - row["PressTime"])
-
             # Two consecutive UP events: the next row and the second next row are both UP (Release) events
             # -> the second next row doesn't have a DOWN (Press) pair event -> skip and ignore it
             second_next_row_valid = False
+            second_next_row = None
             j = i + 2
             while j < key_press_event_df_grouped_length and second_next_row_valid is False:
                 # second_next_row = DOWN (Press) event
@@ -140,29 +153,47 @@ def extract_key_press_event_features(key_press_event_df):
 
                 if second_next_row["PressType"] == 0:
                     second_next_row_valid = True
-
-                    key_press_event_features["key_press_press_avg_time_ms"] += (
-                            second_next_row["PressTime"] - row["PressTime"])
-
-                    key_press_event_features["key_release_press_avg_time_ms"] += (
-                            second_next_row["PressTime"] - next_row["PressTime"])
                 else:
                     j += 1
+                    second_next_row = None
+
+            key_press_event_features["phone_orientation"] += row["Phone_orientation"]
+
+            key_press_event_features["down_up_duration_ms_avg"] += (next_row["PressTime"] - row["PressTime"])
+            if second_next_row_valid and second_next_row is not None:
+                key_press_event_features["down_down_duration_ms_avg"] += (
+                        second_next_row["PressTime"] - row["PressTime"])
+
+                key_press_event_features["up_down_duration_ms_avg"] += (
+                        next_row["PressTime"] - second_next_row["PressTime"])
+
+            current_row_key_id = row["KeyID"]
+            if current_row_key_id in key_press_event_features["key_ids"]:
+                index = key_press_event_features["key_ids"].index(current_row_key_id)
+                key_press_event_features["key_ids_occurrences"][index] += 1
+            else:
+                key_press_event_features["key_ids"].append(int(current_row_key_id))
+                key_press_event_features["key_ids_occurrences"].append(1)
 
             # If the second statement is true, it means that a DOWN event doesn't have a post UP (Release) event and is the last row
             # The final row
             if i + 2 == key_press_event_df_grouped_length or i + 2 >= key_press_event_df_grouped_length - 1:
-                key_press_event_features["duration_ms"] -= row["PressTime"]
-                key_press_event_features["duration_ms"] = abs(key_press_event_features["duration_ms"])
+                key_press_event_features["session_duration_ms"] -= row["PressTime"]
+                key_press_event_features["session_duration_ms"] = abs(key_press_event_features["session_duration_ms"])
 
                 total_characters_pressed = sum(key_press_event_features["key_ids_occurrences"])
                 key_press_event_features["characters_per_second"] = total_characters_pressed / (
-                        key_press_event_features["duration_ms"] / 1000)
-                key_press_event_features["Phone_orientation_avg"] /= total_characters_pressed
+                        key_press_event_features["session_duration_ms"] / 1000)
 
-                key_press_event_features["key_press_release_avg_ms"] /= (total_characters_pressed / 2)
-                key_press_event_features["key_release_press_avg_time_ms"] /= (total_characters_pressed / 2)
-                key_press_event_features["key_press_press_avg_time_ms"] /= (total_characters_pressed / 2)
+                key_press_event_features["total_unique_keys_used"] = len(key_press_event_features["key_ids"])
+                key_press_event_features["total_keys_pressed"] = sum(key_press_event_features["key_ids_occurrences"])
+
+                key_press_event_features["phone_orientation"] /= total_characters_pressed
+                key_press_event_features["phone_orientation"] = round(key_press_event_features["phone_orientation"])
+
+                key_press_event_features["down_up_duration_ms_avg"] /= (total_characters_pressed / 2)
+                key_press_event_features["up_down_duration_ms_avg"] /= (total_characters_pressed / 2)
+                key_press_event_features["down_down_duration_ms_avg"] /= (total_characters_pressed / 2)
 
                 features.append(key_press_event_features)
 
@@ -178,4 +209,10 @@ def extract_key_press_event_features(key_press_event_df):
             # Skip the finger UP event
             i += 2
 
-    return pd.DataFrame(features)
+    categorical_cols_to_encode = ["phone_orientation", "part_of_day"]
+
+    features_df = pd.DataFrame(features)
+    if one_hot_encodings:
+        features_df = pd.get_dummies(features_df, columns=categorical_cols_to_encode, prefix_sep="_")
+
+    return features_df
