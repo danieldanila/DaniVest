@@ -12,6 +12,10 @@ from sklearn.metrics import classification_report, accuracy_score
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from scripts.algorithms.equal_error_rate import compute_multiclass_eer
+from scripts.algorithms.false_acceptance_rate import calculate_overall_far
+from scripts.algorithms.false_rejection_rate import calculate_overall_frr
+
 
 def scroll_event_analysis(scroll_event_df, classifier_name):
     if scroll_event_df is None:
@@ -39,6 +43,7 @@ def scroll_event_analysis(scroll_event_df, classifier_name):
 
     y_pred = None
     classifier = None
+    y_scores = None
     if classifier_name == "k-NN":
         # Without activity_id, session_number, start_timestamps and scroll_id, the best k value was 15 with 45.94% accuracy in a cross validation scenario
         best_k = 0
@@ -62,16 +67,20 @@ def scroll_event_analysis(scroll_event_df, classifier_name):
         knn.fit(X_train_scaled, y_train)
 
         y_pred = knn.predict(X_test_scaled)
+        y_scores = knn.predict_proba(X_test_scaled)
 
         classifier = knn
 
         # Without activity_id, session_number, start_timestamps and scroll_id, the best k value was 15 with 46.16% accuracy in a one shot test accuracy
-
+        # After adding the new properties: hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, down_up_duration_ms, down_down_duration_ms, up_down_duration_ms, start_quadrant, end_quadrant, scroll_length_euclidean_distance, scroll_angle, direction, magnitude_speed and hot encodings was true, the best k = 1 with 81.13% accuracy, 0.0094 FAR, 0.1867 FRR and 0.1072 EER with 1.0 threshold
+        #   after turning off the hot encodings, the best k = 1 with 83.56% accuracy, 0.0082 FAR, 0.1643 FRR and 0.0947 EER with 1.0 threshold
     elif classifier_name == "Random Forest":
         best_k = 0
 
         # After k=100, the accuracy is relatively constant at around 52%
         #   but k=151 showed the best accuracy of 52.07%
+        # After adding the new properties: hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, down_up_duration_ms, down_down_duration_ms, up_down_duration_ms, start_quadrant, end_quadrant, scroll_length_euclidean_distance, scroll_angle, direction, magnitude_speed and hot encodings was true, the best k = 201 with 90.04% accuracy, 0.0053 FAR, 0.0995 FRR and 0.0223 EER with 0.1850 threshold
+        #   after turning off the hot encodings, the best k = 201 with 90.05% accuracy, 0.0050 FAR, 0.0946 FRR and 0.0214 EER with 0.1850 threshold
         if best_k == 0:
             k_values = list(range(1, 202, 50))
             cv_scores = []
@@ -95,6 +104,7 @@ def scroll_event_analysis(scroll_event_df, classifier_name):
         rf.fit(X_train, y_train)
 
         y_pred = rf.predict(X_test)
+        y_scores = rf.predict_proba(X_test)
 
         classifier = rf
 
@@ -123,6 +133,8 @@ def scroll_event_analysis(scroll_event_df, classifier_name):
             ])
 
             # After 2 hours of executing, the best params are: svm__C: 1000, svm__gama: 0.1 and svm__kernel: rbf with 52.85% accuracy
+            # After adding the new properties: hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, down_up_duration_ms, down_down_duration_ms, up_down_duration_ms, start_quadrant, end_quadrant, scroll_length_euclidean_distance, scroll_angle, direction, magnitude_speed and hot encodings was true, the best params are: svm__C: 10, svm__gama: 0.01 and svm__kernel: rbf with 83.87% accuracy, 0.0085 FAR, 0.1612 FRR and 0.0505 EER with 18.79 threshold
+            #   after turning off the hot encodings, the best params are: svm__C: 10, svm__gama: 0.1 and svm__kernel: rbf with 88.87% accuracy, 0.0058 FAR, 0.1126 FRR and 0.0386 EER with 19.03 threshold
             param_grid = {"svm__C": [10, 100, 1000],
                               "svm__gamma": [0.01, 0.1, 1.0, 10.0],
                               "svm__kernel": ["rbf"]}
@@ -143,6 +155,7 @@ def scroll_event_analysis(scroll_event_df, classifier_name):
         svm.fit(X_train_scaled, y_train)
 
         y_pred = svm.predict(X_test_scaled)
+        y_scores = svm.decision_function(X_test_scaled)
 
         classifier = svm
     else:
@@ -153,6 +166,12 @@ def scroll_event_analysis(scroll_event_df, classifier_name):
 
     accuracy = accuracy_score(y_test, y_pred)
     print("Accuracy:", accuracy)
+    far = calculate_overall_far(y_true=y_test, y_pred=y_pred)
+    print("FAR (False Acceptance Rate):", far)
+    frr = calculate_overall_frr(y_true=y_test, y_pred=y_pred)
+    print("FRR (False Rejection Rate):", frr)
+    mean_eer, mean_threshold = compute_multiclass_eer(y_test, y_scores)
+    print(f"EER (Equal Error Rate): {mean_eer} with EER threshold: {mean_threshold}")
 
     cv = cross_val_score(classifier, X_scaled, y, cv=5)
     print(f"{classifier_name} 5-fold CV accuracy:", np.round(cv.mean(), decimals=4))

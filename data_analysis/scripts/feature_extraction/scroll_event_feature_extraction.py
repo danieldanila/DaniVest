@@ -24,7 +24,7 @@ from scripts.Utils.coordinates_operations import get_stroke_event_quadrant, get_
 from scripts.Utils.date_transformation import timestamp_to_date
 
 
-def preprocess_scroll_events(scroll_event_df, one_hot_encodings=False):
+def preprocess_scroll_events(scroll_event_df):
     rows_length_with_minus_one = len(scroll_event_df[scroll_event_df["ScrollID"] == -1])
     scroll_id_max_value = scroll_event_df["ScrollID"].max()
     scroll_id_index = scroll_id_max_value + 1
@@ -61,16 +61,17 @@ def preprocess_scroll_events(scroll_event_df, one_hot_encodings=False):
 def extract_scroll_event_features(scroll_event_df):
     features = []
 
-    one_hot_encodings = True
     max_x = math.ceil(scroll_event_df[["Start_X", "Current_X"]].max().max() / 1000) * 1000
     max_y = math.ceil(scroll_event_df[["Start_Y", "Current_Y"]].max().max() / 1000) * 1000
+
+    one_hot_encodings = False
 
     for activity_id, scroll_event_df_grouped in scroll_event_df.groupby("ActivityID"):
         scroll_event_df_grouped = scroll_event_df_grouped.sort_values(
             by=["ScrollID", "BeginTime", "CurrentTime", "Start_X", "Start_Y", "Start_size"]).reset_index(drop=True)
 
         # Sorted the dataframe by ScrollID And ActivityID so ScrollID values=-1 come first, then sorted by the unique tuple and CurrentTime
-        scroll_event_df_grouped = preprocess_scroll_events(scroll_event_df_grouped, one_hot_encodings)
+        scroll_event_df_grouped = preprocess_scroll_events(scroll_event_df_grouped)
 
         i = 0
         while i < len(scroll_event_df_grouped):
