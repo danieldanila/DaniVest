@@ -11,7 +11,7 @@ import numpy as np
 # |   Box 3   |   Box 4   |
 # |           |           |
 # +-----------+-----------+
-def get_stroke_event_quadrant(x, y, max_x, max_y):
+def get_quadrant(x, y, max_x, max_y):
     half_screen_x = max_x / 2
     half_screen_y = max_y / 2
 

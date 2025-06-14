@@ -89,7 +89,7 @@ def extract_key_press_event_features(key_press_event_df):
 
     key_press_event_df = preprocess_key_press_events(key_press_event_df)
 
-    one_hot_encodings = False
+    one_hot_encodings = True
 
     for activity_id, key_press_event_df_grouped in key_press_event_df.groupby("ActivityID"):
         key_press_event_df_grouped = key_press_event_df_grouped.sort_values(by=["PressTime", "Systime"]).reset_index(

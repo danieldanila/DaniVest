@@ -1,7 +1,7 @@
 import pandas as pd
 import math
 
-from scripts.Utils.coordinates_operations import get_stroke_event_quadrant, get_magnitude_speed, \
+from scripts.Utils.coordinates_operations import get_quadrant, get_magnitude_speed, \
     get_euclidean_distance, get_angle, get_movement_direction
 from scripts.Utils.date_transformation import timestamp_to_date
 from scripts.Utils.show_relationships import show_relationship_between_speed_and_quadrant
@@ -13,11 +13,11 @@ def preprocess_stroke_events(stroke_event_df):
     max_y = math.ceil(stroke_event_df[["Start_Y", "End_Y"]].max().max() / 1000) * 1000
 
     stroke_event_df["Start_Quadrant"] = stroke_event_df.apply(
-        lambda row: get_stroke_event_quadrant(row["Start_X"], row["Start_Y"], max_x, max_y), axis=1
+        lambda row: get_quadrant(row["Start_X"], row["Start_Y"], max_x, max_y), axis=1
     )
 
     stroke_event_df["End_Quadrant"] = stroke_event_df.apply(
-        lambda row: get_stroke_event_quadrant(row["End_X"], row["End_Y"], max_x, max_y), axis=1
+        lambda row: get_quadrant(row["End_X"], row["End_Y"], max_x, max_y), axis=1
     )
 
     stroke_event_df["Direction"] = stroke_event_df.apply(
@@ -83,13 +83,13 @@ def extract_stroke_event_features(stroke_event_df):
                                      "start_y": stroke_event_start_row["Start_Y"],
                                      "end_x": stroke_event_start_row["End_X"],
                                      "end_y": stroke_event_start_row["End_Y"],
-                                     "start_quadrant": get_stroke_event_quadrant(stroke_event_start_row["Start_X"],
-                                                                                 stroke_event_start_row["Start_Y"],
-                                                                                 max_x, max_y),
-                                     "end_quadrant": get_stroke_event_quadrant(stroke_event_start_row["End_X"],
-                                                                               stroke_event_start_row["End_Y"],
-                                                                               max_x,
-                                                                               max_y),
+                                     "start_quadrant": get_quadrant(stroke_event_start_row["Start_X"],
+                                                                    stroke_event_start_row["Start_Y"],
+                                                                    max_x, max_y),
+                                     "end_quadrant": get_quadrant(stroke_event_start_row["End_X"],
+                                                                  stroke_event_start_row["End_Y"],
+                                                                  max_x,
+                                                                  max_y),
                                      "X_coord_distance": stroke_event_start_row["End_X"] - stroke_event_start_row[
                                          "Start_X"],
                                      "Y_coord_distance": stroke_event_start_row["End_Y"] - stroke_event_start_row[

@@ -19,7 +19,7 @@
 import pandas as pd
 import math
 
-from scripts.Utils.coordinates_operations import get_stroke_event_quadrant, get_euclidean_distance, \
+from scripts.Utils.coordinates_operations import get_quadrant, get_euclidean_distance, \
     get_angle, get_movement_direction, get_magnitude_speed
 from scripts.Utils.date_transformation import timestamp_to_date
 
@@ -99,13 +99,13 @@ def extract_scroll_event_features(scroll_event_df):
                                      "start_y": scroll_event_start_row["Start_Y"],
                                      "end_x": scroll_event_start_row["Current_X"],
                                      "end_y": scroll_event_start_row["Current_Y"],
-                                     "start_quadrant": get_stroke_event_quadrant(scroll_event_start_row["Start_X"],
-                                                                                 scroll_event_start_row["Start_Y"],
-                                                                                 max_x, max_y),
-                                     "end_quadrant": get_stroke_event_quadrant(scroll_event_start_row["Current_X"],
-                                                                               scroll_event_start_row["Current_Y"],
-                                                                               max_x,
-                                                                               max_y),
+                                     "start_quadrant": get_quadrant(scroll_event_start_row["Start_X"],
+                                                                    scroll_event_start_row["Start_Y"],
+                                                                    max_x, max_y),
+                                     "end_quadrant": get_quadrant(scroll_event_start_row["Current_X"],
+                                                                  scroll_event_start_row["Current_Y"],
+                                                                  max_x,
+                                                                  max_y),
                                      "scroll_length_euclidean_distance": get_euclidean_distance(
                                          scroll_event_start_row["Start_X"], scroll_event_start_row["Start_Y"],
                                          scroll_event_start_row["Current_X"], scroll_event_start_row["Current_Y"]),
@@ -157,7 +157,7 @@ def extract_scroll_event_features(scroll_event_df):
                         scroll_event_features["magnitude_speed"] = get_magnitude_speed(
                             scroll_event_features["distance_x_avg"], scroll_event_features["distance_y_avg"])
 
-                        scroll_event_features["end_quadrant"] = get_stroke_event_quadrant(
+                        scroll_event_features["end_quadrant"] = get_quadrant(
                             scroll_event_next_row["Current_X"], scroll_event_next_row["Current_Y"], max_x, max_y)
 
                         scroll_event_features[
