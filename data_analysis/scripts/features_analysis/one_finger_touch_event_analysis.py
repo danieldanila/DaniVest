@@ -6,10 +6,9 @@ from scripts.algorithms.support_vector_machine import support_vector_machine
 
 
 def one_finger_touch_event_analysis(touch_event_df, classifier_name):
-    columns_names_to_drop_array_0 = ["user_id", "activity_id", "session_number", "start_timestamps"]
+    columns_names_to_drop_array = ["user_id", "activity_id", "session_number", "start_timestamps"]
 
-    # Removed some columns which showed no importance
-    columns_names_to_drop_array = ["user_id", "activity_id", "session_number", "start_timestamps",
+    columns_names_to_drop_array_1 = ["user_id", "activity_id", "session_number", "start_timestamps",
                                    "move_actions_second", "scenario", "start_quadrant", "end_quadrant", "scenario",
                                    "direction"]
 
