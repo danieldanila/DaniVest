@@ -1,46 +1,37 @@
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score
 
+from scripts.Utils.show_relationships import show_random_forest_feature_importances, \
+    show_random_forest_accuracies_based_on_tested_n_estimators
 
-def random_forest_classifier(X, X_train, X_test, y_train, best_k=0):
-    if best_k == 0:
-        k_values = list(range(1, 202, 50))
+
+def random_forest_classifier(X, X_train, X_test, y_train, best_n_estimators=0, show_plots=False):
+    if best_n_estimators == 0:
+        n_estimators_values = list(range(1, 202, 50))
         cv_scores = []
 
-        for k in k_values:
-            rfc = RandomForestClassifier(n_estimators=k)
+        for n_estimator in n_estimators_values:
+            rfc = RandomForestClassifier(n_estimators=n_estimator)
             scores = cross_val_score(rfc, X_train, y_train, cv=5, scoring="accuracy")
             cv_scores.append(scores.mean())
 
         best_index = np.argmax(cv_scores)
-        best_k = k_values[best_index]
+        best_n_estimators = n_estimators_values[best_index]
         best_score = cv_scores[best_index]
-        print(f"Random Forest 5-fold, best k in cross validation: {best_k} with accuracy: {best_score}")
+        print(f"Random Forest 5-fold, best n_estimator in cross validation: {best_n_estimators} with accuracy: {best_score}")
 
-        plt.plot(k_values, cv_scores)
-        plt.xlabel("Value of n_estimators for Random Forest Classifier")
-        plt.ylabel("Testing Accuracy")
-        plt.show()
+        if show_plots:
+            show_random_forest_accuracies_based_on_tested_n_estimators(n_estimators_values=n_estimators_values, cv_scores=cv_scores)
 
-    rf = RandomForestClassifier(n_estimators=best_k, random_state=42)
+    rf = RandomForestClassifier(n_estimators=best_n_estimators, random_state=42)
     rf.fit(X_train, y_train)
-
-    importances = rf.feature_importances_
-    feature_names = X.columns
-
-    plt.figure(figsize=(10, 6))
-    sns.barplot(x=importances, y=feature_names)
-    plt.title("Random Forest Feature Importances")
-    plt.xlabel("Importance")
-    plt.ylabel("Feature")
-    plt.tight_layout()
-    plt.show()
 
     y_pred = rf.predict(X_test)
     y_scores = rf.predict_proba(X_test)
+
+    if show_plots:
+        show_random_forest_feature_importances(importances=rf.feature_importances_, feature_names=X.columns)
 
     return y_pred, y_scores, rf

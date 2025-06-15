@@ -29,16 +29,16 @@ def one_finger_touch_event_analysis(touch_event_df, classifier_name):
         # After removing the previous added properties and added the following properties: hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, down_up_duration_ms_avg, down_down_duration_ms_avg, up_down_duration_ms_avg, start_x, start_y, end_x, end_y, start_quadrant, end_quadrant, X_coord_distance, Y_coord_distance, direction, touch_length_euclidean_distance, touch_angle and contact_size_avg, the best k = 5 with 78.95% accuracy, 0.0107 FAR, 0.2104 FRR and 0.0478 EER with 0.2000 threshold
         #   after removing move_actions_second, scenario, start_quadrant, end_quadrant, scenario and direction, the best k = 5 with 79.02% accuracy, 0.0106 FAR, 0.2097 FRR and 0.0464 EER with 0.2000 threshold
     elif classifier_name == "Random Forest":
-        best_k = 151
+        best_n_estimators = 151
         y_pred, y_scores, classifier = random_forest_classifier(X=X, X_train=X_train, X_test=X_test, y_train=y_train,
-                                                                best_k=best_k)
+                                                                best_n_estimators=best_n_estimators)
 
-        # After k=100, the accuracy is relatively constant at around 43%
-        #   but k=190->200 showed the best accuracy of 43%+
+        # After best_n_estimators=100, the accuracy is relatively constant at around 43%
+        #   but best_n_estimators=190->200 showed the best accuracy of 43%+
         # After adding the new properties down_down_duration_ms, up_down_duration_ms, X_coord_distance_avg and Y_coord_distance_avg, an increase of 2% in accuracy
-        #   was recorded, from 43% to 45.18% (k=151)
-        # After removing the previous added properties and added the following properties: hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, down_up_duration_ms_avg, down_down_duration_ms_avg, up_down_duration_ms_avg, start_x, start_y, end_x, end_y, start_quadrant, end_quadrant, X_coord_distance, Y_coord_distance, direction, touch_length_euclidean_distance, touch_angle and contact_size_avg, the best k = 201 with 89.00% accuracy, 0.0056 FAR, 0.1099 FRR and 0.0217 EER with 0.1525 threshold
-        #   after removing move_actions_second, scenario, start_quadrant, end_quadrant, scenario and direction, the best k = 5 with 88.91% accuracy, 0.0057 FAR, 0.1108 FRR and 0.0220 EER with 0.1563 threshold
+        #   was recorded, from 43% to 45.18% (best_n_estimators=151)
+        # After removing the previous added properties and added the following properties: hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, down_up_duration_ms_avg, down_down_duration_ms_avg, up_down_duration_ms_avg, start_x, start_y, end_x, end_y, start_quadrant, end_quadrant, X_coord_distance, Y_coord_distance, direction, touch_length_euclidean_distance, touch_angle and contact_size_avg, the best best_n_estimators = 201 with 89.00% accuracy, 0.0056 FAR, 0.1099 FRR and 0.0217 EER with 0.1525 threshold
+        #   after removing move_actions_second, scenario, start_quadrant, end_quadrant, scenario and direction, the best best_n_estimators = 5 with 88.91% accuracy, 0.0057 FAR, 0.1108 FRR and 0.0220 EER with 0.1563 threshold
     elif classifier_name == "SVM":
         best_c = 0
         best_gamma = 0

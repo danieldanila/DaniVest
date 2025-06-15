@@ -54,3 +54,20 @@ def show_relationship_between_speed_and_quadrant(stroke_event_df):
 
     plt.tight_layout()
     plt.show()
+
+
+def show_random_forest_feature_importances(importances, feature_names):
+    plt.figure(figsize=(10, 6))
+    sns.barplot(x=importances, y=feature_names)
+    plt.title("Random Forest Feature Importances")
+    plt.xlabel("Importance")
+    plt.ylabel("Feature")
+    plt.tight_layout()
+    plt.show()
+
+
+def show_random_forest_accuracies_based_on_tested_n_estimators(n_estimators_values, cv_scores):
+    plt.plot(n_estimators_values, cv_scores)
+    plt.xlabel("Value of n_estimators for Random Forest Classifier")
+    plt.ylabel("Testing Accuracy")
+    plt.show()

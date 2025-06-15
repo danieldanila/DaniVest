@@ -61,26 +61,26 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
         #   after running the same setup except one hot encoding was False, the best k = 1 with 79.64% accuracy, 0.0112 FAR, 0.2035 FRR and 0.1271 EER with 1.0 threshold
         #   after dropping all time related properties and re-adding start_timestamp, the best k = 7 with 61.33% accuracy, 0.0245 FAR, 0.3866 FRR and 0.1298 EER with 0.1564 threshold
     elif classifier_name == "Random Forest":
-        best_k = 201
+        best_n_estimators = 201
         y_pred, y_scores, classifier = random_forest_classifier(X=X, X_train=X_train, X_test=X_test, y_train=y_train,
-                                                                best_k=best_k)
+                                                                best_n_estimators=best_n_estimators)
 
-        # After k=100, the accuracy is relatively constant at around 52%
-        #   but k=201 showed the best accuracy of 50.75%
-        # After changing how data is processed and adding the new properties down_down_duration_ms and up_down_duration_ms, the best k = 201 with 54.02% accuracy
-        # After adding the new properties X_coord_distance and Y_coord_distance, the best k = 201 with 55.53% accuracy
-        # After adding the new properties start_quadrant, end_quadrant and direction, the best k = 201 with 55.10% accuracy
-        # After transforming the properties start_quadrant, end_quadrant and direction into one hot encodings, the best k = 201 with 55.20% accuracy
-        # After adding magnitude_speed and turning off the one hot encodings, the best k = 201 with 55.63% accuracy, 0.02 FAR, 0.44 FRR and 0.15 EER with 0.0670 threshold
-        # After adding magnitude_speed and turning on the one hot encodings, the best k = 201 with 56.08% accuracy, 0.0289 FAR, 0.4391 FRR and 0.1522 EER with 0.0682 threshold
-        # After adding contact_size_avg, stroke_length, stroke_angle and removing start_size, end_size and speed_x and speed_y, the best k = 151 with 54.71% accuracy, 0.0295 FAR, 0.4528 FRR and 0.1579 EER with 0.0678 threshold
-        #   after also removing  "phone_orientation", "start_quadrant", "end_quadrant" and "direction", the best k = 201 with 53.98% accuracy, 0.0299 FAR, 0.4601 FRR and 0.1636 EER with 0.0660 threshold
-        #   after also removing  "start_x", "start_y", "end_x", "end_y", "X_coord_distance" and "Y_coord_distance", the best k = 201 with 40.12% accuracy, 0.0386 FAR, 0.5987 FRR and 0.2209 EER with 0.0566 threshold
-        #   after re-adding "start_x", "start_y", "end_x" and "end_y", the best k = 201 with 53.03% accuracy, 0.0306 FAR, 0.4696 FRR and 0.1606 EER with 0.0660 threshold
-        # After dropping only activity_id, session_number and start_timestamps, the best k = 201 with 55.81% accuracy, 0.0289 FAR, 0.4418 FRR and 0.1506 EER with 0.0684 threshold
-        #   after adding new properties: part_of_day, hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend and activated one hot encodings (for Direction, Start_Quadrant, End_Quadrant, Phone_orientation, Part_Of_Day), the best k = 201 with 87.77% accuracy, 0.0074 FAR, 0.1229 FRR and 0.0272 EER with 0.1802 threshold
-        #   after running the same setup except one hot encoding was False, the best k = 201 with 87.70% accuracy, 0.0076 FAR, 0.1239 FRR and 0.0260 EER with 0.1795 threshold
-        #   after dropping all time related properties and re-adding start_timestamp, the best k = 201 with 90.57% accuracy, 0.0056 FAR, 0.0942 FRR and 0.0248 EER with 0.1425 threshold
+        # After best_n_estimators=100, the accuracy is relatively constant at around 52%
+        #   but best_n_estimators=201 showed the best accuracy of 50.75%
+        # After changing how data is processed and adding the new properties down_down_duration_ms and up_down_duration_ms, the best best_n_estimators = 201 with 54.02% accuracy
+        # After adding the new properties X_coord_distance and Y_coord_distance, the best best_n_estimators = 201 with 55.53% accuracy
+        # After adding the new properties start_quadrant, end_quadrant and direction, the best best_n_estimators = 201 with 55.10% accuracy
+        # After transforming the properties start_quadrant, end_quadrant and direction into one hot encodings, the best best_n_estimators = 201 with 55.20% accuracy
+        # After adding magnitude_speed and turning off the one hot encodings, the best best_n_estimators = 201 with 55.63% accuracy, 0.02 FAR, 0.44 FRR and 0.15 EER with 0.0670 threshold
+        # After adding magnitude_speed and turning on the one hot encodings, the best best_n_estimators = 201 with 56.08% accuracy, 0.0289 FAR, 0.4391 FRR and 0.1522 EER with 0.0682 threshold
+        # After adding contact_size_avg, stroke_length, stroke_angle and removing start_size, end_size and speed_x and speed_y, the best best_n_estimators = 151 with 54.71% accuracy, 0.0295 FAR, 0.4528 FRR and 0.1579 EER with 0.0678 threshold
+        #   after also removing  "phone_orientation", "start_quadrant", "end_quadrant" and "direction", the best best_n_estimators = 201 with 53.98% accuracy, 0.0299 FAR, 0.4601 FRR and 0.1636 EER with 0.0660 threshold
+        #   after also removing  "start_x", "start_y", "end_x", "end_y", "X_coord_distance" and "Y_coord_distance", the best best_n_estimators = 201 with 40.12% accuracy, 0.0386 FAR, 0.5987 FRR and 0.2209 EER with 0.0566 threshold
+        #   after re-adding "start_x", "start_y", "end_x" and "end_y", the best best_n_estimators = 201 with 53.03% accuracy, 0.0306 FAR, 0.4696 FRR and 0.1606 EER with 0.0660 threshold
+        # After dropping only activity_id, session_number and start_timestamps, the best best_n_estimators = 201 with 55.81% accuracy, 0.0289 FAR, 0.4418 FRR and 0.1506 EER with 0.0684 threshold
+        #   after adding new properties: part_of_day, hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend and activated one hot encodings (for Direction, Start_Quadrant, End_Quadrant, Phone_orientation, Part_Of_Day), the best best_n_estimators = 201 with 87.77% accuracy, 0.0074 FAR, 0.1229 FRR and 0.0272 EER with 0.1802 threshold
+        #   after running the same setup except one hot encoding was False, the best best_n_estimators = 201 with 87.70% accuracy, 0.0076 FAR, 0.1239 FRR and 0.0260 EER with 0.1795 threshold
+        #   after dropping all time related properties and re-adding start_timestamp, the best best_n_estimators = 201 with 90.57% accuracy, 0.0056 FAR, 0.0942 FRR and 0.0248 EER with 0.1425 threshold
     elif classifier_name == "SVM":
         best_c = 0
         best_gamma = 0
