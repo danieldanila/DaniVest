@@ -1,11 +1,11 @@
-from scripts.Utils.classifiers_reports import print_classifier_performance
+from scripts.Utils.classifiers_reports import print_classifier_performance, get_classifier_performance
 from scripts.Utils.prepare_analysis_data import prepare_analysis_data
 from scripts.algorithms.k_nearest_neighbors import k_nearest_neighbors
 from scripts.algorithms.random_forest import random_forest_classifier
 from scripts.algorithms.support_vector_machine import support_vector_machine
 
 
-def stroke_event_analysis(stroke_event_df, classifier_name):
+def stroke_event_analysis(stroke_event_df, classifier_name, print_results=False):
     # Drop Test 8
     # columns_names_to_drop_array = ["user_id", "activity_id", "session_number", "start_timestamps", "start_size",
     #                                "end_size", "speed_x", "speed_y"]
@@ -112,5 +112,12 @@ def stroke_event_analysis(stroke_event_df, classifier_name):
     else:
         print(f"{classifier_name} is not implemented.")
 
-    print_classifier_performance(classifier_name=classifier_name, classifier=classifier, X_scaled=X_scaled, y=y,
-                                 y_test=y_test, y_pred=y_pred, y_scores=y_scores)
+    accuracy, far, frr, mean_eer, mean_threshold, cv = get_classifier_performance(classifier=classifier,
+                                                                                  X_scaled=X_scaled, y=y, y_test=y_test,
+                                                                                  y_pred=y_pred, y_scores=y_scores)
+
+    if print_results:
+        print_classifier_performance(classifier_name=classifier_name, y_test=y_test, y_pred=y_pred, accuracy=accuracy,
+                                     far=far, frr=frr, mean_eer=mean_eer, mean_threshold=mean_threshold, cv=cv)
+
+    return accuracy, far, frr, mean_eer, mean_threshold, cv

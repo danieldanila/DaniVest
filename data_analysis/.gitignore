@@ -1,4 +1,5 @@
-/.idea
+*/.idea
+.idea
 /.venv
 **/__pycache__
 */hmog_dataset
@@ -10,3 +11,4 @@
 */stroke_event_features.csv
 */one_finger_touch_event_features.csv
 */all_data_draft.xlsx
+*/opinion_questionnaire_answers.csv
