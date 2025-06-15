@@ -110,7 +110,7 @@ def extract_key_press_event_features(key_press_event_df):
                                     "month_sin": key_press_event_df_grouped.iloc[0]["Month_Sin"],
                                     "month_cos": key_press_event_df_grouped.iloc[0]["Month_Cos"],
                                     "is_weekend": key_press_event_df_grouped.iloc[0]["Is_Weekend"],
-                                    "part_of_day": key_press_event_df_grouped.iloc[0]["Part_Of_Day"],
+                                    "part_of_day": int(key_press_event_df_grouped.iloc[0]["Part_Of_Day"]),
                                     "down_up_duration_ms_avg": 0,
                                     "down_down_duration_ms_avg": 0,
                                     "up_down_duration_ms_avg": 0,

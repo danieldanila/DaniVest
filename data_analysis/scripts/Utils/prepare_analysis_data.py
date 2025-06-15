@@ -1,9 +1,10 @@
 import pandas as pd
+import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
 
-def prepare_analysis_data(df, csv_file_path, column_name_to_predict, columns_names_to_drop_array):
+def prepare_analysis_data(df, feature_name, csv_file_path, column_name_to_predict, columns_names_to_drop_array):
     if df is None:
         df = pd.read_csv(csv_file_path)
 
@@ -25,5 +26,7 @@ def prepare_analysis_data(df, csv_file_path, column_name_to_predict, columns_nam
     X_scaled = scaler.fit_transform(X)
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
+
+    joblib.dump(scaler, f"..\\data\\scalers\\{feature_name}_scaler.pkl")
 
     return X, y, X_train, X_test, y_train, y_test, X_scaled, X_train_scaled, X_test_scaled

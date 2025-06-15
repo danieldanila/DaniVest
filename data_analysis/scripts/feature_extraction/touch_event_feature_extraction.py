@@ -104,10 +104,10 @@ def extract_touch_event_features(touch_event_df):
                                     "end_x": 0, "end_y": 0,
                                     "start_quadrant": 0, "end_quadrant": 0,
                                     "X_coord_distance": 0, "Y_coord_distance": 0,
-                                    "direction": 0,
                                     "touch_length_euclidean_distance": 0,
                                     "touch_angle": 0,
                                     "contact_size_avg": 0,
+                                    "direction": 0,
                                     "move_actions_first": 0, "move_actions_second": 0,
                                     "phone_orientation": 0
                                     }

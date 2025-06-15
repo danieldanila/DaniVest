@@ -25,7 +25,7 @@ def k_nearest_neighbors(X_train_scaled, X_test_scaled, y_train, feature_name, be
     knn = KNeighborsClassifier(n_neighbors=best_k)
     knn.fit(X_train_scaled, y_train)
 
-    joblib.dump(knn, f"..\\data\\models\\{feature_name}_svm_model.pkl")
+    joblib.dump(knn, f"..\\data\\models\\{feature_name}_knn_model.pkl")
 
     y_pred = knn.predict(X_test_scaled)
     y_scores = knn.predict_proba(X_test_scaled)

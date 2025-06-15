@@ -14,7 +14,7 @@ def get_part_of_day(hour):
     elif 18 <= hour <= 21:
         return 4 # "Evening"
     else: 
-        return 5 #"Night"
+        return 5 # "Night"
 
 
 def timestamp_to_date(data_df):
@@ -33,7 +33,7 @@ def timestamp_to_date(data_df):
     data_df["Month_Sin"] = np.sin(2 * np.pi * data_df["month"] / 12)
     data_df["Month_Cos"] = np.cos(2 * np.pi * data_df["month"] / 12)
 
-    data_df["Part_Of_Day"] = data_df["hour"].apply(get_part_of_day)
+    data_df["Part_Of_Day"] = data_df["hour"].apply(get_part_of_day).astype(int)
 
     data_df["Is_Weekend"] = data_df["datetime"].dt.dayofweek.isin([5, 6]).astype(int)
 

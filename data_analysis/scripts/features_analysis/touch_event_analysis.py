@@ -9,7 +9,8 @@ def touch_event_analysis(touch_event_df, classifier_name, print_results=False):
     columns_names_to_drop_array = ["user_id", "activity_id", "session_number", "start_timestamps"]
 
     X, y, X_train, X_test, y_train, y_test, X_scaled, X_train_scaled, X_test_scaled = prepare_analysis_data(
-        df=touch_event_df, csv_file_path="..\\data\\features\\touch_event_features.csv",
+        df=touch_event_df, feature_name="touch_event",
+        csv_file_path="..\\data\\features\\touch_event_features.csv",
         column_name_to_predict="user_id", columns_names_to_drop_array=columns_names_to_drop_array)
 
     y_pred = None
@@ -53,13 +54,13 @@ def touch_event_analysis(touch_event_df, classifier_name, print_results=False):
         # After 1.5 hours of executing, the best params are: svm__C: 1000, svm__gama: 1.0 and svm__kernel: rbf with 66.39% accuracy
         # After removing the properties (X_coord_first_avg, Y_coord_first_avg, X_coord_second_avg, Y_coord_second_avg, Contact_size_first_avg, Contact_size_second_avg, move_actions, X_coord_avg, Y_coord_avg, X_coord_distance_avg, Y_coord_distance_avg) and added the following properties: (hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, start_x, start_y, end_x, end_y, start_quadrant, end_quadrant, X_coord_distance, Y_coord_distance, direction, touch_length_euclidean_distance, touch_angle and contact_size_avg), the best params are: svm__C: 1000, svm__gama: 0.01 and svm__kernel: rbf with 91.97% accuracy, 0.005 FAR, 0.0802 FRR and 0.0342 EER with 18.89 threshold
         param_grid = {"svm__C": [10, 100, 1000],
-                          "svm__gamma": [0.01, 0.1, 1.0, 10.0],
-                          "svm__kernel": ["rbf"]}
+                      "svm__gamma": [0.01, 0.1, 1.0, 10.0],
+                      "svm__kernel": ["rbf"]}
 
         # Executed for more than 3 hours, left it for the moment
         param_grid_old = {"svm__C": [1000, 10000, 100000],
-                      "svm__gamma": [0.01, 0.1, 1.0, 10.0],
-                      "svm__kernel": ["rbf"]}
+                          "svm__gamma": [0.01, 0.1, 1.0, 10.0],
+                          "svm__kernel": ["rbf"]}
 
         y_pred, y_scores, classifier = support_vector_machine(X=X, y=y, X_train_scaled=X_train_scaled,
                                                               X_test_scaled=X_test_scaled, y_train=y_train,

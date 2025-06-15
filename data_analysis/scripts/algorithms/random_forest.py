@@ -31,7 +31,7 @@ def random_forest_classifier(X, X_train, X_test, y_train, feature_name, best_n_e
     rf = RandomForestClassifier(n_estimators=best_n_estimators, random_state=42)
     rf.fit(X_train, y_train)
 
-    joblib.dump(rf, f"..\\data\\models\\{feature_name}_svm_model.pkl")
+    joblib.dump(rf, f"..\\data\\models\\{feature_name}_rf_model.pkl")
 
     y_pred = rf.predict(X_test)
     y_scores = rf.predict_proba(X_test)

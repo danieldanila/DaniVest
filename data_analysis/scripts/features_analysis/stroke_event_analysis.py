@@ -34,7 +34,8 @@ def stroke_event_analysis(stroke_event_df, classifier_name, print_results=False)
     #                                "dow_cos", "month_sin", "month_cos", "is_weekend", "part_of_day"]
 
     X, y, X_train, X_test, y_train, y_test, X_scaled, X_train_scaled, X_test_scaled = prepare_analysis_data(
-        df=stroke_event_df, csv_file_path="..\\data\\features\\stroke_event_features.csv",
+        df=stroke_event_df, feature_name="stroke_event",
+        csv_file_path="..\\data\\features\\stroke_event_features.csv",
         column_name_to_predict="user_id", columns_names_to_drop_array=columns_names_to_drop_array)
 
     y_pred = None

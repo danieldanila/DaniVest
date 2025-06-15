@@ -9,7 +9,8 @@ def scroll_event_analysis(scroll_event_df, classifier_name, print_results=False)
     columns_names_to_drop_array = ["user_id", "activity_id", "session_number", "start_timestamps", "scroll_id"]
 
     X, y, X_train, X_test, y_train, y_test, X_scaled, X_train_scaled, X_test_scaled = prepare_analysis_data(
-        df=scroll_event_df, csv_file_path="..\\data\\features\\scroll_event_features.csv",
+        df=scroll_event_df, feature_name="scroll_event",
+        csv_file_path="..\\data\\features\\scroll_event_features.csv",
         column_name_to_predict="user_id", columns_names_to_drop_array=columns_names_to_drop_array)
 
     y_pred = None

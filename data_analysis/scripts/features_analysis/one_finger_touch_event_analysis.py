@@ -9,11 +9,12 @@ def one_finger_touch_event_analysis(touch_event_df, classifier_name, print_resul
     columns_names_to_drop_array = ["user_id", "activity_id", "session_number", "start_timestamps"]
 
     columns_names_to_drop_array_1 = ["user_id", "activity_id", "session_number", "start_timestamps",
-                                   "move_actions_second", "scenario", "start_quadrant", "end_quadrant", "scenario",
-                                   "direction"]
+                                     "move_actions_second", "scenario", "start_quadrant", "end_quadrant", "scenario",
+                                     "direction"]
 
     X, y, X_train, X_test, y_train, y_test, X_scaled, X_train_scaled, X_test_scaled = prepare_analysis_data(
-        df=touch_event_df, csv_file_path="..\\data\\features\\one_finger_touch_event_features.csv",
+        df=touch_event_df, feature_name="one_finger_touch_event",
+        csv_file_path="..\\data\\features\\one_finger_touch_event_features.csv",
         column_name_to_predict="user_id", columns_names_to_drop_array=columns_names_to_drop_array)
 
     y_pred = None

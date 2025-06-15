@@ -75,7 +75,7 @@ def main():
     # touch_event_analysis(None, classifier_name="SVM")
 
     normalized_weights = get_properties_weights(
-        csv_file_path="..\\data\\questionnaire\\opinion_questionnaire_answers.csv")
+        csv_file_path="..\\data\\questionnaires\\opinion_questionnaire_answers.csv")
 
     (location_weight, time_weight, app_navigation_weight, key_press_weight, touch_weight, hand_preference_weight,
      auth_preference_weight, bank_balance_visibility_weight, bank_transaction_sums_weight) = normalized_weights
