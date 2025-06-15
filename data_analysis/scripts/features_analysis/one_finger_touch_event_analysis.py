@@ -13,7 +13,7 @@ def one_finger_touch_event_analysis(touch_event_df, classifier_name, print_resul
                                    "direction"]
 
     X, y, X_train, X_test, y_train, y_test, X_scaled, X_train_scaled, X_test_scaled = prepare_analysis_data(
-        df=touch_event_df, csv_file_path="..\\data\\one_finger_touch_event_features.csv",
+        df=touch_event_df, csv_file_path="..\\data\\features\\one_finger_touch_event_features.csv",
         column_name_to_predict="user_id", columns_names_to_drop_array=columns_names_to_drop_array)
 
     y_pred = None
@@ -22,7 +22,8 @@ def one_finger_touch_event_analysis(touch_event_df, classifier_name, print_resul
     if classifier_name == "k-NN":
         best_k = 0
         y_pred, y_scores, classifier = k_nearest_neighbors(X_train_scaled=X_train_scaled, X_test_scaled=X_test_scaled,
-                                                           y_train=y_train, best_k=best_k)
+                                                           y_train=y_train, best_k=best_k,
+                                                           feature_name="one_finger_touch_event")
 
         # Without activity_id, session_number and start_timestamps, the best k value was 33 with 33.45% accuracy in a one shot test accuracy
         # After adding the new properties down_down_duration_ms, up_down_duration_ms, X_coord_distance_avg and Y_coord_distance_avg, the accuracy increased to 34.02% (k = 24)
@@ -31,7 +32,8 @@ def one_finger_touch_event_analysis(touch_event_df, classifier_name, print_resul
     elif classifier_name == "Random Forest":
         best_n_estimators = 151
         y_pred, y_scores, classifier = random_forest_classifier(X=X, X_train=X_train, X_test=X_test, y_train=y_train,
-                                                                best_n_estimators=best_n_estimators)
+                                                                best_n_estimators=best_n_estimators,
+                                                                feature_name="one_finger_touch_event")
 
         # After best_n_estimators=100, the accuracy is relatively constant at around 43%
         #   but best_n_estimators=190->200 showed the best accuracy of 43%+
@@ -50,7 +52,8 @@ def one_finger_touch_event_analysis(touch_event_df, classifier_name, print_resul
         y_pred, y_scores, classifier = support_vector_machine(X=X, y=y, X_train_scaled=X_train_scaled,
                                                               X_test_scaled=X_test_scaled, y_train=y_train,
                                                               param_grid=param_grid, best_c=best_c,
-                                                              best_gamma=best_gamma, best_kernel=best_kernel)
+                                                              best_gamma=best_gamma, best_kernel=best_kernel,
+                                                              feature_name="one_finger_touch_event")
 
         # After 10 hours of executing, the best params are: svm__C: 1000, svm__gama: 1.0 and svm__kernel: rbf with 37.68% accuracy
         # (too much time to wait, aborted it) After removing the previous added properties and added the following properties: hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, down_up_duration_ms_avg, down_down_duration_ms_avg, up_down_duration_ms_avg, start_x, start_y, end_x, end_y, start_quadrant, end_quadrant, X_coord_distance, Y_coord_distance, direction, touch_length_euclidean_distance, touch_angle and contact_size_avg, the best params are: svm__C: ?, svm__gama: 0.? and svm__kernel: rbf with ?% accuracy, 0.? FAR, 0.? FRR and 0.? EER with ?.? threshold

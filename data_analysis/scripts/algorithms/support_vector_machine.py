@@ -1,10 +1,13 @@
+import joblib
+
 from sklearn.model_selection import GridSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
 
-def support_vector_machine(X, y, X_train_scaled, X_test_scaled, y_train, param_grid, best_c=0, best_gamma=0, best_kernel="rbf"):
+def support_vector_machine(X, y, X_train_scaled, X_test_scaled, y_train, param_grid, feature_name, best_c=0,
+                           best_gamma=0, best_kernel="rbf"):
     if best_c == 0 and best_gamma == 0:
         svm = SVC()
         scaler = StandardScaler()
@@ -27,6 +30,8 @@ def support_vector_machine(X, y, X_train_scaled, X_test_scaled, y_train, param_g
 
     svm = SVC(kernel=best_kernel, C=best_c, gamma=best_gamma)
     svm.fit(X_train_scaled, y_train)
+
+    joblib.dump(svm, f"..\\data\\models\\{feature_name}_svm_model.pkl")
 
     y_pred = svm.predict(X_test_scaled)
     y_scores = svm.decision_function(X_test_scaled)

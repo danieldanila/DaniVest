@@ -5,10 +5,9 @@
 */hmog_dataset
 */hmog_dataset.zip
 */Activity.csv_merged.csv
-*/key_press_event_features.csv
-*/touch_event_features.csv
-*/scroll_event_features.csv
-*/stroke_event_features.csv
-*/one_finger_touch_event_features.csv
 */all_data_draft.xlsx
-*/opinion_questionnaire_answers.csv
+data/features/
+data/models/
+data/questionnaires/
+
+

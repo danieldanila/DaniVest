@@ -1,10 +1,12 @@
 import math
 import numpy as np
+import joblib
+
 from sklearn.model_selection import cross_val_score
 from sklearn.neighbors import KNeighborsClassifier
 
 
-def k_nearest_neighbors(X_train_scaled, X_test_scaled, y_train, best_k=0):
+def k_nearest_neighbors(X_train_scaled, X_test_scaled, y_train, feature_name, best_k=0):
     if best_k == 0:
         k_max = math.floor(math.sqrt(len(X_train_scaled)) / 2)
         k_values = range(1, k_max)
@@ -22,6 +24,8 @@ def k_nearest_neighbors(X_train_scaled, X_test_scaled, y_train, best_k=0):
 
     knn = KNeighborsClassifier(n_neighbors=best_k)
     knn.fit(X_train_scaled, y_train)
+
+    joblib.dump(knn, f"..\\data\\models\\{feature_name}_svm_model.pkl")
 
     y_pred = knn.predict(X_test_scaled)
     y_scores = knn.predict_proba(X_test_scaled)

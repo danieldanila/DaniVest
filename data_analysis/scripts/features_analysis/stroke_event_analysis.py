@@ -34,7 +34,7 @@ def stroke_event_analysis(stroke_event_df, classifier_name, print_results=False)
     #                                "dow_cos", "month_sin", "month_cos", "is_weekend", "part_of_day"]
 
     X, y, X_train, X_test, y_train, y_test, X_scaled, X_train_scaled, X_test_scaled = prepare_analysis_data(
-        df=stroke_event_df, csv_file_path="..\\data\\stroke_event_features.csv",
+        df=stroke_event_df, csv_file_path="..\\data\\features\\stroke_event_features.csv",
         column_name_to_predict="user_id", columns_names_to_drop_array=columns_names_to_drop_array)
 
     y_pred = None
@@ -43,7 +43,8 @@ def stroke_event_analysis(stroke_event_df, classifier_name, print_results=False)
     if classifier_name == "k-NN":
         best_k = 0
         y_pred, y_scores, classifier = k_nearest_neighbors(X_train_scaled=X_train_scaled, X_test_scaled=X_test_scaled,
-                                                           y_train=y_train, best_k=best_k)
+                                                           y_train=y_train, best_k=best_k,
+                                                           feature_name="stroke_event")
 
         # Without activity_id, session_number and start_timestamps, the best k value was 1 with 46% accuracy in a one shot test accuracy
         # After changing how data is processed and adding the new properties down_down_duration_ms and up_down_duration_ms, the k = 20 with 42.78% accuracy
@@ -63,7 +64,8 @@ def stroke_event_analysis(stroke_event_df, classifier_name, print_results=False)
     elif classifier_name == "Random Forest":
         best_n_estimators = 201
         y_pred, y_scores, classifier = random_forest_classifier(X=X, X_train=X_train, X_test=X_test, y_train=y_train,
-                                                                best_n_estimators=best_n_estimators)
+                                                                best_n_estimators=best_n_estimators,
+                                                                feature_name="stroke_event")
 
         # After best_n_estimators=100, the accuracy is relatively constant at around 52%
         #   but best_n_estimators=201 showed the best accuracy of 50.75%
@@ -92,7 +94,8 @@ def stroke_event_analysis(stroke_event_df, classifier_name, print_results=False)
         y_pred, y_scores, classifier = support_vector_machine(X=X, y=y, X_train_scaled=X_train_scaled,
                                                               X_test_scaled=X_test_scaled, y_train=y_train,
                                                               param_grid=param_grid, best_c=best_c,
-                                                              best_gamma=best_gamma, best_kernel=best_kernel)
+                                                              best_gamma=best_gamma, best_kernel=best_kernel,
+                                                              feature_name="stroke_event")
 
         # After 1 hour of executing, the best params are: svm__C: 10, svm__gama: 0.1 and svm__kernel: rbf with 50.75% accuracy
         # After changing how data is processed and adding the new properties down_down_duration_ms and up_down_duration_ms, the best params are: svm__C: 100, svm__gama: 0.1 and svm__kernel: rbf with 47.89% accuracy

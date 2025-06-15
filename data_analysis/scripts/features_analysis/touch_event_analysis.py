@@ -9,7 +9,7 @@ def touch_event_analysis(touch_event_df, classifier_name, print_results=False):
     columns_names_to_drop_array = ["user_id", "activity_id", "session_number", "start_timestamps"]
 
     X, y, X_train, X_test, y_train, y_test, X_scaled, X_train_scaled, X_test_scaled = prepare_analysis_data(
-        df=touch_event_df, csv_file_path="..\\data\\touch_event_features.csv",
+        df=touch_event_df, csv_file_path="..\\data\\features\\touch_event_features.csv",
         column_name_to_predict="user_id", columns_names_to_drop_array=columns_names_to_drop_array)
 
     y_pred = None
@@ -18,7 +18,8 @@ def touch_event_analysis(touch_event_df, classifier_name, print_results=False):
     if classifier_name == "k-NN":
         best_k = 0
         y_pred, y_scores, classifier = k_nearest_neighbors(X_train_scaled=X_train_scaled, X_test_scaled=X_test_scaled,
-                                                           y_train=y_train, best_k=best_k)
+                                                           y_train=y_train, best_k=best_k,
+                                                           feature_name="touch_event")
 
         # Without activity_id, session_number and start_timestamps, the best k value was 27 with 63% accuracy in a one shot test accuracy
         # After adding the new properties down_down_duration_ms and up_down_duration_ms, no change in accuracy reported for k-NN classifier (best k = 21)
@@ -29,7 +30,8 @@ def touch_event_analysis(touch_event_df, classifier_name, print_results=False):
     elif classifier_name == "Random Forest":
         best_n_estimators = 201
         y_pred, y_scores, classifier = random_forest_classifier(X=X, X_train=X_train, X_test=X_test, y_train=y_train,
-                                                                best_n_estimators=best_n_estimators)
+                                                                best_n_estimators=best_n_estimators,
+                                                                feature_name="touch_event")
 
         # After best_n_estimators=100, the accuracy is relatively constant at around 68%
         #   but best_n_estimators=190->200 showed the best accuracy of 68.4%+
@@ -62,7 +64,8 @@ def touch_event_analysis(touch_event_df, classifier_name, print_results=False):
         y_pred, y_scores, classifier = support_vector_machine(X=X, y=y, X_train_scaled=X_train_scaled,
                                                               X_test_scaled=X_test_scaled, y_train=y_train,
                                                               param_grid=param_grid, best_c=best_c,
-                                                              best_gamma=best_gamma, best_kernel=best_kernel)
+                                                              best_gamma=best_gamma, best_kernel=best_kernel,
+                                                              feature_name="touch_event")
     else:
         print(f"{classifier_name} is not implemented.")
 

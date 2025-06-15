@@ -10,7 +10,7 @@ def key_press_event_analysis(key_press_event_df, classifier_name, print_results=
                                    "key_ids_occurrences"]
 
     X, y, X_train, X_test, y_train, y_test, X_scaled, X_train_scaled, X_test_scaled = prepare_analysis_data(
-        df=key_press_event_df, csv_file_path="..\\data\\key_press_event_features.csv",
+        df=key_press_event_df, csv_file_path="..\\data\\features\\key_press_event_features.csv",
         column_name_to_predict="user_id", columns_names_to_drop_array=columns_names_to_drop_array)
 
     y_pred = None
@@ -19,7 +19,8 @@ def key_press_event_analysis(key_press_event_df, classifier_name, print_results=
     if classifier_name == "k-NN":
         best_k = 0
         y_pred, y_scores, classifier = k_nearest_neighbors(X_train_scaled=X_train_scaled, X_test_scaled=X_test_scaled,
-                                                           y_train=y_train, best_k=best_k)
+                                                           y_train=y_train, best_k=best_k,
+                                                           feature_name="key_press_event")
 
         # Without activity_id, session_number, start_timestamps, key_ids and key_ids_occurrences, the best k value was 1 with 62% accuracy in a one shot test accuracy
         # After adding the new properties: session_duration_ms, hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, down_up_duration_ms_avg, down_down_duration_ms_avg, up_down_duration_ms_avg, total_unique_keys_used, total_keys_pressed and characters_per_second, and hot encodings was false, the best k = 1 with 88% accuracy, 0.0063 FAR, 0.12 FRR and 0.0625 EER with 1.0 threshold
@@ -27,7 +28,8 @@ def key_press_event_analysis(key_press_event_df, classifier_name, print_results=
     elif classifier_name == "Random Forest":
         best_n_estimators = 0
         y_pred, y_scores, classifier = random_forest_classifier(X=X, X_train=X_train, X_test=X_test, y_train=y_train,
-                                                                best_n_estimators=best_n_estimators)
+                                                                best_n_estimators=best_n_estimators,
+                                                                feature_name="key_press_event")
 
         # After best_n_estimators=100, the accuracy is relatively constant at around 59.94%
         #   but best_n_estimators=201 showed the best accuracy of 62.57%
@@ -44,7 +46,8 @@ def key_press_event_analysis(key_press_event_df, classifier_name, print_results=
         y_pred, y_scores, classifier = support_vector_machine(X=X, y=y, X_train_scaled=X_train_scaled,
                                                               X_test_scaled=X_test_scaled, y_train=y_train,
                                                               param_grid=param_grid, best_c=best_c,
-                                                              best_gamma=best_gamma, best_kernel=best_kernel)
+                                                              best_gamma=best_gamma, best_kernel=best_kernel,
+                                                              feature_name="key_press_event")
 
         # After 1 hour of executing, the best params are: svm__C: 1000, svm__gama: 0.1 and svm__kernel: rbf with 62% accuracy
         # After adding the new properties: session_duration_ms, hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, down_up_duration_ms_avg, down_down_duration_ms_avg, up_down_duration_ms_avg, total_unique_keys_used, total_keys_pressed and characters_per_second, and hot encodings was false, the best params are: svm__C: 100, svm__gama: 0.01 and svm__kernel: rbf with 87% accuracy, 0.0068 FAR, 0.13 FRR and 0.0402 EER with 19.60 threshold

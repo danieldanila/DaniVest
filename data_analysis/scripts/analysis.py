@@ -34,19 +34,19 @@ def main():
     # activity_df, touch_event_df, key_press_event_df, one_finger_touch_event_df, scroll_event_df, stroke_event_df = init()
 
     # key_press_event_features_df = extract_key_press_event_features(key_press_event_df)
-    # key_press_event_features_df.to_csv("..\\data\\key_press_event_features.csv")
+    # key_press_event_features_df.to_csv("..\\data\\features\\key_press_event_features.csv")
 
     # one_finger_touch_event_features_df = extract_one_finger_touch_event_features(one_finger_touch_event_df)
-    # one_finger_touch_event_features_df.to_csv("..\\data\\one_finger_touch_event_features.csv")
+    # one_finger_touch_event_features_df.to_csv("..\\data\\features\\one_finger_touch_event_features.csv")
 
     # scroll_event_features_df = extract_scroll_event_features(scroll_event_df)
-    # scroll_event_features_df.to_csv("..\\data\\scroll_event_features.csv")
+    # scroll_event_features_df.to_csv("..\\data\\features\\scroll_event_features.csv")
 
     # stroke_event_features_df = extract_stroke_event_features(stroke_event_df)
-    # stroke_event_features_df.to_csv("..\\data\\stroke_event_features.csv")
+    # stroke_event_features_df.to_csv("..\\data\\features\\stroke_event_features.csv")
 
     # touch_event_features_df = extract_touch_event_features(touch_event_df)
-    # touch_event_features_df.to_csv("..\\data\\touch_event_features.csv")
+    # touch_event_features_df.to_csv("..\\data\\features\\touch_event_features.csv")
 
     print("===== KeyPressEventAnalysis =====")
     # key_press_event_analysis(None, classifier_name="k-NN")
@@ -75,7 +75,7 @@ def main():
     # touch_event_analysis(None, classifier_name="SVM")
 
     normalized_weights = get_properties_weights(
-        csv_file_path="..\\data\\opinion_questionnaire_answers.csv")
+        csv_file_path="..\\data\\questionnaire\\opinion_questionnaire_answers.csv")
 
     (location_weight, time_weight, app_navigation_weight, key_press_weight, touch_weight, hand_preference_weight,
      auth_preference_weight, bank_balance_visibility_weight, bank_transaction_sums_weight) = normalized_weights
