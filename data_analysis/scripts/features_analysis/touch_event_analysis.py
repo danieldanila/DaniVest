@@ -27,7 +27,7 @@ def touch_event_analysis(touch_event_df, classifier_name):
         # After adding the new X_coord_distance_avg and Y_coord_distance_avg, the accuracy increased by 1% to 64% (k = 20)
         # After removing the properties (X_coord_first_avg, Y_coord_first_avg, X_coord_second_avg, Y_coord_second_avg, Contact_size_first_avg, Contact_size_second_avg, move_actions, X_coord_avg, Y_coord_avg, X_coord_distance_avg, Y_coord_distance_avg) and added the following properties: (hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, start_x, start_y, end_x, end_y, start_quadrant, end_quadrant, X_coord_distance, Y_coord_distance, direction, touch_length_euclidean_distance, touch_angle and contact_size_avg), the best k = 1 with 86.76% accuracy, 0.0084 FAR, 0.1323 FRR and 0.1031 EER with 1.0 threshold
     elif classifier_name == "Random Forest":
-        best_k = 0
+        best_k = 201
         y_pred, y_scores, classifier = random_forest_classifier(X=X, X_train=X_train, X_test=X_test, y_train=y_train,
                                                                 best_k=best_k)
 

@@ -24,7 +24,7 @@ def scroll_event_analysis(scroll_event_df, classifier_name):
         # After adding the new properties: hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, down_up_duration_ms, down_down_duration_ms, up_down_duration_ms, start_quadrant, end_quadrant, scroll_length_euclidean_distance, scroll_angle, direction, magnitude_speed and hot encodings was true, the best k = 1 with 81.13% accuracy, 0.0094 FAR, 0.1867 FRR and 0.1072 EER with 1.0 threshold
         #   after turning off the hot encodings, the best k = 1 with 83.56% accuracy, 0.0082 FAR, 0.1643 FRR and 0.0947 EER with 1.0 threshold
     elif classifier_name == "Random Forest":
-        best_k = 0
+        best_k = 201
         y_pred, y_scores, classifier = random_forest_classifier(X=X, X_train=X_train, X_test=X_test, y_train=y_train,
                                                                 best_k=best_k)
 

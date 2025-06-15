@@ -34,8 +34,8 @@ def key_press_event_analysis(key_press_event_df, classifier_name):
         # After adding the new properties: session_duration_ms, hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, down_up_duration_ms_avg, down_down_duration_ms_avg, up_down_duration_ms_avg, total_unique_keys_used, total_keys_pressed and characters_per_second, and hot encodings was false, the best k = 151 with 86% accuracy, 0.0073 FAR, 0.14 FRR and 0.0179 EER with 0.4903 threshold
         #   after setting one hot encoding to true, the best k = 101 with 86% accuracy, 0.0072 FAR, 0.14 FRR and 0.0169 EER with 0.4818 threshold
     elif classifier_name == "SVM":
-        best_c = 0
-        best_gamma = 0
+        best_c = 100
+        best_gamma = 0.01
         best_kernel = "rbf"
         param_grid = {"svm__C": [10, 100, 1000],
                       "svm__gamma": [0.01, 0.1, 1.0, 10.0],

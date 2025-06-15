@@ -49,7 +49,7 @@ def extract_stroke_event_features(stroke_event_df):
     max_x = math.ceil(stroke_event_df[["Start_X", "End_X"]].max().max() / 1000) * 1000
     max_y = math.ceil(stroke_event_df[["Start_Y", "End_Y"]].max().max() / 1000) * 1000
 
-    one_hot_encodings = True
+    one_hot_encodings = False
     show_relationships = False
 
     if not one_hot_encodings and show_relationships:
