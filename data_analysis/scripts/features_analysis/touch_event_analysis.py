@@ -6,15 +6,11 @@ from scripts.algorithms.support_vector_machine import support_vector_machine
 
 
 def touch_event_analysis(touch_event_df, classifier_name):
-    columns_names_to_drop_array = ["user_id", "activity_id", "session_number", "start_timestamps", "move_actions",
-                                   "X_coord_avg", "Y_coord_avg", "Contact_size_avg"]
+    columns_names_to_drop_array = ["user_id", "activity_id", "session_number", "start_timestamps"]
 
     X, y, X_train, X_test, y_train, y_test, X_scaled, X_train_scaled, X_test_scaled = prepare_analysis_data(
         df=touch_event_df, csv_file_path="..\\data\\touch_event_features.csv",
-        column_name_to_predict="user_id", columns_names_to_drop_array=columns_names_to_drop_array,
-        column_name_to_mask="scenario", mask_condition_value=2,
-        columns_names_to_average=["move_actions_second", "X_coord_second_avg", "Y_coord_second_avg",
-                                  "Contact_size_second_avg", "X_coord_distance_avg", "Y_coord_distance_avg"])
+        column_name_to_predict="user_id", columns_names_to_drop_array=columns_names_to_drop_array)
 
     y_pred = None
     y_scores = None
@@ -29,6 +25,7 @@ def touch_event_analysis(touch_event_df, classifier_name):
         # After adding the new properties move_actions, X_coord_avg, Y_coord_avg, Contact_size_avg and dropping the properties specific to the first/second touch,
         #   the accuracy dropped to 58% (k = 21)
         # After adding the new X_coord_distance_avg and Y_coord_distance_avg, the accuracy increased by 1% to 64% (k = 20)
+        # After removing the properties (X_coord_first_avg, Y_coord_first_avg, X_coord_second_avg, Y_coord_second_avg, Contact_size_first_avg, Contact_size_second_avg, move_actions, X_coord_avg, Y_coord_avg, X_coord_distance_avg, Y_coord_distance_avg) and added the following properties: (hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, start_x, start_y, end_x, end_y, start_quadrant, end_quadrant, X_coord_distance, Y_coord_distance, direction, touch_length_euclidean_distance, touch_angle and contact_size_avg, the best k = 1 with 86.76% accuracy, 0.0084 FAR, 0.1323 FRR and 0.1031 EER with 1.0 threshold
     elif classifier_name == "Random Forest":
         best_k = 0
         y_pred, y_scores, classifier = random_forest_classifier(X=X, X_train=X_train, X_test=X_test, y_train=y_train,
@@ -40,6 +37,7 @@ def touch_event_analysis(touch_event_df, classifier_name):
         #   was recorded, from 68% to 70%
         # After adding the new properties move_actions, X_coord_avg, Y_coord_avg, Contact_size_avg and dropping the properties specific to the first/second touch,
         #   the accuracy dropped to 64%
+        # After removing the properties (X_coord_first_avg, Y_coord_first_avg, X_coord_second_avg, Y_coord_second_avg, Contact_size_first_avg, Contact_size_second_avg, move_actions, X_coord_avg, Y_coord_avg, X_coord_distance_avg, Y_coord_distance_avg) and added the following properties: (hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, start_x, start_y, end_x, end_y, start_quadrant, end_quadrant, X_coord_distance, Y_coord_distance, direction, touch_length_euclidean_distance, touch_angle and contact_size_avg, the best k = 201 with 93.50% accuracy, 0.0043 FAR, 0.0649 FRR and 0.0148 EER with 0.1779 threshold
     elif classifier_name == "SVM":
         best_c = 0
         best_gamma = 0
@@ -51,12 +49,13 @@ def touch_event_analysis(touch_event_df, classifier_name):
                           "svm__kernel": ["linear", "rbf"]}
 
         # After 1.5 hours of executing, the best params are: svm__C: 1000, svm__gama: 1.0 and svm__kernel: rbf with 66.39% accuracy
-        param_grid_old = {"svm__C": [10, 100, 1000],
+        # After removing the properties (X_coord_first_avg, Y_coord_first_avg, X_coord_second_avg, Y_coord_second_avg, Contact_size_first_avg, Contact_size_second_avg, move_actions, X_coord_avg, Y_coord_avg, X_coord_distance_avg, Y_coord_distance_avg) and added the following properties: (hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, start_x, start_y, end_x, end_y, start_quadrant, end_quadrant, X_coord_distance, Y_coord_distance, direction, touch_length_euclidean_distance, touch_angle and contact_size_avg, the best params are: svm__C: 1000, svm__gama: 0.01 and svm__kernel: rbf with 91.97% accuracy, 0.005 FAR, 0.0802 FRR and 0.0342 EER with 18.89 threshold
+        param_grid = {"svm__C": [10, 100, 1000],
                           "svm__gamma": [0.01, 0.1, 1.0, 10.0],
                           "svm__kernel": ["rbf"]}
 
         # Executed for more than 3 hours, left it for the moment
-        param_grid = {"svm__C": [1000, 10000, 100000],
+        param_grid_old = {"svm__C": [1000, 10000, 100000],
                       "svm__gamma": [0.01, 0.1, 1.0, 10.0],
                       "svm__kernel": ["rbf"]}
 

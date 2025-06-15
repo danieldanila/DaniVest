@@ -1,12 +1,9 @@
-import numpy as np
 import pandas as pd
-from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
 
-def prepare_analysis_data(df, csv_file_path, column_name_to_predict, columns_names_to_drop_array,
-                          column_name_to_mask=None, mask_condition_value=None, columns_names_to_average=None):
+def prepare_analysis_data(df, csv_file_path, column_name_to_predict, columns_names_to_drop_array):
     if df is None:
         df = pd.read_csv(csv_file_path)
 
@@ -21,14 +18,6 @@ def prepare_analysis_data(df, csv_file_path, column_name_to_predict, columns_nam
     # Predicted value will be most likely user_id
     y = df[column_name_to_predict]
     X = df.drop(columns=columns_names_to_drop_array)
-
-    if column_name_to_mask is not None and columns_names_to_average is not None:
-        # Most likely used in the scenarios where only one finger is used: replace 0 values for second finger with the mean
-        mask = df[column_name_to_mask] != mask_condition_value
-        columns = columns_names_to_average
-        df.loc[mask, columns] = np.nan
-        imputer = SimpleImputer(strategy='mean')
-        df[columns] = imputer.fit_transform(df[columns])
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 

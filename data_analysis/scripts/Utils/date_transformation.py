@@ -18,6 +18,7 @@ def get_part_of_day(hour):
 
 
 def timestamp_to_date(data_df):
+    data_df = data_df[data_df["Systime"].astype(str).str.len() == 13].copy()
     data_df["datetime"] = pd.to_datetime(data_df["Systime"], unit="ms")
 
     data_df["hour"] = data_df["datetime"].dt.hour
