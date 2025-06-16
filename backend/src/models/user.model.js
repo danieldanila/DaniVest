@@ -1,5 +1,6 @@
 import Database from "../configs/database.config.js";
 import DataTypes from "sequelize";
+import bcrypt from "bcrypt"
 
 const User = Database.define("User", {
     id: {
@@ -81,6 +82,43 @@ const User = Database.define("User", {
 }, {
     underscored: true,
     tableName: "Users",
+    defaultScope: {
+        attributes: {
+            exclude: [
+                "password",
+                "passcode",
+                "createdAt",
+                "updatedAt"
+            ],
+        },
+    },
+    scopes: {
+        withPassword: {
+            attributes: {
+                include: [
+                    "password",
+                    "passcode",
+                    "createdAt",
+                    "updatedAt"
+                ],
+            },
+        },
+    },
+    hooks: {
+        beforeSave: async (user) => {
+            if (user.changed("password")) {
+                const saltRounds = 10;
+                const salt = await bcrypt.genSalt(saltRounds);
+                const hashedPassword = await bcrypt.hash(user.password, salt);
+
+                user.password = hashedPassword;
+            }
+        },
+    },
 });
+
+User.arePasswordsEqual = async (candidatePassword, userPassword) => {
+    return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 export default User;

@@ -22,19 +22,21 @@ class SignupScreen extends StatelessWidget {
           horizontal: constants.Properties.containerHorizontalMargin,
           vertical: constants.Properties.containerVerticalMargin,
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            spacing: constants.Properties.columnSpacing,
-            children: [
-              Image.asset(constants.Strings.logoUrl),
-              const SignupForm(),
-              TextButton(
-                onPressed: () {
-                  AppNavigator.replaceToLoginPage(context);
-                },
-                child: const Text(constants.Strings.alreadyHasAccount),
-              ),
-            ],
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              spacing: constants.Properties.columnSpacing,
+              children: [
+                Image.asset(constants.Strings.logoUrl),
+                const SignupForm(),
+                TextButton(
+                  onPressed: () {
+                    AppNavigator.replaceToLoginPage(context);
+                  },
+                  child: const Text(constants.Strings.alreadyHasAccount),
+                ),
+              ],
+            ),
           ),
         ),
       ),

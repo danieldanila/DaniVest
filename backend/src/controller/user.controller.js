@@ -1,15 +1,13 @@
 import { UserService as userService } from "../services/index.js";
+import catchAsync from "../utils/catchAsync.util.js";
 
 const controller = {
-    createUser: async (req, res) => {
-        try {
-            const newUser = await userService.createUser(req.body);
+    createUser: catchAsync(async (req, res, next) => {
+        const newUser = await userService.createUser(req.body);
 
-            res.status(201).json({ message: `User '${newUser.username}' created.` })
-        } catch (err) {
-            res.status(500).json({ message: err.message });
-        }
-    }
+        res.status(201).json({ message: `User '${newUser.username}' created.` })
+
+    })
 }
 
 export default controller;

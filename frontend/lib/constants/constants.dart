@@ -15,7 +15,9 @@ class Strings {
 
   static const String loginAppBarTitle = "Login into your account";
   static const String signupAppBarTitle = "Signup for a DaniVest account";
+  static const String homepageAppBarTitle = "DaniVest";
   static const String alreadyHasAccount = "Already have an account?";
+  static const String useFingerprintToUnlock = "Use fingerprint to unlock";
 
   // Signup fields
   static const String usernameFieldLabel = "Username";
@@ -81,12 +83,14 @@ class Strings {
 
   // Back-end server details
   static const String backendScheme = "http";
-  static const String backendHost = "192.168.1.35";
+  static const String backendHost = "192.168.1.34";
   static const String backendPort = "3000";
   static const String backendURL = "$backendScheme://$backendHost:$backendPort";
 
   // Resources paths
   static const String createUserPath = "/api/user/create";
+  static const String loginUserPath = "/api/auth/login";
+  static const String userAuthenticatedPath = "/api/auth/me";
 
   // Standard response field names
   static const String responseMessageFieldName = "message";

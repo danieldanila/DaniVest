@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/di/service_locator.dart';
+import 'package:frontend/provider/auth_provider.dart';
 import 'package:frontend/screens/start.dart';
 import 'package:frontend/constants/constants.dart' as constants;
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  setupLocator();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

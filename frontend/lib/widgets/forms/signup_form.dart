@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/constants.dart' as constants;
 import 'package:frontend/models/signup_data.dart';
-import 'package:frontend/services/user_service.dart';
+import 'package:frontend/provider/auth_provider.dart';
 import 'package:frontend/utilities/forms/validators/username_validator.dart';
 import 'package:frontend/utilities/forms/validators/email_validator.dart';
 import 'package:frontend/utilities/forms/validators/first_name_validator.dart';
@@ -11,6 +11,7 @@ import 'package:frontend/utilities/forms/validators/birthdate_validator.dart';
 import 'package:frontend/utilities/forms/validators/password_validator.dart';
 import 'package:frontend/utilities/forms/validators/confirm_password_validator.dart';
 import 'package:frontend/utilities/navigation/app_navigator.dart';
+import 'package:provider/provider.dart';
 
 class SignupForm extends StatefulWidget {
   const SignupForm({super.key});
@@ -89,12 +90,13 @@ class _SignupFormState extends State<SignupForm> {
   }
 
   void handleSignup(SignupData userBody) async {
-    final response = await UserService.createUser(userBody);
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+    final customResponse = await auth.signup(userBody);
 
     if (!mounted) return;
 
     setState(() {
-      _message = response;
+      _message = customResponse.message;
     });
 
     ScaffoldMessenger.of(

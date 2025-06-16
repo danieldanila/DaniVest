@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/homepage.dart';
 import 'package:frontend/screens/login.dart';
 import 'package:frontend/screens/signup.dart';
 
@@ -21,6 +22,13 @@ class AppNavigator {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const SignupScreen()),
+    );
+  }
+
+  static void navigateToHomepage(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const HomepageScreen()),
     );
   }
 }

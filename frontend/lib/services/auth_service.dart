@@ -1,0 +1,97 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
+import 'package:frontend/models/custom_response.dart';
+import 'package:frontend/models/login_data.dart';
+import 'package:frontend/models/signup_data.dart';
+
+import 'package:frontend/constants/constants.dart' as constants;
+import 'package:frontend/services/token_service.dart';
+
+class AuthService {
+  final Dio _dio;
+
+  AuthService(this._dio);
+
+  Future<Map<String, dynamic>> getUserProfile() async {
+    final response = await _dio.get(constants.Strings.userAuthenticatedPath);
+
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      throw Exception("Failed to load user profile");
+    }
+  }
+
+  Future<CustomResponse> login(LoginData loginData) async {
+    try {
+      final response = await _dio.post(
+        constants.Strings.loginUserPath,
+        data: jsonEncode(loginData),
+      );
+
+      final responseBodyJson = response.data;
+
+      if (response.statusCode == 200) {
+        final token = responseBodyJson["token"];
+        if (token != null) {
+          await TokenService().saveToken(token);
+          return CustomResponse(
+            success: true,
+            message:
+                responseBodyJson[constants.Strings.responseMessageFieldName],
+          );
+        }
+      }
+      return CustomResponse(
+        success: false,
+        message: responseBodyJson[constants.Strings.responseMessageFieldName],
+      );
+    } catch (e) {
+      return CustomResponse(success: false, message: "Login error: $e");
+    }
+  }
+
+  Future<CustomResponse> signup(SignupData userBody) async {
+    try {
+      final response = await _dio.post(
+        constants.Strings.createUserPath,
+        data: jsonEncode(userBody),
+      );
+
+      final responseBodyJson = response.data;
+
+      if (response.statusCode == 201) {
+        return CustomResponse(
+          success: true,
+          message: responseBodyJson[constants.Strings.responseMessageFieldName],
+        );
+      }
+      return CustomResponse(
+        success: false,
+        message: responseBodyJson[constants.Strings.responseMessageFieldName],
+      );
+    } catch (e) {
+      return CustomResponse(success: false, message: "Signup error: $e");
+    }
+  }
+
+  Future<String?> getToken() async {
+    return await TokenService().getToken();
+  }
+
+  Future<void> logout() async {
+    await TokenService().deleteToken();
+  }
+
+  Map<String, dynamic> parseJwt(String token) {
+    final parts = token.split('.');
+    if (parts.length != 3) {
+      throw Exception("Invalid token");
+    }
+    final payload = utf8.decode(
+      base64Url.decode(base64Url.normalize(parts[1])),
+    );
+    return json.decode(payload);
+  }
+}
