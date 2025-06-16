@@ -27,13 +27,6 @@ class SidebarDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text(constants.Strings.investPageName),
-            leading: const Icon(Icons.attach_money),
-            onTap: () {
-              AppNavigator.navigateToInvestPage(context);
-            },
-          ),
-          ListTile(
             title: const Text(constants.Strings.transactionPageName),
             leading: const Icon(Icons.shopping_cart),
             onTap: () {

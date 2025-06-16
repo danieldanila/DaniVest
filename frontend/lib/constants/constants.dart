@@ -25,7 +25,6 @@ class Strings {
   // Page names
   static const String homepagePageName = "Home";
   static const String transferPageName = "Transfer";
-  static const String investPageName = "Invest";
   static const String transactionPageName = "Transactions";
   static const String myAccountPageName = "My account";
   static const String addWithdrawMoneyPageName = "Add/withdraw money";
