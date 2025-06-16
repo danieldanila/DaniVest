@@ -18,9 +18,7 @@ class AuthProvider with ChangeNotifier {
   Future<void> _updateUser() async {
     try {
       final userData = await _authService.getUserProfile();
-      print(userData);
       _user = User.fromJson(userData);
-      print(_user);
     } catch (e) {
       print("Failed to fetch user: $e");
     }

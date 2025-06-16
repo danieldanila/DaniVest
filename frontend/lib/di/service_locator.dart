@@ -9,7 +9,14 @@ final GetIt locator = GetIt.instance;
 
 void setupLocator() {
   locator.registerLazySingleton<Dio>(() {
-    final dio = Dio(BaseOptions(baseUrl: constants.Strings.backendURL));
+    final dio = Dio(
+      BaseOptions(
+        baseUrl: constants.Strings.backendURL,
+        validateStatus: (status) {
+          return status != null && status >= 200 && status < 500;
+        },
+      ),
+    );
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {

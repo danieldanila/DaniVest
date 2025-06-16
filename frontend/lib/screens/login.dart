@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/constants.dart' as constants;
+import 'package:frontend/provider/auth_provider.dart';
 import 'package:frontend/utilities/navigation/app_navigator.dart';
 import 'package:frontend/widgets/app_bar_title.dart';
 import 'package:frontend/widgets/forms/login_form.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+    if (authProvider.isAuthenticated) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        AppNavigator.replaceToHomepage(context);
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const AppBarTitle(

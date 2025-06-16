@@ -6,8 +6,8 @@ import 'package:frontend/constants/constants.dart' as constants;
 import 'package:frontend/widgets/sidebar_drawer.dart';
 import 'package:provider/provider.dart';
 
-class HomepageScreen extends StatelessWidget {
-  const HomepageScreen({super.key});
+class MyAccountScreen extends StatelessWidget {
+  const MyAccountScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class HomepageScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const AppBarTitle(
-          text: constants.Strings.homepageAppBarTitle,
+          text: constants.Strings.myAccountPageName,
           primaryTextStartPosition: 0,
           primaryTextEndPosition: 1,
         ),

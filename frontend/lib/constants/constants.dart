@@ -8,16 +8,29 @@ class Colors {
 class Strings {
   static const String applicationTitle = "DaviVest";
   static const String logoUrl = "assets/images/logo.png";
+  static const String logoIconUrl = "assets/images/logo-icon.png";
   static const String dateDelimiter = '/';
 
   static const String loginButtonMessage = "Login";
   static const String signupButtonMessage = "Signup";
+  static const String logoutButtonMessage = "Logout";
 
   static const String loginAppBarTitle = "Login into your account";
   static const String signupAppBarTitle = "Signup for a DaniVest account";
   static const String homepageAppBarTitle = "DaniVest";
   static const String alreadyHasAccount = "Already have an account?";
   static const String useFingerprintToUnlock = "Use fingerprint to unlock";
+  static const String successfulLogout = "You successfully logout";
+
+  // Page names
+  static const String homepagePageName = "Home";
+  static const String transferPageName = "Transfer";
+  static const String investPageName = "Invest";
+  static const String transactionPageName = "Transactions";
+  static const String myAccountPageName = "My account";
+  static const String addWithdrawMoneyPageName = "Add/withdraw money";
+  static const String shareIbanPageName = "Share IBAN";
+  static const String showCardDetailsPageName = "Show card details";
 
   // Signup fields
   static const String usernameFieldLabel = "Username";
