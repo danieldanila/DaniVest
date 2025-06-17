@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:frontend/models/custom_response.dart';
 import 'package:frontend/models/login_data.dart';
+import 'package:frontend/models/login_passcode_data.dart';
 import 'package:frontend/models/signup_data.dart';
 
 import 'package:frontend/constants/constants.dart' as constants;
@@ -49,6 +50,40 @@ class AuthService {
       );
     } catch (e) {
       return CustomResponse(success: false, message: "Login error: $e");
+    }
+  }
+
+  Future<CustomResponse> checkPasscode(
+    LoginPasscodeData loginPasscodeData,
+  ) async {
+    try {
+      final response = await _dio.post(
+        constants.Strings.authPasscodePath,
+        data: jsonEncode(loginPasscodeData),
+      );
+
+      final responseBodyJson = response.data;
+
+      if (response.statusCode == 200) {
+        final token = responseBodyJson["token"];
+        if (token != null) {
+          await TokenService().saveToken(token);
+          return CustomResponse(
+            success: true,
+            message:
+                responseBodyJson[constants.Strings.responseMessageFieldName],
+          );
+        }
+      }
+      return CustomResponse(
+        success: false,
+        message: responseBodyJson[constants.Strings.responseMessageFieldName],
+      );
+    } catch (e) {
+      return CustomResponse(
+        success: false,
+        message: "Passcode login error: $e",
+      );
     }
   }
 

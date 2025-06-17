@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/services/token_service.dart';
+import 'package:frontend/services/user_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:frontend/constants/constants.dart' as constants;
 
@@ -32,6 +33,7 @@ void setupLocator() {
   });
 
   locator.registerLazySingleton<AuthService>(() => AuthService(locator<Dio>()));
+  locator.registerLazySingleton<UserService>(() => UserService(locator<Dio>()));
   locator.registerLazySingleton<TokenService>(() => TokenService());
   locator.registerLazySingleton<FlutterSecureStorage>(
     () => const FlutterSecureStorage(),

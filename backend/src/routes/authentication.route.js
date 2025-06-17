@@ -5,6 +5,7 @@ import { AuthenticationMiddleware as authenticationMiddleware } from "../middlew
 const router = express.Router();
 
 router.post("/login", authenticationController.login);
+router.post("/passcode", authenticationController.passcode);
 router.get(
     "/me",
     authenticationMiddleware.protect,

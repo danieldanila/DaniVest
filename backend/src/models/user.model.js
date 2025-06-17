@@ -78,6 +78,12 @@ const User = Database.define("User", {
             notEmpty: true,
         }
     },
+    hasPasscode: {
+        type: DataTypes.VIRTUAL,
+        get() {
+            return this.getDataValue("passcode") != null;
+        }
+    }
 
 }, {
     underscored: true,
@@ -87,6 +93,7 @@ const User = Database.define("User", {
             exclude: [
                 "password",
                 "passcode",
+                "hasPasscode",
                 "createdAt",
                 "updatedAt"
             ],
@@ -103,6 +110,19 @@ const User = Database.define("User", {
                 ],
             },
         },
+        withHasPasscode: {
+            attributes: {
+                include: [
+                    "hasPasscode",
+                ],
+                exclude: [
+                    "password",
+                    "passcode",
+                    "createdAt",
+                    "updatedAt"
+                ]
+            },
+        },
     },
     hooks: {
         beforeSave: async (user) => {
@@ -113,12 +133,24 @@ const User = Database.define("User", {
 
                 user.password = hashedPassword;
             }
+
+            if (user.changed("passcode")) {
+                const saltRounds = 10;
+                const salt = await bcrypt.genSalt(saltRounds);
+                const hashedPasscode = await bcrypt.hash(user.passcode, salt);
+
+                user.passcode = hashedPasscode;
+            }
         },
     },
 });
 
 User.arePasswordsEqual = async (candidatePassword, userPassword) => {
     return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+User.arePasscodesEqual = async (candidatePasscode, userPasscode) => {
+    return await bcrypt.compare(candidatePasscode, userPasscode);
 };
 
 export default User;

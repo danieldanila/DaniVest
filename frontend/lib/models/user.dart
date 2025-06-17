@@ -8,6 +8,7 @@ class User {
     required this.phoneNumber,
     required this.birthdate,
     required this.profilePicturePath,
+    required this.hasPasscode,
   });
 
   final String id;
@@ -18,6 +19,7 @@ class User {
   final String phoneNumber;
   final String birthdate;
   final String? profilePicturePath;
+  final bool hasPasscode;
 
   User.fromJson(Map<String, dynamic> json)
     : id = json["id"] as String,
@@ -27,7 +29,8 @@ class User {
       lastName = json["lastName"] as String,
       phoneNumber = json["phoneNumber"] as String,
       birthdate = json["birthdate"] as String,
-      profilePicturePath = json["profilePicturePath"] as String?;
+      profilePicturePath = json["profilePicturePath"] as String?,
+      hasPasscode = json["hasPasscode"] as bool;
 
   Map<String, dynamic> toJson() => {
     "id": id,
@@ -38,5 +41,6 @@ class User {
     "phoneNumber": phoneNumber,
     "birthdate": birthdate,
     "profilePicturePath": profilePicturePath,
+    "hasPasscode": hasPasscode,
   };
 }

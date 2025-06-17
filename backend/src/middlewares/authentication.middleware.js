@@ -58,7 +58,7 @@ const middleware = {
                 process.env.JWT_SECRET
             );
 
-            const currentUser = await User.findByPk(decoded.id);
+            const currentUser = await User.scope("withHasPasscode").findByPk(decoded.id);
 
             if (!currentUser) {
                 return next();

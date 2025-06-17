@@ -103,6 +103,8 @@ class Strings {
   static const String createUserPath = "/api/user/create";
   static const String loginUserPath = "/api/auth/login";
   static const String userAuthenticatedPath = "/api/auth/me";
+  static const String userPasscodePath = "/api/user/passcode";
+  static const String authPasscodePath = "/api/auth/passcode";
 
   // Standard response field names
   static const String responseMessageFieldName = "message";

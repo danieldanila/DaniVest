@@ -1,0 +1,38 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
+import 'package:frontend/models/custom_response.dart';
+
+import 'package:frontend/constants/constants.dart' as constants;
+import 'package:frontend/models/patch_passcode.dart';
+
+class UserService {
+  final Dio _dio;
+
+  UserService(this._dio);
+
+  Future<CustomResponse> setPasscode(PatchPasscode patchPasscode) async {
+    try {
+      final response = await _dio.patch(
+        constants.Strings.userPasscodePath,
+        data: jsonEncode(patchPasscode),
+      );
+
+      final responseBodyJson = response.data;
+
+      if (response.statusCode == 200) {
+        return CustomResponse(
+          success: true,
+          message: responseBodyJson[constants.Strings.responseMessageFieldName],
+        );
+      }
+
+      return CustomResponse(
+        success: false,
+        message: responseBodyJson[constants.Strings.responseMessageFieldName],
+      );
+    } catch (e) {
+      return CustomResponse(success: false, message: "SetPassCode error: $e");
+    }
+  }
+}

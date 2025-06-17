@@ -9,15 +9,25 @@ import 'package:frontend/services/auth_service.dart';
 class AuthProvider with ChangeNotifier {
   final _authService = locator<AuthService>();
   bool _isAuthenticated = false;
+  bool _passcodeChecked = false;
 
   bool get isAuthenticated => _isAuthenticated;
 
   User? _user;
   User? get user => _user;
+  bool get passcodeChecked => _passcodeChecked;
+
+  void setPasscodeChecked(bool value) {
+    _passcodeChecked = value;
+    notifyListeners();
+  }
 
   Future<void> _updateUser() async {
     try {
       final userData = await _authService.getUserProfile();
+
+      print(userData);
+
       _user = User.fromJson(userData);
     } catch (e) {
       print("Failed to fetch user: $e");
