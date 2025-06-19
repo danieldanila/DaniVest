@@ -22,19 +22,19 @@ def scroll_event_analysis(scroll_event_df, classifier_name, print_results=False)
                                                            y_train=y_train, best_k=best_k,
                                                            feature_name="scroll_event")
 
-        # Without activity_id, session_number, start_timestamps and scroll_id, the best k value was 15 with 46.16% accuracy in a one shot test accuracy
-        # After adding the new properties: hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, down_up_duration_ms, down_down_duration_ms, up_down_duration_ms, start_quadrant, end_quadrant, scroll_length_euclidean_distance, scroll_angle, direction, magnitude_speed and hot encodings was true, the best k = 1 with 81.13% accuracy, 0.0094 FAR, 0.1867 FRR and 0.1072 EER with 1.0 threshold
-        #   after turning off the hot encodings, the best k = 1 with 83.56% accuracy, 0.0082 FAR, 0.1643 FRR and 0.0947 EER with 1.0 threshold
+        # 1. Without activity_id, session_number, start_timestamps and scroll_id, the best k value was 15 with 46.16% accuracy in a one shot test accuracy
+        # 2. After adding the new properties: hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, down_up_duration_ms, down_down_duration_ms, up_down_duration_ms, start_quadrant, end_quadrant, scroll_length_euclidean_distance, scroll_angle, direction, magnitude_speed and hot encodings was true, the best k = 1 with 81.13% accuracy, 0.0094 FAR, 0.1867 FRR and 0.1072 EER with 1.0 threshold
+        # 3.  after turning off the hot encodings, the best k = 1 with 83.56% accuracy, 0.0082 FAR, 0.1643 FRR and 0.0947 EER with 1.0 threshold
     elif classifier_name == "Random Forest":
         best_n_estimators = 201
         y_pred, y_scores, classifier = random_forest_classifier(X=X, X_train=X_train, X_test=X_test, y_train=y_train,
                                                                 best_n_estimators=best_n_estimators,
                                                                 feature_name="scroll_event")
 
-        # After k=100, the accuracy is relatively constant at around 52%
+        # 1. After k=100, the accuracy is relatively constant at around 52%
         #   but k=151 showed the best accuracy of 52.07%
-        # After adding the new properties: hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, down_up_duration_ms, down_down_duration_ms, up_down_duration_ms, start_quadrant, end_quadrant, scroll_length_euclidean_distance, scroll_angle, direction, magnitude_speed and hot encodings was true, the best best_n_estimators = 201 with 90.04% accuracy, 0.0053 FAR, 0.0995 FRR and 0.0223 EER with 0.1850 threshold
-        #   after turning off the hot encodings, the best best_n_estimators = 201 with 90.05% accuracy, 0.0050 FAR, 0.0946 FRR and 0.0214 EER with 0.1850 threshold
+        # 2. After adding the new properties: hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, down_up_duration_ms, down_down_duration_ms, up_down_duration_ms, start_quadrant, end_quadrant, scroll_length_euclidean_distance, scroll_angle, direction, magnitude_speed and hot encodings was true, the best best_n_estimators = 201 with 90.04% accuracy, 0.0053 FAR, 0.0995 FRR and 0.0223 EER with 0.1850 threshold
+        # 3.  after turning off the hot encodings, the best best_n_estimators = 201 with 90.05% accuracy, 0.0050 FAR, 0.0946 FRR and 0.0214 EER with 0.1850 threshold
     elif classifier_name == "SVM":
         best_c = 0
         best_gamma = 0
@@ -49,9 +49,9 @@ def scroll_event_analysis(scroll_event_df, classifier_name, print_results=False)
                                                               best_gamma=best_gamma, best_kernel=best_kernel,
                                                               feature_name="scroll_event")
 
-        # After 2 hours of executing, the best params are: svm__C: 1000, svm__gama: 0.1 and svm__kernel: rbf with 52.85% accuracy
-        # After adding the new properties: hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, down_up_duration_ms, down_down_duration_ms, up_down_duration_ms, start_quadrant, end_quadrant, scroll_length_euclidean_distance, scroll_angle, direction, magnitude_speed and hot encodings was true, the best params are: svm__C: 10, svm__gama: 0.01 and svm__kernel: rbf with 83.87% accuracy, 0.0085 FAR, 0.1612 FRR and 0.0505 EER with 18.79 threshold
-        #   after turning off the hot encodings, the best params are: svm__C: 10, svm__gama: 0.1 and svm__kernel: rbf with 88.87% accuracy, 0.0058 FAR, 0.1126 FRR and 0.0386 EER with 19.03 threshold
+        # 1. After 2 hours of executing, the best params are: svm__C: 1000, svm__gama: 0.1 and svm__kernel: rbf with 52.85% accuracy
+        # 2. After adding the new properties: hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, down_up_duration_ms, down_down_duration_ms, up_down_duration_ms, start_quadrant, end_quadrant, scroll_length_euclidean_distance, scroll_angle, direction, magnitude_speed and hot encodings was true, the best params are: svm__C: 10, svm__gama: 0.01 and svm__kernel: rbf with 83.87% accuracy, 0.0085 FAR, 0.1612 FRR and 0.0505 EER with 18.79 threshold
+        # 3.  after turning off the hot encodings, the best params are: svm__C: 10, svm__gama: 0.1 and svm__kernel: rbf with 88.87% accuracy, 0.0058 FAR, 0.1126 FRR and 0.0386 EER with 19.03 threshold
     else:
         print(f"{classifier_name} is not implemented.")
 

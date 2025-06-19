@@ -22,42 +22,42 @@ def touch_event_analysis(touch_event_df, classifier_name, print_results=False):
                                                            y_train=y_train, best_k=best_k,
                                                            feature_name="touch_event")
 
-        # Without activity_id, session_number and start_timestamps, the best k value was 27 with 63% accuracy in a one shot test accuracy
-        # After adding the new properties down_down_duration_ms and up_down_duration_ms, no change in accuracy reported for k-NN classifier (best k = 21)
-        # After adding the new properties move_actions, X_coord_avg, Y_coord_avg, Contact_size_avg and dropping the properties specific to the first/second touch,
+        # 1. Without activity_id, session_number and start_timestamps, the best k value was 27 with 63% accuracy in a one shot test accuracy
+        # 2. After adding the new properties down_down_duration_ms and up_down_duration_ms, no change in accuracy reported for k-NN classifier (best k = 21)
+        # 3. After adding the new properties move_actions, X_coord_avg, Y_coord_avg, Contact_size_avg and dropping the properties specific to the first/second touch,
         #   the accuracy dropped to 58% (k = 21)
-        # After adding the new X_coord_distance_avg and Y_coord_distance_avg, the accuracy increased by 1% to 64% (k = 20)
-        # After removing the properties (X_coord_first_avg, Y_coord_first_avg, X_coord_second_avg, Y_coord_second_avg, Contact_size_first_avg, Contact_size_second_avg, move_actions, X_coord_avg, Y_coord_avg, X_coord_distance_avg, Y_coord_distance_avg) and added the following properties: (hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, start_x, start_y, end_x, end_y, start_quadrant, end_quadrant, X_coord_distance, Y_coord_distance, direction, touch_length_euclidean_distance, touch_angle and contact_size_avg), the best k = 1 with 86.76% accuracy, 0.0084 FAR, 0.1323 FRR and 0.1031 EER with 1.0 threshold
+        # 4. After adding the new X_coord_distance_avg and Y_coord_distance_avg, the accuracy increased by 1% to 64% (k = 20)
+        # 5. After removing the properties (X_coord_first_avg, Y_coord_first_avg, X_coord_second_avg, Y_coord_second_avg, Contact_size_first_avg, Contact_size_second_avg, move_actions, X_coord_avg, Y_coord_avg, X_coord_distance_avg, Y_coord_distance_avg) and added the following properties: (hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, start_x, start_y, end_x, end_y, start_quadrant, end_quadrant, X_coord_distance, Y_coord_distance, direction, touch_length_euclidean_distance, touch_angle and contact_size_avg), the best k = 1 with 86.76% accuracy, 0.0084 FAR, 0.1323 FRR and 0.1031 EER with 1.0 threshold
     elif classifier_name == "Random Forest":
         best_n_estimators = 201
         y_pred, y_scores, classifier = random_forest_classifier(X=X, X_train=X_train, X_test=X_test, y_train=y_train,
                                                                 best_n_estimators=best_n_estimators,
                                                                 feature_name="touch_event")
 
-        # After best_n_estimators=100, the accuracy is relatively constant at around 68%
+        # 1. After best_n_estimators=100, the accuracy is relatively constant at around 68%
         #   but best_n_estimators=190->200 showed the best accuracy of 68.4%+
-        # After adding the new properties down_down_duration_ms and up_down_duration_ms, an increase of 2% in accuracy
+        # 2. After adding the new properties down_down_duration_ms and up_down_duration_ms, an increase of 2% in accuracy
         #   was recorded, from 68% to 70%
-        # After adding the new properties move_actions, X_coord_avg, Y_coord_avg, Contact_size_avg and dropping the properties specific to the first/second touch,
+        # 3. After adding the new properties move_actions, X_coord_avg, Y_coord_avg, Contact_size_avg and dropping the properties specific to the first/second touch,
         #   the accuracy dropped to 64%
-        # After removing the properties (X_coord_first_avg, Y_coord_first_avg, X_coord_second_avg, Y_coord_second_avg, Contact_size_first_avg, Contact_size_second_avg, move_actions, X_coord_avg, Y_coord_avg, X_coord_distance_avg, Y_coord_distance_avg) and added the following properties: (hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, start_x, start_y, end_x, end_y, start_quadrant, end_quadrant, X_coord_distance, Y_coord_distance, direction, touch_length_euclidean_distance, touch_angle and contact_size_avg), the best best_n_estimators = 201 with 93.50% accuracy, 0.0043 FAR, 0.0649 FRR and 0.0148 EER with 0.1779 threshold
+        # 5. After removing the properties (X_coord_first_avg, Y_coord_first_avg, X_coord_second_avg, Y_coord_second_avg, Contact_size_first_avg, Contact_size_second_avg, move_actions, X_coord_avg, Y_coord_avg, X_coord_distance_avg, Y_coord_distance_avg) and added the following properties: (hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, start_x, start_y, end_x, end_y, start_quadrant, end_quadrant, X_coord_distance, Y_coord_distance, direction, touch_length_euclidean_distance, touch_angle and contact_size_avg), the best best_n_estimators = 201 with 93.50% accuracy, 0.0043 FAR, 0.0649 FRR and 0.0148 EER with 0.1779 threshold
     elif classifier_name == "SVM":
         best_c = 0
         best_gamma = 0
         best_kernel = "rbf"
 
-        # After 7 hours of executing, the best params are: svm__C: 100, svm__gama: 0.1 and svm__kernel: rbf with 63.93% accuracy
+        # 1?. After 7 hours of executing, the best params are: svm__C: 100, svm__gama: 0.1 and svm__kernel: rbf with 63.93% accuracy
         param_grid_old = {"svm__C": [0.001, 0.01, 0.1, 1, 10, 100],
                           "svm__gamma": [0.0001, 0.001, 0.01, 0.1, 1.0],
                           "svm__kernel": ["linear", "rbf"]}
 
-        # After 1.5 hours of executing, the best params are: svm__C: 1000, svm__gama: 1.0 and svm__kernel: rbf with 66.39% accuracy
-        # After removing the properties (X_coord_first_avg, Y_coord_first_avg, X_coord_second_avg, Y_coord_second_avg, Contact_size_first_avg, Contact_size_second_avg, move_actions, X_coord_avg, Y_coord_avg, X_coord_distance_avg, Y_coord_distance_avg) and added the following properties: (hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, start_x, start_y, end_x, end_y, start_quadrant, end_quadrant, X_coord_distance, Y_coord_distance, direction, touch_length_euclidean_distance, touch_angle and contact_size_avg), the best params are: svm__C: 1000, svm__gama: 0.01 and svm__kernel: rbf with 91.97% accuracy, 0.005 FAR, 0.0802 FRR and 0.0342 EER with 18.89 threshold
+        # 2?. After 1.5 hours of executing, the best params are: svm__C: 1000, svm__gama: 1.0 and svm__kernel: rbf with 66.39% accuracy
+        # 5. After removing the properties (X_coord_first_avg, Y_coord_first_avg, X_coord_second_avg, Y_coord_second_avg, Contact_size_first_avg, Contact_size_second_avg, move_actions, X_coord_avg, Y_coord_avg, X_coord_distance_avg, Y_coord_distance_avg) and added the following properties: (hour_sin, hour_cos, dow_sin, dow_cos, month_sin, month_cos, is_weekend, part_of_day, start_x, start_y, end_x, end_y, start_quadrant, end_quadrant, X_coord_distance, Y_coord_distance, direction, touch_length_euclidean_distance, touch_angle and contact_size_avg), the best params are: svm__C: 1000, svm__gama: 0.01 and svm__kernel: rbf with 91.97% accuracy, 0.005 FAR, 0.0802 FRR and 0.0342 EER with 18.89 threshold
         param_grid = {"svm__C": [10, 100, 1000],
                       "svm__gamma": [0.01, 0.1, 1.0, 10.0],
                       "svm__kernel": ["rbf"]}
 
-        # Executed for more than 3 hours, left it for the moment
+        # 3?. Executed for more than 3 hours, left it for the moment
         param_grid_old = {"svm__C": [1000, 10000, 100000],
                           "svm__gamma": [0.01, 0.1, 1.0, 10.0],
                           "svm__kernel": ["rbf"]}
