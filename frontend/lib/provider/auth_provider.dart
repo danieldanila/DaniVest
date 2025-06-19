@@ -5,6 +5,7 @@ import 'package:frontend/models/login_data.dart';
 import 'package:frontend/models/signup_data.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/services/auth_service.dart';
+import 'package:frontend/services/token_service.dart';
 
 class AuthProvider with ChangeNotifier {
   final _authService = locator<AuthService>();
@@ -22,16 +23,13 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _updateUser() async {
-    try {
-      final userData = await _authService.getUserProfile();
+  Future<CustomResponse> _updateUser() async {
+    CustomResponse customResponse = await _authService.getCurrentUser();
 
-      print(userData);
-
-      _user = User.fromJson(userData);
-    } catch (e) {
-      print("Failed to fetch user: $e");
+    if (customResponse.success) {
+      _user = User.fromJson(customResponse.data);
     }
+    return customResponse;
   }
 
   Future<CustomResponse> login(LoginData loginData) async {
@@ -49,6 +47,26 @@ class AuthProvider with ChangeNotifier {
     CustomResponse customResponse = await _authService.signup(signupData);
 
     return customResponse;
+  }
+
+  Future<void> tryAutoLogin() async {
+    try {
+      final token = await TokenService().getToken();
+
+      if (token == null) {
+        return;
+      }
+      CustomResponse customResponse = await _updateUser();
+
+      if (customResponse.success) {
+        _isAuthenticated = true;
+        notifyListeners();
+      } else {
+        _isAuthenticated = false;
+      }
+    } catch (e) {
+      throw Exception("Failed to login. $e");
+    }
   }
 
   Future<void> logout() async {

@@ -14,13 +14,22 @@ class AuthService {
 
   AuthService(this._dio);
 
-  Future<Map<String, dynamic>> getUserProfile() async {
+  Future<CustomResponse> getCurrentUser() async {
     final response = await _dio.get(constants.Strings.userAuthenticatedPath);
 
+    final responseBodyJson = response.data;
+
     if (response.statusCode == 200) {
-      return response.data;
+      return CustomResponse(
+        success: true,
+        data: responseBodyJson,
+        message: responseBodyJson[constants.Strings.responseMessageFieldName],
+      );
     } else {
-      throw Exception("Failed to load user profile");
+      return CustomResponse(
+        success: false,
+        message: responseBodyJson[constants.Strings.responseMessageFieldName],
+      );
     }
   }
 
@@ -109,10 +118,6 @@ class AuthService {
     } catch (e) {
       return CustomResponse(success: false, message: "Signup error: $e");
     }
-  }
-
-  Future<String?> getToken() async {
-    return await TokenService().getToken();
   }
 
   Future<void> logout() async {

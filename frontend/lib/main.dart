@@ -5,12 +5,18 @@ import 'package:frontend/screens/start.dart';
 import 'package:frontend/constants/constants.dart' as constants;
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   setupLocator();
+
+  final authProvider = AuthProvider();
+  await authProvider.tryAutoLogin();
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
+        ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
       ],
       child: const MyApp(),
     ),

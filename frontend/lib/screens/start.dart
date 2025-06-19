@@ -4,18 +4,28 @@ import 'package:frontend/provider/auth_provider.dart';
 import 'package:frontend/utilities/navigation/app_navigator.dart';
 import 'package:provider/provider.dart';
 
-class StartScreen extends StatelessWidget {
+class StartScreen extends StatefulWidget {
   const StartScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    if (authProvider.isAuthenticated) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        AppNavigator.replaceToHomepage(context);
-      });
-    }
+  State<StartScreen> createState() => _StartScreenState();
+}
 
+class _StartScreenState extends State<StartScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      if (authProvider.isAuthenticated) {
+        AppNavigator.replaceToHomepage(context);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         margin: const EdgeInsets.symmetric(

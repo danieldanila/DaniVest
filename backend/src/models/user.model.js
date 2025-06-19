@@ -110,14 +110,14 @@ const User = Database.define("User", {
                 ],
             },
         },
-        withHasPasscode: {
+        witPasscode: {
             attributes: {
                 include: [
+                    "passcode",
                     "hasPasscode",
                 ],
                 exclude: [
                     "password",
-                    "passcode",
                     "createdAt",
                     "updatedAt"
                 ]

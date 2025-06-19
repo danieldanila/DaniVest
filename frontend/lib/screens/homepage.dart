@@ -15,12 +15,20 @@ class HomepageScreen extends StatefulWidget {
 }
 
 class _HomepageScreenState extends State<HomepageScreen> {
+  late AuthProvider authProvider;
+
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+      authProvider.addListener(() {
+        if (!authProvider.isAuthenticated) {
+          AppNavigator.replaceToStartPage(context);
+        }
+      });
 
       if (!authProvider.passcodeChecked) {
         if (authProvider.user!.hasPasscode) {
@@ -35,14 +43,8 @@ class _HomepageScreenState extends State<HomepageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
-    if (!authProvider.isAuthenticated) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          AppNavigator.replaceToStartPage(context);
-        }
-      });
-    }
+    // In case of rebuilds
+    authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(

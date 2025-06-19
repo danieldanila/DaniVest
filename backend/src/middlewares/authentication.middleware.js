@@ -58,7 +58,7 @@ const middleware = {
                 process.env.JWT_SECRET
             );
 
-            const currentUser = await User.scope("withHasPasscode").findByPk(decoded.id);
+            const currentUser = await User.scope("witPasscode").findByPk(decoded.id);
 
             if (!currentUser) {
                 return next();
@@ -68,7 +68,10 @@ const middleware = {
                 return next();
             }
 
-            res.locals.user = currentUser;
+            const userSafe = currentUser.toJSON();
+            delete userSafe.passcode;
+
+            res.locals.user = userSafe;
         } catch (err) {
             return next();
         }
