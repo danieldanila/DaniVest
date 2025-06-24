@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 const signToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -15,7 +16,21 @@ const changedPasswordAfter = (changedPasswordAt, jwtTimestamp) => {
     return false;
 };
 
+const createPasswordResetToken = (user) => {
+    const resetToken = crypto.randomBytes(32).toString("hex");
+
+    user.passwordResetToken = crypto
+        .createHash("sha256")
+        .update(resetToken)
+        .digest("hex");
+
+    user.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+
+    return resetToken;
+};
+
 export {
     signToken,
-    changedPasswordAfter
+    changedPasswordAfter,
+    createPasswordResetToken
 }

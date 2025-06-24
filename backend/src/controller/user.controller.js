@@ -18,7 +18,7 @@ const controller = {
         const patchedUser = await userService.patchUserPasscode(req.user, req.body);
 
         res.status(202).json({ message: `User '${patchedUser.username}' passcode modified.` })
-    })
+    }),
 }
 
 export default controller;

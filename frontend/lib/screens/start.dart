@@ -3,6 +3,7 @@ import 'package:frontend/constants/constants.dart' as constants;
 import 'package:frontend/provider/auth_provider.dart';
 import 'package:frontend/utilities/navigation/app_navigator.dart';
 import 'package:provider/provider.dart';
+import 'package:app_links/app_links.dart';
 
 class StartScreen extends StatefulWidget {
   const StartScreen({super.key});
@@ -12,14 +13,28 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen> {
+  final AppLinks _appLinks = AppLinks();
+
   @override
   void initState() {
     super.initState();
+    initDeepLinking();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       if (authProvider.isAuthenticated) {
         AppNavigator.replaceToHomepage(context);
+      }
+    });
+  }
+
+  void initDeepLinking() {
+    _appLinks.uriLinkStream.listen((Uri? uri) {
+      if (uri != null && uri.host == constants.Strings.androidIntentHost) {
+        String token = uri.pathSegments.first;
+        if (mounted) {
+          AppNavigator.replaceToResetPasswordPage(context, token);
+        }
       }
     });
   }

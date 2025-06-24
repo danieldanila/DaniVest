@@ -10,16 +10,18 @@ class Strings {
   static const String logoUrl = "assets/images/logo.png";
   static const String logoIconUrl = "assets/images/logo-icon.png";
   static const String dateDelimiter = '/';
+  static const String or = "OR";
 
   static const String loginButtonMessage = "Login";
   static const String signupButtonMessage = "Signup";
   static const String logoutButtonMessage = "Logout";
+  static const String sendButtonMessage = "Send";
 
   static const String loginAppBarTitle = "Login into your account";
   static const String signupAppBarTitle = "Signup for a DaniVest account";
   static const String homepageAppBarTitle = "DaniVest";
   static const String alreadyHasAccount = "Already have an account?";
-  static const String useFingerprintToUnlock = "Use fingerprint to unlock";
+  static const String forgotMyPassword = "Forgot my password";
   static const String successfulLogout = "You successfully logout";
 
   // Page names
@@ -103,11 +105,13 @@ class Strings {
   static const String createUserPath = "/api/user/create";
   static const String loginUserPath = "/api/auth/login";
   static const String userAuthenticatedPath = "/api/auth/me";
-  static const String userPasscodePath = "/api/user/passcode";
   static const String authPasscodePath = "/api/auth/passcode";
+  static const String userPasscodePath = "/api/user/passcode";
+  static const String forgotPasswordPath = "/api/auth/forgotPassword";
 
   // Standard response field names
   static const String responseMessageFieldName = "message";
+  static const String androidIntentHost = "resetpassword";
 }
 
 class Properties {

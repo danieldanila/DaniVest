@@ -1,6 +1,5 @@
 import express from "express";
 import router from "./routes/index.js";
-import NotFoundError from "./errors/notFoundError.js";
 import errorsHandlerWrapper from "./utils/errorsHandlers.util.js";
 
 const app = express();

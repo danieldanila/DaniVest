@@ -83,6 +83,14 @@ const User = Database.define("User", {
         get() {
             return this.getDataValue("passcode") != null;
         }
+    },
+    passwordResetToken: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    passwordResetExpires: {
+        type: DataTypes.DATE,
+        allowNull: true,
     }
 
 }, {

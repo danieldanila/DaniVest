@@ -12,4 +12,8 @@ router.get(
     authenticationController.getCurrentUser
 );
 
+router.post("/forgotPassword", authenticationController.forgotPassword);
+router.patch("/resetPassword/:token", authenticationController.resetPassword);
+
+
 export default router;

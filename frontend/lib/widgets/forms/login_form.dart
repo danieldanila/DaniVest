@@ -36,7 +36,7 @@ class _LoginFormState extends State<LoginForm> {
     });
   }
 
-  handleLogin(LoginData loginData) async {
+  Future<void> handleLogin(LoginData loginData) async {
     final auth = Provider.of<AuthProvider>(context, listen: false);
     final customResponse = await auth.login(loginData);
 
@@ -88,14 +88,14 @@ class _LoginFormState extends State<LoginForm> {
           ),
           const SizedBox(height: constants.Properties.sizedBoxHeight),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               bool areFieldsValidated = formKey.currentState!.validate();
               if (areFieldsValidated) {
                 final loginData = LoginData(
                   username: usernameController.text,
                   password: passwordController.text,
                 );
-                handleLogin(loginData);
+                await handleLogin(loginData);
               }
             },
             child: const Text(constants.Strings.loginButtonMessage),

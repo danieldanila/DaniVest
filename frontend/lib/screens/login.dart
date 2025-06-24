@@ -4,6 +4,7 @@ import 'package:frontend/provider/auth_provider.dart';
 import 'package:frontend/utilities/navigation/app_navigator.dart';
 import 'package:frontend/widgets/app_bar_title.dart';
 import 'package:frontend/widgets/forms/login_form.dart';
+import 'package:frontend/widgets/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -40,9 +41,15 @@ class LoginScreen extends StatelessWidget {
                 const LoginForm(),
                 TextButton(
                   onPressed: () {
-                    AppNavigator.replaceToLoginPage(context);
+                    showModalBottomSheet<void>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const ModalBottomSheet();
+                      },
+                    );
                   },
-                  child: const Text(constants.Strings.useFingerprintToUnlock),
+
+                  child: const Text(constants.Strings.forgotMyPassword),
                 ),
               ],
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/add_withdraw_money.dart';
 import 'package:frontend/screens/my_account.dart';
+import 'package:frontend/screens/reset_password.dart';
 import 'package:frontend/screens/start.dart';
 import 'package:frontend/screens/homepage.dart';
 import 'package:frontend/screens/login.dart';
@@ -76,6 +77,15 @@ class AppNavigator {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const AddWithdrawMoneyScreen()),
+    );
+  }
+
+  static void replaceToResetPasswordPage(BuildContext context, String token) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ResetPasswordScreen(token: token),
+      ),
     );
   }
 }
