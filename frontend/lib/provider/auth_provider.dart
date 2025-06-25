@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/di/service_locator.dart';
 import 'package:frontend/models/custom_response.dart';
 import 'package:frontend/models/login_data.dart';
+import 'package:frontend/models/reset_password_data.dart';
 import 'package:frontend/models/signup_data.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/services/auth_service.dart';
@@ -45,6 +46,18 @@ class AuthProvider with ChangeNotifier {
 
   Future<CustomResponse> signup(SignupData signupData) async {
     CustomResponse customResponse = await _authService.signup(signupData);
+
+    return customResponse;
+  }
+
+  Future<CustomResponse> resetPassword(
+    ResetPasswordData resetPasswordData,
+    String token,
+  ) async {
+    CustomResponse customResponse = await _authService.resetPassword(
+      resetPasswordData,
+      token,
+    );
 
     return customResponse;
   }

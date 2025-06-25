@@ -32,9 +32,11 @@ class _StartScreenState extends State<StartScreen> {
     _appLinks.uriLinkStream.listen((Uri? uri) {
       if (uri != null && uri.host == constants.Strings.androidIntentHost) {
         String token = uri.pathSegments.first;
-        if (mounted) {
-          AppNavigator.replaceToResetPasswordPage(context, token);
-        }
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            AppNavigator.replaceToResetPasswordPage(context, token);
+          }
+        });
       }
     });
   }

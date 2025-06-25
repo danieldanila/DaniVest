@@ -59,6 +59,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const Text(constants.Strings.forgotMyPassword),
             TextFormField(
               controller: emailController,
               validator: emailValidator,

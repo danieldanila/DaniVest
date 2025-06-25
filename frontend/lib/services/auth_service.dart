@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:frontend/models/custom_response.dart';
 import 'package:frontend/models/login_data.dart';
 import 'package:frontend/models/login_passcode_data.dart';
+import 'package:frontend/models/reset_password_data.dart';
 import 'package:frontend/models/signup_data.dart';
 
 import 'package:frontend/constants/constants.dart' as constants;
@@ -117,6 +118,36 @@ class AuthService {
       );
     } catch (e) {
       return CustomResponse(success: false, message: "Signup error: $e");
+    }
+  }
+
+  Future<CustomResponse> resetPassword(
+    ResetPasswordData resetPasswordData,
+    String token,
+  ) async {
+    try {
+      final response = await _dio.patch(
+        "${constants.Strings.resetPasswordPath}/$token",
+        data: jsonEncode(resetPasswordData),
+      );
+
+      final responseBodyJson = response.data;
+
+      if (response.statusCode == 201) {
+        return CustomResponse(
+          success: true,
+          message: responseBodyJson[constants.Strings.responseMessageFieldName],
+        );
+      }
+      return CustomResponse(
+        success: false,
+        message: responseBodyJson[constants.Strings.responseMessageFieldName],
+      );
+    } catch (e) {
+      return CustomResponse(
+        success: false,
+        message: "Reset password error: $e",
+      );
     }
   }
 
