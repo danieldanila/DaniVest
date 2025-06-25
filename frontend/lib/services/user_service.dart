@@ -15,7 +15,7 @@ class UserService {
   Future<CustomResponse> setPasscode(PatchPasscode patchPasscode) async {
     try {
       final response = await _dio.patch(
-        constants.Strings.userPasscodePath,
+        constants.Strings.authPasscodePath,
         data: jsonEncode(patchPasscode),
       );
 

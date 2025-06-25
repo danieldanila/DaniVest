@@ -1,13 +1,30 @@
 import NotFoundError from "../errors/notFoundError.js";
 import { User } from "../models/index.js";
-import validation from "../validations/general.validation.js"; "../validations/general.validation.js"
-
-
+import throwValidationErrorWithMessage from "../utils/errorsWrapper.util.js";
+import validation from "../validations/general.validation.js";
+import userValidation from "../validations/user.validation.js";
 
 const service = {
     createUser: async (userBody) => {
-        const newUser = await User.create(userBody);
-        return newUser;
+        const existingUsers = await service.getAllUsers();
+        const errors = await userValidation.checkUserFields(
+            userBody,
+            existingUsers,
+            false
+        );
+
+        if (errors.length === 0) {
+            const newUser = await User.create(userBody);
+
+            return newUser;
+        } else {
+            throwValidationErrorWithMessage(errors);
+        }
+    },
+
+    getAllUsers: async () => {
+        const users = await User.scope("withPassword").findAll();
+        return users;
     },
 
     getUserById: async (userId) => {
@@ -23,13 +40,6 @@ const service = {
             throw new NotFoundError("User not found.");
         }
     },
-
-    patchUserPasscode: async (loggedUser, userBody) => {
-        const userFound = await service.getUserById(loggedUser.id);
-
-        const updatedUser = await userFound.update({ passcode: userBody.passcode });
-        return updatedUser;
-    }
 };
 
 export default service;

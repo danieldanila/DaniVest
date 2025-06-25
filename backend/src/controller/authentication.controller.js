@@ -18,6 +18,12 @@ const controller = {
         });
     }),
 
+    patchUserPasscode: catchAsync(async (req, res, next) => {
+        const patchedUser = await authenticationService.patchUserPasscode(req.user, req.body);
+
+        res.status(202).json({ message: `User '${patchedUser.username}' passcode modified.` })
+    }),
+
     getCurrentUser: catchAsync(async (req, res, next) => {
         return res.status(200).json(res.locals.user);
     }),

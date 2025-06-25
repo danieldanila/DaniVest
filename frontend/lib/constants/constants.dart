@@ -58,6 +58,8 @@ class Strings {
   static const String confirmPasswordFieldLabel = "Confirm Password";
   static const String confirmPasswordFieldHint = "Enter again the password";
 
+  static const String localizedReasonBiometric = "Login to gain access";
+
   // Generic error
   static const String genericError = "An unknown error has occured.";
 
@@ -106,7 +108,6 @@ class Strings {
   static const String loginUserPath = "/api/auth/login";
   static const String userAuthenticatedPath = "/api/auth/me";
   static const String authPasscodePath = "/api/auth/passcode";
-  static const String userPasscodePath = "/api/user/passcode";
   static const String forgotPasswordPath = "/api/auth/forgotPassword";
 
   // Standard response field names

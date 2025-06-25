@@ -1,6 +1,6 @@
 import express from "express";
 import { UserController as userController } from "../controller/index.js";
-import { AuthenticationMiddleware } from "../middlewares/index.js";
+import { AuthenticationMiddleware as authenticationMiddleware } from "../middlewares/index.js";
 
 const router = express.Router();
 
@@ -9,16 +9,12 @@ router.post(
     userController.createUser
 );
 
+router.get("/", authenticationMiddleware.protect, userController.getAllUsers);
+
 router.get(
     "/:id",
-    AuthenticationMiddleware.protect,
+    authenticationMiddleware.protect,
     userController.getUserById
-);
-
-router.patch(
-    "/passcode",
-    AuthenticationMiddleware.protect,
-    userController.patchUserPasscode
 );
 
 export default router;

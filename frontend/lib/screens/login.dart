@@ -42,9 +42,17 @@ class LoginScreen extends StatelessWidget {
                 TextButton(
                   onPressed: () {
                     showModalBottomSheet<void>(
+                      isScrollControlled: true,
                       context: context,
                       builder: (BuildContext context) {
-                        return const ModalBottomSheet();
+                        return SingleChildScrollView(
+                          child: Container(
+                            padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom,
+                            ),
+                            child: const ModalBottomSheet(),
+                          ),
+                        );
                       },
                     );
                   },

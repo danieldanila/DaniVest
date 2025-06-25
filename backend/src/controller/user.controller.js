@@ -9,15 +9,14 @@ const controller = {
 
     }),
 
+    getAllUsers: catchAsync(async (req, res, next) => {
+        const users = await userService.getAllUsers();
+        res.status(200).json(users);
+    }),
+
     getUserById: catchAsync(async (req, res, next) => {
         const user = await userService.getUserById(req.params.id);
         res.status(200).json(user);
-    }),
-
-    patchUserPasscode: catchAsync(async (req, res, next) => {
-        const patchedUser = await userService.patchUserPasscode(req.user, req.body);
-
-        res.status(202).json({ message: `User '${patchedUser.username}' passcode modified.` })
     }),
 }
 

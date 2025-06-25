@@ -7,6 +7,7 @@ import validation from "../validations/general.validation.js";
 import throwValidationErrorWithMessage from "../utils/errorsWrapper.util.js";
 import { Op } from "sequelize";
 import crypto from "crypto";
+import { UserService as userService } from "./index.js";
 
 
 const service = {
@@ -82,6 +83,13 @@ const service = {
         const token = signToken(user.id);
 
         return token;
+    },
+
+    patchUserPasscode: async (loggedUser, userBody) => {
+        const userFound = await userService.getUserById(loggedUser.id);
+
+        const updatedUser = await userFound.update({ passcode: userBody.passcode });
+        return updatedUser;
     },
 
     forgotPassword: async (userEmail) => {
