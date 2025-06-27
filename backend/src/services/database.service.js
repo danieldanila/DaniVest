@@ -2,7 +2,7 @@ import { Database } from "../models/index.js";
 
 const service = {
   sync: async () => {
-    await Database.sync({ alter: true });
+    await Database.sync({ force: true });
   },
 };
 

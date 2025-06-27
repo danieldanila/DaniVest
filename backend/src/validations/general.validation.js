@@ -120,6 +120,21 @@ const validation = {
         return true;
     },
 
+    foreignUuidValidation: (field, fieldName, errorsArray, entityObjects) => {
+        validation.uuidValidation(field, fieldName, errorsArray);
+
+        let doesUuidExists = false;
+        entityObjects.forEach((entityObject) => {
+            if (entityObject.id === field) {
+                doesUuidExists = true;
+            }
+        });
+
+        if (!doesUuidExists) {
+            errorsArray.push(`${fieldName} with the value "${field}" doesn't exist.`);
+        }
+    },
+
     duplicateFieldValidation: (
         field,
         fieldName,
@@ -140,12 +155,108 @@ const validation = {
         });
     },
 
+    booleanFieldValidation: (field, fieldName, errorsArray) => {
+        if (
+            field &&
+            !(
+                field === "true" ||
+                field === "false" ||
+                field === true ||
+                field === false
+            )
+        ) {
+            errorsArray.push(`${fieldName} must be a boolean value.`);
+        }
+    },
+
     idParamaterValidation: (entityId, fieldName, errorsArray) => {
         if (!validation.uuidValidation(entityId, fieldName, errorsArray)) {
             throwValidationErrorWithMessage(errorsArray);
         }
         return entityId;
     },
+
+    moneyFieldValidation: (field, fieldName, errorsArray) => {
+        if (!field.match(/^(\d+(\.\d{1,2})?)$/)) {
+            errorsArray.push(
+                `${fieldName} must be a number with a maximum of 2 decimals.`
+            );
+        }
+    },
+
+    ibanFieldValidation: (field, fieldName, errorsArray) => {
+        field = field.replace(/\s+/g, '').toUpperCase();
+
+        let isValid;
+
+        if (!field.startsWith("RO") || field.length !== 24 || !/^[A-Z0-9]+$/.test(field)) {
+            isValid = false;
+        } else {
+            const rearranged = field.slice(4) + field.slice(0, 4);
+
+            const converted = rearranged.split('').map(char => {
+                if (/[A-Z]/.test(char)) {
+                    return char.charCodeAt(0) - 55;
+                }
+                return char;
+            }).join('');
+
+            let remainder = converted;
+            while (remainder.length > 2) {
+                const block = remainder.slice(0, 9);
+                remainder = (parseInt(block, 10) % 97).toString() + remainder.slice(block.length);
+            }
+
+            isValid = (parseInt(remainder, 10) % 97 === 1);
+        }
+
+        if (!isValid) {
+            errorsArray.push(
+                `${fieldName} must be a valid IBAN.`
+            );
+        }
+    },
+
+    cardNumberFieldValidation: (field, fieldName, errorsArray) => {
+        field = field.replace(/[\s-]/g, '');
+
+        let isValid;
+
+        if (!/^\d{13,19}$/.test(field)) {
+            isValid = false;
+        } else {
+            let sum = 0;
+            let shouldDouble = false;
+
+            for (let i = field.length - 1; i >= 0; i--) {
+                let digit = parseInt(field.charAt(i), 10);
+
+                if (shouldDouble) {
+                    digit *= 2;
+                    if (digit > 9) digit -= 9;
+                }
+
+                sum += digit;
+                shouldDouble = !shouldDouble;
+            }
+
+            isValid = (sum % 10 === 0);
+        }
+
+        if (!isValid) {
+            errorsArray.push(
+                `${fieldName} must be a valid card number.`
+            );
+        }
+    },
+
+    cvvFieldValidation: (field, fieldName, errorsArray) => {
+        if (!field.match(/^\d{3}$/)) {
+            errorsArray.push(
+                `${fieldName} must have 3 digits.`
+            );
+        }
+    }
 };
 
 export default validation;

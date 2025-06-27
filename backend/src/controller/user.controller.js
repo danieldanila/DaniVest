@@ -3,10 +3,9 @@ import catchAsync from "../utils/catchAsync.util.js";
 
 const controller = {
     createUser: catchAsync(async (req, res, next) => {
-        const newUser = await userService.createUser(req.body);
+        const { newUser, newBankAccount } = await userService.createUser(req.body);
 
-        res.status(201).json({ message: `User '${newUser.username}' created.` })
-
+        res.status(201).json({ message: `User '${newUser.username}' created alongside with his main bank account's IBAN ${newBankAccount.iban}.` })
     }),
 
     getAllUsers: catchAsync(async (req, res, next) => {
