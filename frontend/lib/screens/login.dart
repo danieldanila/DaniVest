@@ -15,7 +15,7 @@ class LoginScreen extends StatelessWidget {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     if (authProvider.isAuthenticated) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        AppNavigator.replaceToHomepage(context);
+        AppNavigator.replaceToMainNavigationPage(context);
       });
     }
 

@@ -17,4 +17,6 @@ router.get(
     userController.getUserById
 );
 
+router.get("/:id/bank", authenticationMiddleware.protect, userController.getUserBankAccount)
+
 export default router;

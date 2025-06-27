@@ -23,7 +23,7 @@ class _StartScreenState extends State<StartScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       if (authProvider.isAuthenticated) {
-        AppNavigator.replaceToHomepage(context);
+        AppNavigator.replaceToMainNavigationPage(context);
       }
     });
   }

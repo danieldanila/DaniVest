@@ -24,6 +24,12 @@ class Strings {
   static const String forgotMyPassword = "Forgot my password";
   static const String successfulLogout = "You successfully logout";
 
+  static const String hideTheAmount = "Hide the amount";
+  static const String showTheAmount = "Show the amount";
+  static const String defaultCurrency = "RON";
+  static const String defaultAmount = "0 $defaultCurrency";
+  static const String amountObscured = "***** $defaultCurrency";
+
   // Page names
   static const String homepagePageName = "Home";
   static const String transferPageName = "Transfer";
@@ -105,6 +111,7 @@ class Strings {
 
   // Resources paths
   static const String createUserPath = "/api/user/create";
+  static const String getUserBankAccount = "/api/user/:id/bank";
   static const String loginUserPath = "/api/auth/login";
   static const String userAuthenticatedPath = "/api/auth/me";
   static const String authPasscodePath = "/api/auth/passcode";
@@ -121,7 +128,9 @@ class Properties {
   static const double containerHorizontalMargin = 50;
   static const double containerVerticalMargin = 50;
   static const double sizedBoxHeight = 50;
+  static const double sizedBoxWidth = 5;
   static const double columnSpacing = 10;
+  static const double fontSizeMainTitle = 54;
   static const int minimumBirthdateYear = 1920;
   static const int minimumUsernameFieldLength = 6;
   static const int minimumEmailFieldLength = 3;

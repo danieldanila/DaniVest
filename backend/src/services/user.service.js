@@ -1,3 +1,4 @@
+import { where } from "sequelize";
 import NotFoundError from "../errors/notFoundError.js";
 import { BankAccount, User } from "../models/index.js";
 import { generateRandomCardNumber, generateRandomCVV, generateRandomRomanianIBAN } from "../utils/bank.util.js";
@@ -54,6 +55,26 @@ const service = {
             throw new NotFoundError("User not found.");
         }
     },
+
+    getUserBankAccount: async (userId) => {
+        const errors = [];
+
+        validation.idParamaterValidation(userId, "User id", errors);
+
+        const bankAccount = await BankAccount.findOne({
+            where: {
+                userId: userId,
+                isMain: true
+            }
+        })
+
+        if (bankAccount) {
+            return bankAccount;
+        } else {
+            throw new NotFoundError("User has no main bank account.");
+        }
+    },
+
 };
 
 export default service;

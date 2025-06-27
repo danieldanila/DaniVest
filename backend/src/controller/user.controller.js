@@ -17,6 +17,11 @@ const controller = {
         const user = await userService.getUserById(req.params.id);
         res.status(200).json(user);
     }),
+
+    getUserBankAccount: catchAsync(async (req, res, next) => {
+        const bankAccount = await userService.getUserBankAccount(req.params.id);
+        res.status(200).json(bankAccount);
+    }),
 }
 
 export default controller;

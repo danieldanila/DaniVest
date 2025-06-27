@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/add_withdraw_money.dart';
+import 'package:frontend/screens/main_navigation.dart';
 import 'package:frontend/screens/my_account.dart';
 import 'package:frontend/screens/reset_password.dart';
 import 'package:frontend/screens/start.dart';
@@ -35,6 +36,14 @@ class AppNavigator {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const SignupScreen()),
+    );
+  }
+
+  static void replaceToMainNavigationPage(BuildContext context) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
+      (route) => false,
     );
   }
 
