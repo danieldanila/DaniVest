@@ -24,4 +24,6 @@ router.get(
 
 router.get("/:id/bank", authenticationMiddleware.protect, userController.getUserBankAccount)
 
+router.get("/:id/transactions", authenticationMiddleware.protect, userController.getUserAllTransactions)
+
 export default router;

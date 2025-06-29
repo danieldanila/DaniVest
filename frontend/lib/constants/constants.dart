@@ -11,11 +11,13 @@ class Strings {
   static const String logoIconUrl = "assets/images/logo-icon.png";
   static const String dateDelimiter = '/';
   static const String or = "OR";
+  static const String success = "Success";
 
   static const String loginButtonMessage = "Login";
   static const String signupButtonMessage = "Signup";
   static const String logoutButtonMessage = "Logout";
   static const String sendButtonMessage = "Send";
+  static const String seeAllTransactions = "See all transactions";
 
   static const String loginAppBarTitle = "Login into your account";
   static const String signupAppBarTitle = "Signup for a DaniVest account";
@@ -105,13 +107,14 @@ class Strings {
 
   // Back-end server details
   static const String backendScheme = "http";
-  static const String backendHost = "192.168.1.34";
+  static const String backendHost = "192.168.1.36";
   static const String backendPort = "3000";
   static const String backendURL = "$backendScheme://$backendHost:$backendPort";
 
   // Resources paths
   static const String createUserPath = "/api/user/create";
   static const String getUserBankAccount = "/api/user/:id/bank";
+  static const String getUserAllTransactions = "/api/user/:id/transactions";
   static const String loginUserPath = "/api/auth/login";
   static const String userAuthenticatedPath = "/api/auth/me";
   static const String authPasscodePath = "/api/auth/passcode";
@@ -139,4 +142,6 @@ class Properties {
   static const int minimumPhoneNumberFieldLength = 10;
   static const int minimumBirthdateFieldLength = 10;
   static const int minimumPasswordFieldLength = 8;
+  static const int maximumListPreviewNumber = 4;
+  static const int transactionPageIndex = 3;
 }

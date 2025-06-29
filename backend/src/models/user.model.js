@@ -78,6 +78,12 @@ const User = Database.define("User", {
             notEmpty: true,
         }
     },
+    fullName: {
+        type: DataTypes.VIRTUAL,
+        get() {
+            return `${this.firstName} ${this.lastName}`;
+        },
+    },
     hasPasscode: {
         type: DataTypes.VIRTUAL,
         get() {

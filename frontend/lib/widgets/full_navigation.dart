@@ -9,14 +9,22 @@ import 'package:frontend/utilities/sidebar/user_logout.dart';
 import 'package:frontend/widgets/app_bar_title.dart';
 
 class FullNavigation extends StatefulWidget {
-  const FullNavigation({super.key});
+  const FullNavigation({super.key, this.initialIndex = 0});
+
+  final int initialIndex;
 
   @override
   State<FullNavigation> createState() => _FullNavigationState();
 }
 
 class _FullNavigationState extends State<FullNavigation> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex;
+  }
 
   final List<Widget> _pages = const [
     HomepageScreen(),

@@ -1,5 +1,5 @@
 import NotFoundError from "../errors/notFoundError.js";
-import { Transaction } from "../models/index.js";
+import { BankAccount, Transaction, User } from "../models/index.js";
 import throwValidationErrorWithMessage from "../utils/errorsWrapper.util.js";
 import validation from "../validations/general.validation.js";
 import transactionValidation from "../validations/transaction.validation.js";
@@ -32,7 +32,28 @@ const service = {
     },
 
     getAllTransactions: async () => {
-        const transactions = await Transaction.findAll();
+        const transactions = await Transaction.findAll({
+            include: [
+                {
+                    model: BankAccount,
+                    as: "sender",
+                    include: [
+                        {
+                            model: User
+                        }
+                    ]
+                },
+                {
+                    model: BankAccount,
+                    as: "receiver",
+                    include: [
+                        {
+                            model: User
+                        }
+                    ]
+                }
+            ]
+        });
         return transactions;
     },
 

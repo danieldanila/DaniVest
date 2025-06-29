@@ -27,6 +27,7 @@ BankAccount.belongsTo(User, {
     },
 });
 BankAccount.hasMany(Transaction, {
+    as: "sender",
     foreignKey: {
         name: "senderBankAccountId",
         type: DataTypes.UUID,
@@ -37,6 +38,7 @@ BankAccount.hasMany(Transaction, {
     },
 });
 Transaction.belongsTo(BankAccount, {
+    as: "sender",
     foreignKey: {
         name: "senderBankAccountId",
         type: DataTypes.UUID,
@@ -47,6 +49,7 @@ Transaction.belongsTo(BankAccount, {
     },
 });
 BankAccount.hasMany(Transaction, {
+    as: "receiver",
     foreignKey: {
         name: "receiverBankAccountId",
         type: DataTypes.UUID,
@@ -57,6 +60,7 @@ BankAccount.hasMany(Transaction, {
     },
 });
 Transaction.belongsTo(BankAccount, {
+    as: "receiver",
     foreignKey: {
         name: "receiverBankAccountId",
         type: DataTypes.UUID,

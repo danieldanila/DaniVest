@@ -1,6 +1,5 @@
-import { where } from "sequelize";
 import NotFoundError from "../errors/notFoundError.js";
-import { BankAccount, User } from "../models/index.js";
+import { BankAccount, Transaction, User } from "../models/index.js";
 import { generateRandomCardNumber, generateRandomCVV, generateRandomRomanianIBAN } from "../utils/bank.util.js";
 import { getDateXYearsFromNow } from "../utils/date.util.js";
 import throwValidationErrorWithMessage from "../utils/errorsWrapper.util.js";
@@ -80,6 +79,45 @@ const service = {
             throw new NotFoundError("User has no main bank account.");
         }
     },
+
+    getUserAllTransactions: async (userId) => {
+        const errors = [];
+
+        validation.idParamaterValidation(userId, "User id", errors);
+
+        const transactions = await Transaction.findAll({
+            include: [
+                {
+                    model: BankAccount,
+                    as: "sender",
+                    include: [
+                        {
+                            model: User
+                        }
+                    ]
+                },
+                {
+                    model: BankAccount,
+                    as: "receiver",
+                    include: [
+                        {
+                            model: User
+                        }
+                    ]
+                }
+            ],
+            where: {
+                '$sender.User.id$': userId
+            }
+        })
+
+        if (transactions) {
+            return transactions;
+        } else {
+            throw new NotFoundError("User has no transactions.");
+        }
+    },
+
 
 };
 

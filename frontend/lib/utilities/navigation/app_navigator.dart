@@ -39,10 +39,15 @@ class AppNavigator {
     );
   }
 
-  static void replaceToMainNavigationPage(BuildContext context) {
+  static void replaceToMainNavigationPage(
+    BuildContext context, {
+    int initialIndex = 0,
+  }) {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
+      MaterialPageRoute(
+        builder: (context) => MainNavigationScreen(initialIndex: initialIndex),
+      ),
     );
   }
 

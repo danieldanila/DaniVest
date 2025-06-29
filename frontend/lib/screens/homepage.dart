@@ -4,6 +4,7 @@ import 'package:frontend/utilities/forms/screen_lock.dart';
 import 'package:frontend/utilities/navigation/app_navigator.dart';
 import 'package:frontend/constants/constants.dart' as constants;
 import 'package:frontend/widgets/homepage/amount_display.dart';
+import 'package:frontend/widgets/homepage/transactions_preview.dart';
 import 'package:provider/provider.dart';
 
 class HomepageScreen extends StatefulWidget {
@@ -51,7 +52,13 @@ class _HomepageScreenState extends State<HomepageScreen> {
           horizontal: constants.Properties.containerHorizontalMargin,
           vertical: constants.Properties.containerVerticalMargin,
         ),
-        child: const AmountDisplay(),
+        child: const Column(
+          children: [
+            AmountDisplay(),
+            SizedBox(height: constants.Properties.sizedBoxHeight),
+            TransactionsPreview(),
+          ],
+        ),
       ),
     );
   }
