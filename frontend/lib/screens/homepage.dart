@@ -4,6 +4,7 @@ import 'package:frontend/utilities/forms/screen_lock.dart';
 import 'package:frontend/utilities/navigation/app_navigator.dart';
 import 'package:frontend/constants/constants.dart' as constants;
 import 'package:frontend/widgets/homepage/amount_display.dart';
+import 'package:frontend/widgets/homepage/fast_actions.dart';
 import 'package:frontend/widgets/homepage/transactions_preview.dart';
 import 'package:provider/provider.dart';
 
@@ -52,12 +53,20 @@ class _HomepageScreenState extends State<HomepageScreen> {
           horizontal: constants.Properties.containerHorizontalMargin,
           vertical: constants.Properties.containerVerticalMargin,
         ),
-        child: const Column(
-          children: [
-            AmountDisplay(),
-            SizedBox(height: constants.Properties.sizedBoxHeight),
-            TransactionsPreview(),
-          ],
+        child: const SingleChildScrollView(
+          child: Column(
+            children: [
+              AmountDisplay(),
+              SizedBox(height: constants.Properties.sizedBoxHeight),
+              TransactionsPreview(),
+              SizedBox(height: constants.Properties.sizedBoxHeight),
+              FastActions(),
+              SizedBox(height: constants.Properties.sizedBoxHeight),
+              Text(constants.Strings.endOfPage),
+              SizedBox(height: constants.Properties.sizedBoxHeight),
+              Text(constants.Strings.endOfPage),
+            ],
+          ),
         ),
       ),
     );

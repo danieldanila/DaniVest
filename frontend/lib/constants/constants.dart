@@ -124,10 +124,14 @@ class Strings {
   // Standard response field names
   static const String responseMessageFieldName = "message";
   static const String androidIntentHost = "resetpassword";
+
+  static const String endOfPage =
+      "You have gracefully arrived at the concluding boundary of this document. At this juncture, there remains no further content to traverse, no additional information to peruse, and no extended sections to engage with beyond this point. It is, therefore, with a sense of completion and finality that we convey to you that the entirety of the presented material has now been fully revealed. Should you wish to revisit any portion of the content, we encourage you to scroll upward at your leisure. Otherwise, we extend our sincere appreciation for your attention, patience, and thoughtful engagement throughout your journey to this terminus.";
 }
 
 class Properties {
   static const double buttonPadding = 50;
+  static const double textButtonPadding = 5;
   static const double containerHorizontalMargin = 50;
   static const double containerVerticalMargin = 50;
   static const double sizedBoxHeight = 50;
@@ -143,5 +147,9 @@ class Properties {
   static const int minimumBirthdateFieldLength = 10;
   static const int minimumPasswordFieldLength = 8;
   static const int maximumListPreviewNumber = 4;
+  static const int homePageIndex = 0;
+  static const int transferPageIndex = 1;
+  static const int addWithdrawMoneyPageIndex = 2;
   static const int transactionPageIndex = 3;
+  static const int myAccountPageIndex = 4;
 }

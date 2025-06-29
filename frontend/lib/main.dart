@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
             ),
             padding: WidgetStateProperty.all<EdgeInsets>(
               const EdgeInsets.symmetric(
-                horizontal: constants.Properties.buttonPadding,
+                horizontal: constants.Properties.textButtonPadding,
               ),
             ),
           ),
