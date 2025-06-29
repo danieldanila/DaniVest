@@ -40,10 +40,9 @@ class AppNavigator {
   }
 
   static void replaceToMainNavigationPage(BuildContext context) {
-    Navigator.pushAndRemoveUntil(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
-      (route) => false,
     );
   }
 

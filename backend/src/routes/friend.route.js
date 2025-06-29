@@ -1,26 +1,26 @@
 import express from "express";
-import { BankAccountController as bankAccountController } from "../controller/index.js";
+import { FriendController as friendController } from "../controller/index.js";
 import { AuthenticationMiddleware as authenticationMiddleware } from "../middlewares/index.js";
 
 const router = express.Router();
 
 router.post(
     "/create",
-    bankAccountController.createBankAccount
+    friendController.createFriend
 );
 
 router.post(
     "/creates",
     authenticationMiddleware.protect,
-    bankAccountController.createMultipleBankAccounts
+    friendController.createMultipleFriends
 );
 
-router.get("/", authenticationMiddleware.protect, bankAccountController.getAllBankAccounts);
+router.get("/", authenticationMiddleware.protect, friendController.getAllFriends);
 
 router.get(
-    "/:id",
+    "/:userId/friend/:friendId",
     authenticationMiddleware.protect,
-    bankAccountController.getBankAccountById
+    friendController.getFriendByCompositeId
 );
 
 export default router;

@@ -9,6 +9,13 @@ const controller = {
 
     }),
 
+    createMultipleBankAccounts: catchAsync(async (req, res, next) => {
+        await bankAccountService.createMultipleBankAccounts(req.body);
+        res.status(201).json({
+            message: `${req.body.length} bank accounts created.`,
+        });
+    }),
+
     getAllBankAccounts: catchAsync(async (req, res, next) => {
         const bankAccounts = await bankAccountService.getAllBankAccounts();
         res.status(200).json(bankAccounts);

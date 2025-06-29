@@ -62,6 +62,16 @@ class _FullNavigationState extends State<FullNavigation> {
               },
             ),
             ListTile(
+              title: const Text(constants.Strings.addWithdrawMoneyPageName),
+              leading: const Icon(Icons.attach_money),
+              onTap: () {
+                Navigator.pop(context);
+                setState(() {
+                  _selectedIndex = 2;
+                });
+              },
+            ),
+            ListTile(
               title: const Text(constants.Strings.transactionPageName),
               leading: const Icon(Icons.shopping_cart),
               onTap: () {
@@ -78,16 +88,6 @@ class _FullNavigationState extends State<FullNavigation> {
                 Navigator.pop(context);
                 setState(() {
                   _selectedIndex = 4;
-                });
-              },
-            ),
-            ListTile(
-              title: const Text(constants.Strings.addWithdrawMoneyPageName),
-              leading: const Icon(Icons.attach_money),
-              onTap: () {
-                Navigator.pop(context);
-                setState(() {
-                  _selectedIndex = 2;
                 });
               },
             ),

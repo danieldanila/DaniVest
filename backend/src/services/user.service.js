@@ -37,6 +37,12 @@ const service = {
         }
     },
 
+    createMultipleUsers: async (arrayOfUserBodies) => {
+        for (const userBody of arrayOfUserBodies) {
+            await service.createUser(userBody);
+        }
+    },
+
     getAllUsers: async () => {
         const users = await User.scope("withPassword").findAll();
         return users;

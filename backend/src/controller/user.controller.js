@@ -8,6 +8,13 @@ const controller = {
         res.status(201).json({ message: `User '${newUser.username}' created alongside with his main bank account's IBAN ${newBankAccount.iban}.` })
     }),
 
+    createMultipleUsers: catchAsync(async (req, res, next) => {
+        await userService.createMultipleUsers(req.body);
+        res.status(201).json({
+            message: `${req.body.length} users created.`,
+        });
+    }),
+
     getAllUsers: catchAsync(async (req, res, next) => {
         const users = await userService.getAllUsers();
         res.status(200).json(users);

@@ -51,7 +51,7 @@ class _LoginFormState extends State<LoginForm> {
     ).showSnackBar(SnackBar(content: Text(_message!)));
 
     if (customResponse.success) {
-      AppNavigator.navigateToHomepage(context);
+      AppNavigator.replaceToMainNavigationPage(context);
     }
   }
 

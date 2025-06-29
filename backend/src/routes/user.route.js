@@ -9,6 +9,11 @@ router.post(
     userController.createUser
 );
 
+router.post(
+    "/creates",
+    userController.createMultipleUsers
+);
+
 router.get("/", authenticationMiddleware.protect, userController.getAllUsers);
 
 router.get(

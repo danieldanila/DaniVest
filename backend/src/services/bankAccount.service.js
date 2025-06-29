@@ -25,6 +25,12 @@ const service = {
         }
     },
 
+    createMultipleBankAccounts: async (arrayOfBankAccountBodies) => {
+        for (const bankAccountBody of arrayOfBankAccountBodies) {
+            await service.createBankAccount(bankAccountBody);
+        }
+    },
+
     getAllBankAccounts: async () => {
         const bankAccounts = await BankAccount.findAll();
         return bankAccounts;

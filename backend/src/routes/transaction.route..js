@@ -1,26 +1,26 @@
 import express from "express";
-import { BankAccountController as bankAccountController } from "../controller/index.js";
+import { TransactionController as transactionController } from "../controller/index.js";
 import { AuthenticationMiddleware as authenticationMiddleware } from "../middlewares/index.js";
 
 const router = express.Router();
 
 router.post(
     "/create",
-    bankAccountController.createBankAccount
+    transactionController.createTransaction
 );
 
 router.post(
     "/creates",
     authenticationMiddleware.protect,
-    bankAccountController.createMultipleBankAccounts
+    transactionController.createMultipleTransactions
 );
 
-router.get("/", authenticationMiddleware.protect, bankAccountController.getAllBankAccounts);
+router.get("/", authenticationMiddleware.protect, transactionController.getAllTransactions);
 
 router.get(
     "/:id",
     authenticationMiddleware.protect,
-    bankAccountController.getBankAccountById
+    transactionController.getTransactionById
 );
 
 export default router;

@@ -27,6 +27,13 @@ class SidebarDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            title: const Text(constants.Strings.addWithdrawMoneyPageName),
+            leading: const Icon(Icons.attach_money),
+            onTap: () {
+              AppNavigator.navigateToAddWithdrawMoneyPage(context);
+            },
+          ),
+          ListTile(
             title: const Text(constants.Strings.transactionPageName),
             leading: const Icon(Icons.shopping_cart),
             onTap: () {
@@ -38,13 +45,6 @@ class SidebarDrawer extends StatelessWidget {
             leading: const Icon(Icons.account_box),
             onTap: () {
               AppNavigator.navigateToMyAccountPage(context);
-            },
-          ),
-          ListTile(
-            title: const Text(constants.Strings.addWithdrawMoneyPageName),
-            leading: const Icon(Icons.attach_money),
-            onTap: () {
-              AppNavigator.navigateToAddWithdrawMoneyPage(context);
             },
           ),
           ListTile(

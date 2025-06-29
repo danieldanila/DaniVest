@@ -109,6 +109,24 @@ const validation = {
         return true;
     },
 
+    datetimeValidation: (field, fieldName, errorsArray) => {
+        // Match: 2025-06-25T14:30:00 or 2025-06-25 14:30:00
+        const isoRegex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])[T ]([01]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/;
+
+        if (!isoRegex.test(field)) {
+            errorsArray.push(`${fieldName} field must use format YYYY-MM-DDTHH:mm[:ss].`);
+            return false;
+        }
+
+        const parsedDate = new Date(field);
+        if (isNaN(parsedDate.getTime())) {
+            errorsArray.push(`${fieldName} field is not a valid datetime.`);
+            return false;
+        }
+
+        return true;
+    },
+
     uuidValidation: (field, fieldName, errorsArray) => {
         const uuidRegex =
             /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -150,6 +168,30 @@ const validation = {
             ) {
                 errorsArray.push(
                     `${fieldName} with the value "${field}" already exists.`
+                );
+            }
+        });
+    },
+
+    duplicateCompositeIdValidation: (
+        firstId,
+        firstIdName,
+        secondId,
+        secondIdName,
+        errorsArray,
+        entityObjects
+    ) => {
+        entityObjects.forEach((entityObject) => {
+            if (
+                firstId &&
+                secondId &&
+                entityObject[firstIdName].toString().toLowerCase() ===
+                firstId.toString().toLowerCase() &&
+                entityObject[secondIdName].toString().toLowerCase() ===
+                secondId.toString().toLowerCase()
+            ) {
+                errorsArray.push(
+                    `The combination of ${firstIdName}: ${firstId} with ${secondIdName}: ${secondId} already exists.`
                 );
             }
         });
