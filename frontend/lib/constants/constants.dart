@@ -18,6 +18,7 @@ class Strings {
   static const String logoutButtonMessage = "Logout";
   static const String sendButtonMessage = "Send";
   static const String seeAllTransactions = "See all transactions";
+  static const String shareToOhterApps = "Share to ohter app";
 
   static const String loginAppBarTitle = "Login into your account";
   static const String signupAppBarTitle = "Signup for a DaniVest account";
@@ -31,6 +32,11 @@ class Strings {
   static const String defaultCurrency = "RON";
   static const String defaultAmount = "0 $defaultCurrency";
   static const String amountObscured = "***** $defaultCurrency";
+
+  static const String cardNumberTitle = "Card Number";
+  static const String copyCardNumberTitle = "Copy the card number";
+  static const String cvvTitle = "CVV";
+  static const String expiryDateTitle = "Expiry date";
 
   // Page names
   static const String homepagePageName = "Home";
@@ -107,7 +113,7 @@ class Strings {
 
   // Back-end server details
   static const String backendScheme = "http";
-  static const String backendHost = "192.168.1.36";
+  static const String backendHost = "192.168.1.34";
   static const String backendPort = "3000";
   static const String backendURL = "$backendScheme://$backendHost:$backendPort";
 
@@ -138,6 +144,8 @@ class Properties {
   static const double sizedBoxWidth = 5;
   static const double columnSpacing = 10;
   static const double fontSizeMainTitle = 54;
+  static const double iconSize = 20;
+
   static const int minimumBirthdateYear = 1920;
   static const int minimumUsernameFieldLength = 6;
   static const int minimumEmailFieldLength = 3;
@@ -152,4 +160,5 @@ class Properties {
   static const int addWithdrawMoneyPageIndex = 2;
   static const int transactionPageIndex = 3;
   static const int myAccountPageIndex = 4;
+  static const int timerSeconds = 1;
 }

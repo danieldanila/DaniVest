@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/constants.dart' as constants;
 import 'package:frontend/utilities/navigation/app_navigator.dart';
+import 'package:frontend/widgets/homepage/share_iban.dart';
 
 class FastActions extends StatelessWidget {
   const FastActions({super.key});
@@ -50,11 +51,24 @@ class FastActions extends StatelessWidget {
             child: const Text(constants.Strings.myAccountPageName),
           ),
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              showModalBottomSheet<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  return const ShareIban();
+                },
+              );
+            },
             child: const Text(constants.Strings.shareIbanPageName),
           ),
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              AppNavigator.replaceToMainNavigationPage(
+                context,
+                initialIndex: constants.Properties.homePageIndex,
+                homepageShowCardDetails: true,
+              );
+            },
             child: const Text(constants.Strings.showCardDetailsPageName),
           ),
         ],

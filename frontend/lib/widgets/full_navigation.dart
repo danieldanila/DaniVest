@@ -7,11 +7,17 @@ import 'package:frontend/screens/transactions.dart';
 import 'package:frontend/screens/transfer.dart';
 import 'package:frontend/utilities/sidebar/user_logout.dart';
 import 'package:frontend/widgets/app_bar_title.dart';
+import 'package:frontend/widgets/homepage/share_iban.dart';
 
 class FullNavigation extends StatefulWidget {
-  const FullNavigation({super.key, this.initialIndex = 0});
+  const FullNavigation({
+    super.key,
+    this.initialIndex = 0,
+    this.homepageShowCardDetails = false,
+  });
 
   final int initialIndex;
+  final bool homepageShowCardDetails;
 
   @override
   State<FullNavigation> createState() => _FullNavigationState();
@@ -19,19 +25,25 @@ class FullNavigation extends StatefulWidget {
 
 class _FullNavigationState extends State<FullNavigation> {
   late int _selectedIndex;
+  late bool _homepageShowCardDetails;
+
+  late List<Widget> _pages;
 
   @override
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
+    _homepageShowCardDetails = widget.homepageShowCardDetails;
+
+    _pages = _buildPages();
   }
 
-  final List<Widget> _pages = const [
-    HomepageScreen(),
-    TransferScreen(),
-    AddWithdrawMoneyScreen(),
-    TransactionsScreen(),
-    MyAccountScreen(),
+  List<Widget> _buildPages() => [
+    HomepageScreen(showCardDetails: _homepageShowCardDetails),
+    const TransferScreen(),
+    const AddWithdrawMoneyScreen(),
+    const TransactionsScreen(),
+    const MyAccountScreen(),
   ];
 
   @override
@@ -102,12 +114,25 @@ class _FullNavigationState extends State<FullNavigation> {
             ListTile(
               title: const Text(constants.Strings.shareIbanPageName),
               leading: const Icon(Icons.share),
-              onTap: () {},
+              onTap: () {
+                showModalBottomSheet<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const ShareIban();
+                  },
+                );
+              },
             ),
             ListTile(
               title: const Text(constants.Strings.showCardDetailsPageName),
-              leading: const Icon(Icons.remove_red_eye),
-              onTap: () {},
+              leading: const Icon(Icons.visibility),
+              onTap: () {
+                Navigator.pop(context);
+                setState(() {
+                  _homepageShowCardDetails = true;
+                  _pages = _buildPages();
+                });
+              },
             ),
             const SizedBox(height: constants.Properties.sizedBoxHeight),
             ListTile(

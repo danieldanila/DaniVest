@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/constants/constants.dart' as constants;
 import 'package:frontend/utilities/navigation/app_navigator.dart';
 import 'package:frontend/utilities/sidebar/user_logout.dart';
+import 'package:frontend/widgets/homepage/share_iban.dart';
 
 class SidebarDrawer extends StatelessWidget {
   const SidebarDrawer({super.key});
@@ -50,12 +51,21 @@ class SidebarDrawer extends StatelessWidget {
           ListTile(
             title: const Text(constants.Strings.shareIbanPageName),
             leading: const Icon(Icons.share),
-            onTap: () {},
+            onTap: () {
+              showModalBottomSheet<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  return const ShareIban();
+                },
+              );
+            },
           ),
           ListTile(
             title: const Text(constants.Strings.showCardDetailsPageName),
             leading: const Icon(Icons.remove_red_eye),
-            onTap: () {},
+            onTap: () {
+              AppNavigator.navigateToHomepage(context, showCardDetails: true);
+            },
           ),
           const SizedBox(height: constants.Properties.sizedBoxHeight),
           ListTile(

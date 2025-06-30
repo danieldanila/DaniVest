@@ -42,26 +42,41 @@ class AppNavigator {
   static void replaceToMainNavigationPage(
     BuildContext context, {
     int initialIndex = 0,
+    bool homepageShowCardDetails = false,
   }) {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => MainNavigationScreen(initialIndex: initialIndex),
+        builder:
+            (context) => MainNavigationScreen(
+              initialIndex: initialIndex,
+              homepageShowCardDetails: homepageShowCardDetails,
+            ),
       ),
     );
   }
 
-  static void navigateToHomepage(BuildContext context) {
+  static void navigateToHomepage(
+    BuildContext context, {
+    bool showCardDetails = false,
+  }) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const HomepageScreen()),
+      MaterialPageRoute(
+        builder: (context) => HomepageScreen(showCardDetails: showCardDetails),
+      ),
     );
   }
 
-  static void replaceToHomepage(BuildContext context) {
+  static void replaceToHomepage(
+    BuildContext context, {
+    bool showCardDetails = false,
+  }) {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const HomepageScreen()),
+      MaterialPageRoute(
+        builder: (context) => HomepageScreen(showCardDetails: showCardDetails),
+      ),
     );
   }
 

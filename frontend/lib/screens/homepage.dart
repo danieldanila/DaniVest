@@ -5,11 +5,14 @@ import 'package:frontend/utilities/navigation/app_navigator.dart';
 import 'package:frontend/constants/constants.dart' as constants;
 import 'package:frontend/widgets/homepage/amount_display.dart';
 import 'package:frontend/widgets/homepage/fast_actions.dart';
+import 'package:frontend/widgets/homepage/show_card_details.dart';
 import 'package:frontend/widgets/homepage/transactions_preview.dart';
 import 'package:provider/provider.dart';
 
 class HomepageScreen extends StatefulWidget {
-  const HomepageScreen({super.key});
+  const HomepageScreen({super.key, this.showCardDetails = false});
+
+  final bool showCardDetails;
 
   @override
   State<HomepageScreen> createState() => _HomepageScreenState();
@@ -17,10 +20,13 @@ class HomepageScreen extends StatefulWidget {
 
 class _HomepageScreenState extends State<HomepageScreen> {
   late AuthProvider authProvider;
+  late bool _showCardDetails;
 
   @override
   void initState() {
     super.initState();
+
+    _showCardDetails = widget.showCardDetails;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -43,6 +49,23 @@ class _HomepageScreenState extends State<HomepageScreen> {
   }
 
   @override
+  void didUpdateWidget(covariant HomepageScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (_showCardDetails != widget.showCardDetails) {
+      setState(() {
+        _showCardDetails = widget.showCardDetails;
+      });
+    }
+  }
+
+  void _toggleShowCardDetails() {
+    setState(() {
+      _showCardDetails = !_showCardDetails;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     // In case of rebuilds
     authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -53,18 +76,20 @@ class _HomepageScreenState extends State<HomepageScreen> {
           horizontal: constants.Properties.containerHorizontalMargin,
           vertical: constants.Properties.containerVerticalMargin,
         ),
-        child: const SingleChildScrollView(
+        child: SingleChildScrollView(
           child: Column(
             children: [
-              AmountDisplay(),
-              SizedBox(height: constants.Properties.sizedBoxHeight),
-              TransactionsPreview(),
-              SizedBox(height: constants.Properties.sizedBoxHeight),
-              FastActions(),
-              SizedBox(height: constants.Properties.sizedBoxHeight),
-              Text(constants.Strings.endOfPage),
-              SizedBox(height: constants.Properties.sizedBoxHeight),
-              Text(constants.Strings.endOfPage),
+              _showCardDetails
+                  ? ShowCardDetails(onToggle: _toggleShowCardDetails)
+                  : const AmountDisplay(),
+              const SizedBox(height: constants.Properties.sizedBoxHeight),
+              const TransactionsPreview(),
+              const SizedBox(height: constants.Properties.sizedBoxHeight),
+              const FastActions(),
+              const SizedBox(height: constants.Properties.sizedBoxHeight),
+              const Text(constants.Strings.endOfPage),
+              const SizedBox(height: constants.Properties.sizedBoxHeight),
+              const Text(constants.Strings.endOfPage),
             ],
           ),
         ),
