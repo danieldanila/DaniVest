@@ -108,6 +108,44 @@ class UserService {
     }
   }
 
+  Future<CustomResponse> getUserOtherBankAccount() async {
+    final authService = locator<AuthService>();
+
+    try {
+      CustomResponse customResponse = await authService.getCurrentUser();
+
+      if (customResponse.success) {
+        User user = User.fromJson(customResponse.data);
+
+        final response = await _dio.get(
+          constants.Strings.getUserOtherBankAccount.replaceAll(":id", user.id),
+        );
+
+        final responseBodyJson = response.data;
+
+        if (response.statusCode == 200) {
+          return CustomResponse(
+            success: true,
+            data: responseBodyJson,
+            message:
+                responseBodyJson[constants.Strings.responseMessageFieldName],
+          );
+        }
+
+        return CustomResponse(
+          success: false,
+          message: responseBodyJson[constants.Strings.responseMessageFieldName],
+        );
+      }
+      return CustomResponse(success: false, message: customResponse.message);
+    } catch (e) {
+      return CustomResponse(
+        success: false,
+        message: "GetUserOtherBankAccount error: $e",
+      );
+    }
+  }
+
   Future<CustomResponse> getUserAllTransactions() async {
     final authService = locator<AuthService>();
 

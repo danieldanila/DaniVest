@@ -80,6 +80,25 @@ const service = {
         }
     },
 
+    getUserOtherBankAccount: async (userId) => {
+        const errors = [];
+
+        validation.idParamaterValidation(userId, "User id", errors);
+
+        const bankAccount = await BankAccount.findOne({
+            where: {
+                userId: userId,
+                isMain: false
+            }
+        })
+
+        if (bankAccount) {
+            return bankAccount;
+        } else {
+            throw new NotFoundError("User has no other bank account.");
+        }
+    },
+
     getUserAllTransactions: async (userId) => {
         const errors = [];
 

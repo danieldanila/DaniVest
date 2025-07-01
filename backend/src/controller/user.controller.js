@@ -30,6 +30,11 @@ const controller = {
         res.status(200).json(bankAccount);
     }),
 
+    getUserOtherBankAccount: catchAsync(async (req, res, next) => {
+        const bankAccount = await userService.getUserOtherBankAccount(req.params.id);
+        res.status(200).json(bankAccount);
+    }),
+
     getUserAllTransactions: catchAsync(async (req, res, next) => {
         const transactions = await userService.getUserAllTransactions(req.params.id);
         res.status(200).json(transactions);

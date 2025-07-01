@@ -5,7 +5,7 @@ const controller = {
     createTransaction: catchAsync(async (req, res, next) => {
         const newTransaction = await transactionService.createTransaction(req.body);
 
-        res.status(201).json({ message: `Transaction with details '${newTransaction.details}' created.` })
+        res.status(201).json({ message: `Transaction with details '${newTransaction.details}' created.`, data: newTransaction },)
 
     }),
 

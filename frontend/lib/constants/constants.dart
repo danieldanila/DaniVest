@@ -10,6 +10,7 @@ class Strings {
   static const String logoUrl = "assets/images/logo.png";
   static const String logoIconUrl = "assets/images/logo-icon.png";
   static const String dateDelimiter = '/';
+  static const String dateFormat = "yyyy-MM-dd'T'HH:mm";
   static const String or = "OR";
   static const String success = "Success";
 
@@ -19,6 +20,9 @@ class Strings {
   static const String sendButtonMessage = "Send";
   static const String seeAllTransactions = "See all transactions";
   static const String shareToOhterApps = "Share to ohter app";
+  static const String changeButtonMessage = "Change";
+  static const String changeTransferDirectionButtonMessage =
+      "Change transfer direction";
 
   static const String loginAppBarTitle = "Login into your account";
   static const String signupAppBarTitle = "Signup for a DaniVest account";
@@ -29,14 +33,20 @@ class Strings {
 
   static const String hideTheAmount = "Hide the amount";
   static const String showTheAmount = "Show the amount";
+  static const String obscuredText = "***";
   static const String defaultCurrency = "RON";
   static const String defaultAmount = "0 $defaultCurrency";
-  static const String amountObscured = "***** $defaultCurrency";
+  static const String amountObscured = "$obscuredText $defaultCurrency";
+  static const String bankTransferText = "Transfer between bank accounts";
 
   static const String cardNumberTitle = "Card Number";
   static const String copyCardNumberTitle = "Copy the card number";
   static const String cvvTitle = "CVV";
   static const String expiryDateTitle = "Expiry date";
+  static const String balanceText = "Balance";
+  static const String myAccountText = "My account";
+  static const String otherAccountText = "Other account";
+  static const String transferText = "Transfer";
 
   // Page names
   static const String homepagePageName = "Home";
@@ -46,6 +56,8 @@ class Strings {
   static const String addWithdrawMoneyPageName = "Add/withdraw money";
   static const String shareIbanPageName = "Share IBAN";
   static const String showCardDetailsPageName = "Show card details";
+  static const String transferInformation =
+      "$defaultCurrency will be transferred from :first to :second";
 
   // Signup fields
   static const String usernameFieldLabel = "Username";
@@ -71,6 +83,9 @@ class Strings {
 
   static const String confirmPasswordFieldLabel = "Confirm Password";
   static const String confirmPasswordFieldHint = "Enter again the password";
+
+  static const String amountFieldLabel = "Amount";
+  static const String amountFieldHint = "... $defaultCurrency";
 
   static const String localizedReasonBiometric = "Login to gain access";
 
@@ -102,6 +117,7 @@ class Strings {
       "This field must have at least one special character";
   static const String fieldEqualToOtherValue =
       "This field must match the original";
+  static const String fieldWithAmount = "This field must be a valid amount";
 
   // RegExp strings
   static const String nameRegExp = r"^[A-Za-z]+(?:[ -][A-Za-z]+)*$";
@@ -110,6 +126,7 @@ class Strings {
   static const String uppercaseLetterRegExp = r"[A-Z]";
   static const String numberRegExp = r"[0-9]";
   static const String specialCharacterRegExp = r"[!@#$%^&*()<>{}\|;:<>,]";
+  static const String amountRegExp = r"^\d+(\.\d{1,2})?$";
 
   // Back-end server details
   static const String backendScheme = "http";
@@ -120,6 +137,8 @@ class Strings {
   // Resources paths
   static const String createUserPath = "/api/user/create";
   static const String getUserBankAccount = "/api/user/:id/bank";
+  static const String getUserOtherBankAccount = "/api/user/:id/bank/other";
+  static const String createTransaction = "/api/transaction/create";
   static const String getUserAllTransactions = "/api/user/:id/transactions";
   static const String loginUserPath = "/api/auth/login";
   static const String userAuthenticatedPath = "/api/auth/me";
@@ -142,6 +161,7 @@ class Properties {
   static const double containerVerticalMargin = 50;
   static const double sizedBoxHeight = 50;
   static const double sizedBoxWidth = 5;
+  static const double amountFieldWidth = 70;
   static const double columnSpacing = 10;
   static const double fontSizeMainTitle = 54;
   static const double iconSize = 20;

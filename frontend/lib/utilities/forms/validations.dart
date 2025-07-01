@@ -94,4 +94,11 @@ class Validations {
     }
     return null;
   }
+
+  static String? fieldWithValidAmount(String value) {
+    if (!value.contains(RegExp(constants.Strings.amountRegExp))) {
+      return constants.Strings.fieldWithAmount;
+    }
+    return null;
+  }
 }

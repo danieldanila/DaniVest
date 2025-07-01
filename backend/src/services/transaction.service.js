@@ -16,6 +16,18 @@ const service = {
             false
         );
 
+        const senderBankAccount = await bankAccountService.getBankAccountById(transactionBody.senderBankAccountId);
+        const receiverBankAccount = await bankAccountService.getBankAccountById(transactionBody.receiverBankAccountId);
+
+        if (senderBankAccount.amount > transactionBody.amount) {
+            senderBankAccount.amount -= transactionBody.amount;
+            receiverBankAccount.amount = parseFloat(receiverBankAccount.amount) + parseFloat(transactionBody.amount);
+            await senderBankAccount.save();
+            await receiverBankAccount.save();
+        } else {
+            errors.push("Insufficient funds.");
+        }
+
         if (errors.length === 0) {
             const newTransaction = await Transaction.create(transactionBody);
 
