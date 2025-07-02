@@ -24,7 +24,7 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<CustomResponse> _updateUser() async {
+  Future<CustomResponse> updateUser() async {
     CustomResponse customResponse = await _authService.getCurrentUser();
 
     if (customResponse.success) {
@@ -38,7 +38,7 @@ class AuthProvider with ChangeNotifier {
 
     if (customResponse.success) {
       _isAuthenticated = true;
-      await _updateUser();
+      await updateUser();
       notifyListeners();
     }
     return customResponse;
@@ -69,7 +69,7 @@ class AuthProvider with ChangeNotifier {
       if (token == null) {
         return;
       }
-      CustomResponse customResponse = await _updateUser();
+      CustomResponse customResponse = await updateUser();
 
       if (customResponse.success) {
         _isAuthenticated = true;

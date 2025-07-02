@@ -14,6 +14,17 @@ router.post(
     userController.createMultipleUsers
 );
 
+router.put(
+    "/:id",
+    authenticationMiddleware.protect,
+    userController.updateUser
+);
+router.patch(
+    "/updateMe",
+    authenticationMiddleware.protect,
+    userController.updateMe
+);
+
 router.get("/", authenticationMiddleware.protect, userController.getAllUsers);
 
 router.get(

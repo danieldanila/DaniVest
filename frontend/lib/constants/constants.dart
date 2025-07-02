@@ -23,6 +23,8 @@ class Strings {
   static const String changeButtonMessage = "Change";
   static const String changeTransferDirectionButtonMessage =
       "Change transfer direction";
+  static const String changePasscodeButtonText = "Change passcode";
+  static const String changePasswordButtonText = "Change password";
 
   static const String loginAppBarTitle = "Login into your account";
   static const String signupAppBarTitle = "Signup for a DaniVest account";
@@ -39,6 +41,9 @@ class Strings {
   static const String amountObscured = "$obscuredText $defaultCurrency";
   static const String bankTransferText = "Transfer between bank accounts";
   static const String changeOtherAccount = "Change other account";
+  static const String personalDetailsText = "Personal details";
+  static const String accountDetailsText = "Account details";
+  static const String otherDetailsText = "Other";
 
   static const String cardNumberTitle = "Card Number";
   static const String copyCardNumberTitle = "Copy the card number";
@@ -97,6 +102,8 @@ class Strings {
   static const String expiryDateFieldLabel = "Expiry date";
   static const String expiryDateFieldHint = "Enter a expiry date";
 
+  static const String ibanFieldLabel = "IBAN";
+
   static const String localizedReasonBiometric = "Login to gain access";
 
   // Generic error
@@ -150,6 +157,7 @@ class Strings {
   static const String getUserOtherBankAccount = "/api/user/:id/bank/other";
   static const String getUserOtherBankAccountByCardDetails =
       "/api/user/:id/bank/other/cardNumber/:cardNumber/cvv/:cvv/expiryDate/:expiryDate";
+  static const String updateMePath = "/api/user/updateMe";
   static const String createTransaction = "/api/transaction/create";
   static const String getUserAllTransactions = "/api/user/:id/transactions";
   static const String loginUserPath = "/api/auth/login";
@@ -177,6 +185,7 @@ class Properties {
   static const double amountFieldWidth = 70;
   static const double columnSpacing = 10;
   static const double fontSizeMainTitle = 54;
+  static const double fontSizeMainText = 20;
   static const double iconSize = 20;
 
   static const int minimumBirthdateYear = 1920;

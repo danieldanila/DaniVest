@@ -3,6 +3,7 @@ import CredentialsDoNotMatchError from "../errors/credentialsDoNotMatchError.js"
 import UnauthorizedError from "../errors/unauthorizedError.js";
 import jwt from 'jsonwebtoken';
 import ValidationError from "../errors/validationError.js";
+import AppError from "../errors/appError.js";
 
 const { JsonWebTokenError, TokenExpiredError } = jwt;
 
@@ -31,6 +32,10 @@ const jwtErrorHandler = (res) => {
     res.status(401).json({ message: "Invalid token. Please log in again!" });
 };
 
+const appErrorHandler = (res, err) => {
+    res.status(err.statusCode).json({ message: err.message });
+};
+
 const serverErrorHandler = (res, err, message = "Server error.") => {
     console.log(err);
     res.status(500).json({ message: message });
@@ -49,6 +54,8 @@ const errorsHandlerWrapper = (err, req, res, next) => {
         jwtTokenExpiredErrorHandler(res);
     } else if (err instanceof JsonWebTokenError) {
         jwtErrorHandler(res);
+    } else if (err instanceof AppError) {
+        appErrorHandler(res, err);
     } else {
         serverErrorHandler(res, err);
     }
