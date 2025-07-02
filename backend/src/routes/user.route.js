@@ -26,6 +26,8 @@ router.get("/:id/bank", authenticationMiddleware.protect, userController.getUser
 
 router.get("/:id/bank/other", authenticationMiddleware.protect, userController.getUserOtherBankAccount);
 
+router.get("/:id/bank/other/cardNumber/:cardNumber/cvv/:cvv/expiryDate/:expiryDate", authenticationMiddleware.protect, userController.getUserOtherBankAccountByCardDetails);
+
 router.get("/:id/transactions", authenticationMiddleware.protect, userController.getUserAllTransactions);
 
 export default router;

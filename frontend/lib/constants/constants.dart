@@ -38,6 +38,7 @@ class Strings {
   static const String defaultAmount = "0 $defaultCurrency";
   static const String amountObscured = "$obscuredText $defaultCurrency";
   static const String bankTransferText = "Transfer between bank accounts";
+  static const String changeOtherAccount = "Change other account";
 
   static const String cardNumberTitle = "Card Number";
   static const String copyCardNumberTitle = "Copy the card number";
@@ -86,6 +87,15 @@ class Strings {
 
   static const String amountFieldLabel = "Amount";
   static const String amountFieldHint = "... $defaultCurrency";
+
+  static const String cardNumberFieldLabel = "Card number";
+  static const String cardNumberFieldHint = "Enter a card number";
+
+  static const String cvvFieldLabel = "CVV";
+  static const String cvvFieldHint = "Enter a CVV";
+
+  static const String expiryDateFieldLabel = "Expiry date";
+  static const String expiryDateFieldHint = "Enter a expiry date";
 
   static const String localizedReasonBiometric = "Login to gain access";
 
@@ -138,6 +148,8 @@ class Strings {
   static const String createUserPath = "/api/user/create";
   static const String getUserBankAccount = "/api/user/:id/bank";
   static const String getUserOtherBankAccount = "/api/user/:id/bank/other";
+  static const String getUserOtherBankAccountByCardDetails =
+      "/api/user/:id/bank/other/cardNumber/:cardNumber/cvv/:cvv/expiryDate/:expiryDate";
   static const String createTransaction = "/api/transaction/create";
   static const String getUserAllTransactions = "/api/user/:id/transactions";
   static const String loginUserPath = "/api/auth/login";
@@ -148,6 +160,7 @@ class Strings {
 
   // Standard response field names
   static const String responseMessageFieldName = "message";
+  static const String responseDataFieldName = "data";
   static const String androidIntentHost = "resetpassword";
 
   static const String endOfPage =

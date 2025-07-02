@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:frontend/di/service_locator.dart';
+import 'package:frontend/models/change_other_account_data.dart';
 import 'package:frontend/models/custom_response.dart';
 
 import 'package:frontend/constants/constants.dart' as constants;
@@ -108,7 +109,9 @@ class UserService {
     }
   }
 
-  Future<CustomResponse> getUserOtherBankAccount() async {
+  Future<CustomResponse> getUserOtherBankAccount(
+    ChangeOtherAccountData? changeOtherAccountData,
+  ) async {
     final authService = locator<AuthService>();
 
     try {
@@ -117,16 +120,34 @@ class UserService {
       if (customResponse.success) {
         User user = User.fromJson(customResponse.data);
 
-        final response = await _dio.get(
-          constants.Strings.getUserOtherBankAccount.replaceAll(":id", user.id),
-        );
+        final Response response;
+
+        if (changeOtherAccountData != null &&
+            changeOtherAccountData.cardNumber.isNotEmpty &&
+            changeOtherAccountData.expiryDate.isNotEmpty &&
+            changeOtherAccountData.cvv.isNotEmpty) {
+          response = await _dio.get(
+            constants.Strings.getUserOtherBankAccountByCardDetails
+                .replaceAll(":id", user.id)
+                .replaceAll(":cardNumber", changeOtherAccountData.cardNumber)
+                .replaceAll(":expiryDate", changeOtherAccountData.expiryDate)
+                .replaceAll(":cvv", changeOtherAccountData.cvv),
+          );
+        } else {
+          response = await _dio.get(
+            constants.Strings.getUserOtherBankAccount.replaceAll(
+              ":id",
+              user.id,
+            ),
+          );
+        }
 
         final responseBodyJson = response.data;
 
         if (response.statusCode == 200) {
           return CustomResponse(
             success: true,
-            data: responseBodyJson,
+            data: responseBodyJson[constants.Strings.responseDataFieldName],
             message:
                 responseBodyJson[constants.Strings.responseMessageFieldName],
           );

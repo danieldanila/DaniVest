@@ -19,9 +19,16 @@ const service = {
         const senderBankAccount = await bankAccountService.getBankAccountById(transactionBody.senderBankAccountId);
         const receiverBankAccount = await bankAccountService.getBankAccountById(transactionBody.receiverBankAccountId);
 
-        if (senderBankAccount.amount > transactionBody.amount) {
-            senderBankAccount.amount -= transactionBody.amount;
-            receiverBankAccount.amount = parseFloat(receiverBankAccount.amount) + parseFloat(transactionBody.amount);
+        let senderAmount = parseFloat(senderBankAccount.amount);
+        let receiverAmount = parseFloat(receiverBankAccount.amount)
+        const transactionAmount = parseFloat(transactionBody.amount);
+
+        if (senderAmount >= transactionAmount) {
+            senderAmount -= transactionAmount;
+            receiverAmount += transactionAmount;
+
+            senderBankAccount.amount = senderAmount;
+            receiverBankAccount.amount = receiverAmount;
             await senderBankAccount.save();
             await receiverBankAccount.save();
         } else {

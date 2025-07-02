@@ -99,6 +99,33 @@ const service = {
         }
     },
 
+    getUserOtherBankAccountByCardDetails: async (userId, cardNumber, expiryDate, cvv) => {
+        const errors = [];
+
+        validation.idParamaterValidation(userId, "User id", errors);
+        validation.cardNumberFieldValidation(cardNumber, "Card number", errors);
+        validation.dateValidation(expiryDate, "Expiry date", errors);
+        validation.cvvFieldValidation(cvv, "CVV", errors);
+
+        const bankAccount = await BankAccount.findOne({
+            where: {
+                userId: userId,
+                cardNumber: cardNumber,
+                // expiryDate: expiryDate,
+                cvv: cvv,
+                isMain: false
+            }
+        })
+
+        if (bankAccount) {
+            return bankAccount;
+        } else {
+            throw new NotFoundError("User has no other bank account with those details.");
+        }
+    },
+
+
+
     getUserAllTransactions: async (userId) => {
         const errors = [];
 

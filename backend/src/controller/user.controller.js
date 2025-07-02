@@ -35,6 +35,11 @@ const controller = {
         res.status(200).json(bankAccount);
     }),
 
+    getUserOtherBankAccountByCardDetails: catchAsync(async (req, res, next) => {
+        const bankAccount = await userService.getUserOtherBankAccountByCardDetails(req.params.id, req.params.cardNumber, req.params.expiryDate, req.params.cvv);
+        res.status(200).json({ message: `Bank account with IBAN: ${bankAccount.iban} updated as other account.`, data: bankAccount });
+    }),
+
     getUserAllTransactions: catchAsync(async (req, res, next) => {
         const transactions = await userService.getUserAllTransactions(req.params.id);
         res.status(200).json(transactions);

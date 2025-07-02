@@ -21,7 +21,7 @@ class TransactionService {
 
       final responseBodyJson = response.data;
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         return CustomResponse(
           success: true,
           data: responseBodyJson,

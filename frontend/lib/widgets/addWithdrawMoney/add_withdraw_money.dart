@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/di/service_locator.dart';
 import 'package:frontend/models/bank_account.dart';
+import 'package:frontend/models/change_other_account_data.dart';
 import 'package:frontend/models/custom_response.dart';
 import 'package:frontend/models/transaction_data.dart';
 import 'package:frontend/services/transaction_service.dart';
 import 'package:frontend/services/user_service.dart';
 import 'package:frontend/utilities/forms/validators/amount_validator.dart';
 import 'package:frontend/constants/constants.dart' as constants;
+import 'package:frontend/widgets/addWithdrawMoney/change_other_account.dart';
 import 'package:intl/intl.dart';
 
 class AddWithdrawMoney extends StatefulWidget {
@@ -23,6 +25,7 @@ class _AddWithDrawMoneyState extends State<AddWithdrawMoney> {
   late BankAccount _otherBankAccount;
 
   bool _isBankAccountTheReceiver = true;
+  ChangeOtherAccountData? _changeOtherAccountData;
   String? _message;
 
   final TextEditingController amountController = TextEditingController();
@@ -31,13 +34,22 @@ class _AddWithDrawMoneyState extends State<AddWithdrawMoney> {
   void initState() {
     super.initState();
     fetchUserBankAccount();
-    fetchUserOtherBankAccount();
+    fetchUserOtherBankAccount(_changeOtherAccountData);
   }
 
   void changeReceiverAccount() {
     setState(() {
       _isBankAccountTheReceiver = !_isBankAccountTheReceiver;
     });
+  }
+
+  Future<void> updateChangeOtherAccountData(
+    ChangeOtherAccountData? changeOtherAccountData,
+  ) async {
+    setState(() {
+      _changeOtherAccountData = changeOtherAccountData;
+    });
+    await fetchUserOtherBankAccount(_changeOtherAccountData);
   }
 
   Future<void> fetchUserBankAccount() async {
@@ -54,10 +66,14 @@ class _AddWithDrawMoneyState extends State<AddWithdrawMoney> {
     }
   }
 
-  Future<void> fetchUserOtherBankAccount() async {
+  Future<void> fetchUserOtherBankAccount(
+    ChangeOtherAccountData? changeOtherAccountData,
+  ) async {
     final userService = locator<UserService>();
 
-    CustomResponse customResponse = await userService.getUserOtherBankAccount();
+    CustomResponse customResponse = await userService.getUserOtherBankAccount(
+      changeOtherAccountData,
+    );
 
     if (customResponse.success) {
       final userOtherBankAccount = BankAccount.fromJson(customResponse.data);
@@ -78,7 +94,6 @@ class _AddWithDrawMoneyState extends State<AddWithdrawMoney> {
 
     if (!mounted) return;
 
-    print(customResponse.message);
     setState(() {
       _message = customResponse.message;
     });
@@ -103,12 +118,31 @@ class _AddWithDrawMoneyState extends State<AddWithdrawMoney> {
                 children: [
                   const Text(constants.Strings.otherAccountText),
                   Text(
-                    "${constants.Strings.obscuredText}${_otherBankAccount.cardNumber.substring(_bankAccount.cardNumber.length - 4)} ${_otherBankAccount.expiryDate.substring(_bankAccount.expiryDate.length - 4)}",
+                    "${constants.Strings.obscuredText}${_otherBankAccount.cardNumber.substring(_bankAccount.cardNumber.length - 4)} ${_otherBankAccount.expiryDate.substring(_bankAccount.expiryDate.length - 5)}",
                   ),
                 ],
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  showModalBottomSheet<void>(
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return SingleChildScrollView(
+                        child: Container(
+                          padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom,
+                          ),
+                          child: ChangeOtherAccount(
+                            updateChangeOtherAccountData:
+                                updateChangeOtherAccountData,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+
                 style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
                   padding: WidgetStateProperty.all<EdgeInsets>(
                     const EdgeInsets.symmetric(
