@@ -11,6 +11,8 @@ class Transaction {
     required this.receiverBankAccountId,
     required this.senderName,
     required this.receiverName,
+    required this.senderId,
+    required this.receiverId,
   });
 
   final String id;
@@ -20,7 +22,9 @@ class Transaction {
   final bool isApproved;
   final String senderBankAccountId;
   final String receiverBankAccountId;
+  final String senderId;
   final String senderName;
+  final String receiverId;
   final String receiverName;
 
   Transaction.fromJson(Map<String, dynamic> json)
@@ -31,7 +35,9 @@ class Transaction {
       isApproved = json["isApproved"] as bool,
       senderBankAccountId = json["senderBankAccountId"] as String,
       receiverBankAccountId = json["receiverBankAccountId"] as String,
+      senderId = json["sender"]["User"]["id"] as String,
       senderName = json["sender"]["User"]["fullName"] as String,
+      receiverId = json["receiver"]["User"]["id"] as String,
       receiverName = json["receiver"]["User"]["fullName"] as String;
 
   Map<String, dynamic> toJson() => {
@@ -42,7 +48,9 @@ class Transaction {
     "isApproved": isApproved,
     "senderBankAccountId": senderBankAccountId,
     "receiverBankAccountId": receiverBankAccountId,
+    "sender.User.id": senderId,
     "sender.User.firstName": senderName,
+    "receiver.User.id": receiverId,
     "receiver.User.firstName": receiverName,
   };
 
@@ -63,6 +71,22 @@ class Transaction {
       }
     }
     return "$prefix${formatter.format(parsedDateTime)}";
+  }
+
+  String get formattedOnlyDate {
+    DateTime now = DateTime.now();
+
+    DateFormat formatter = DateFormat("d MMMM yyyy");
+
+    if (parsedDateTime.year == now.year && parsedDateTime.month == now.month) {
+      if (parsedDateTime.day == now.day) {
+        return "Today";
+      } else if (parsedDateTime.day == now.day - 1) {
+        return "Yesterday";
+      }
+    }
+
+    return formatter.format(parsedDateTime);
   }
 
   String get formattedAmount {

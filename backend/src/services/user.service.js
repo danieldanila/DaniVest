@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import AppError from "../errors/appError.js";
 import NotFoundError from "../errors/notFoundError.js";
 import { BankAccount, Transaction, User } from "../models/index.js";
@@ -200,7 +201,10 @@ const service = {
                 }
             ],
             where: {
-                '$sender.User.id$': userId
+                [Op.or]: [
+                    { '$sender.User.id$': userId },
+                    { '$receiver.User.id$': userId }
+                ]
             }
         })
 

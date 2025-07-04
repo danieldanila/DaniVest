@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/provider/auth_provider.dart';
 import 'package:frontend/utilities/navigation/app_navigator.dart';
 import 'package:frontend/constants/constants.dart' as constants;
+import 'package:frontend/widgets/transactions/transactions_list.dart';
 import 'package:provider/provider.dart';
 
 class TransactionsScreen extends StatelessWidget {
@@ -22,12 +23,7 @@ class TransactionsScreen extends StatelessWidget {
           horizontal: constants.Properties.containerHorizontalMargin,
           vertical: constants.Properties.containerVerticalMargin,
         ),
-        child:
-            authProvider.isAuthenticated
-                ? Center(
-                  child: Text("ESTI LOGAT ${authProvider.user!.username}"),
-                )
-                : const Center(child: Text("NU ESTI LOGAT")),
+        child: const TransactionsList(),
       ),
     );
   }
