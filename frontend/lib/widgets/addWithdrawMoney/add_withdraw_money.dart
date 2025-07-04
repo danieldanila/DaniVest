@@ -27,14 +27,23 @@ class _AddWithDrawMoneyState extends State<AddWithdrawMoney> {
   bool _isBankAccountTheReceiver = true;
   ChangeOtherAccountData? _changeOtherAccountData;
   String? _message;
+  bool _isLoading = true;
 
   final TextEditingController amountController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    fetchUserBankAccount();
-    fetchUserOtherBankAccount(_changeOtherAccountData);
+    _initData();
+  }
+
+  Future<void> _initData() async {
+    await fetchUserBankAccount();
+    await fetchUserOtherBankAccount(_changeOtherAccountData);
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   void changeReceiverAccount() {
@@ -105,6 +114,10 @@ class _AddWithDrawMoneyState extends State<AddWithdrawMoney> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return Form(
       key: formKey,
       child: Column(
@@ -142,7 +155,6 @@ class _AddWithDrawMoneyState extends State<AddWithdrawMoney> {
                     },
                   );
                 },
-
                 style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
                   padding: WidgetStateProperty.all<EdgeInsets>(
                     const EdgeInsets.symmetric(

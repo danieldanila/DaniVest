@@ -79,6 +79,14 @@ const validation = {
         return true;
     },
 
+    passcodeValidation: (field, fieldName, errorsArray) => {
+        if (!field.match(/^\d{4}$/)) {
+            errorsArray.push(`${fieldName} field must have 4 digits.`);
+            return false;
+        }
+        return true;
+    },
+
     emailValidation: (field, fieldName, errorsArray) => {
         if (
             !field.match(

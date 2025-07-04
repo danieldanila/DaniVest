@@ -20,6 +20,15 @@ router.get(
 
 router.post("/forgotPassword", authenticationController.forgotPassword);
 router.patch("/resetPassword/:token", authenticationController.resetPassword);
-
+router.patch(
+    "/updateMyPassword",
+    authenticationMiddleware.protect,
+    authenticationController.updatePassword
+);
+router.patch(
+    "/updateMyPasscode",
+    authenticationMiddleware.protect,
+    authenticationController.updatePasscode
+);
 
 export default router;

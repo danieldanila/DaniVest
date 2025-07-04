@@ -44,6 +44,7 @@ class Strings {
   static const String personalDetailsText = "Personal details";
   static const String accountDetailsText = "Account details";
   static const String otherDetailsText = "Other";
+  static const String changeMyPasswordText = "Change my password";
 
   static const String cardNumberTitle = "Card Number";
   static const String copyCardNumberTitle = "Copy the card number";
@@ -90,6 +91,12 @@ class Strings {
   static const String confirmPasswordFieldLabel = "Confirm Password";
   static const String confirmPasswordFieldHint = "Enter again the password";
 
+  static const String passcodeFieldLabel = "Passcode";
+  static const String passcodeFieldHint = "Enter a passcode";
+
+  static const String confirmPasscodeFieldLabel = "Confirm passcode";
+  static const String confirmPasscodeFieldHint = "Enter again the passcode";
+
   static const String amountFieldLabel = "Amount";
   static const String amountFieldHint = "... $defaultCurrency";
 
@@ -101,6 +108,12 @@ class Strings {
 
   static const String expiryDateFieldLabel = "Expiry date";
   static const String expiryDateFieldHint = "Enter a expiry date";
+
+  static const String currentPasswordFieldLabel = "Current password";
+  static const String currentPasswordFieldHint = "Enter current password";
+
+  static const String currentPasscodeFieldLabel = "Current passcode";
+  static const String currentPasscodeFieldHint = "Enter current passcode";
 
   static const String ibanFieldLabel = "IBAN";
 
@@ -147,7 +160,7 @@ class Strings {
 
   // Back-end server details
   static const String backendScheme = "http";
-  static const String backendHost = "192.168.1.34";
+  static const String backendHost = "192.168.1.35";
   static const String backendPort = "3000";
   static const String backendURL = "$backendScheme://$backendHost:$backendPort";
 
@@ -165,6 +178,8 @@ class Strings {
   static const String authPasscodePath = "/api/auth/passcode";
   static const String forgotPasswordPath = "/api/auth/forgotPassword";
   static const String resetPasswordPath = "/api/auth/resetPassword";
+  static const String updateMyPasswordPath = "/api/auth/updateMyPassword";
+  static const String updateMyPasscodePath = "/api/auth/updateMyPasscode";
 
   // Standard response field names
   static const String responseMessageFieldName = "message";

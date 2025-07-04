@@ -220,6 +220,67 @@ const service = {
 
         return user;
     },
+
+
+    updatePassword: async (loggedUser, userBody) => {
+        const user = await User.scope("withPassword").findByPk(loggedUser.id);
+
+        if (
+            !(await User.arePasswordsEqual(userBody.currentPassword, user.password))
+        ) {
+            throw new CredentialsDoNotMatchError("Current password is wrong.");
+        }
+
+        const errors = [];
+
+        validation.validateCompletedField(
+            validation.passwordValidation,
+            userBody.password,
+            "Password",
+            errors,
+            false
+        );
+
+        if (errors.length > 0) {
+            throwValidationErrorWithMessage(errors);
+        }
+
+        user.password = userBody.password;
+
+        await user.save();
+
+        const token = signToken(user.id);
+
+        return token;
+    },
+
+    updatePasscode: async (loggedUser, userBody) => {
+        const user = await User.scope("withPassword").findByPk(loggedUser.id);
+
+        if (
+            !(await User.arePasscodesEqual(userBody.currentPasscode, user.passcode))
+        ) {
+            throw new CredentialsDoNotMatchError("Current passcode is wrong.");
+        }
+
+        const errors = [];
+
+        validation.validateCompletedField(
+            validation.passcodeValidation,
+            userBody.passcode,
+            "Passcode",
+            errors,
+            false
+        );
+
+        if (errors.length > 0) {
+            throwValidationErrorWithMessage(errors);
+        }
+
+        const updatedUser = await user.update({ passcode: userBody.passcode });
+
+        return updatedUser;
+    },
 }
 
 export default service;

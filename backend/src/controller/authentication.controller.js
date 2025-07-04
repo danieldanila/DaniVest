@@ -45,6 +45,24 @@ const controller = {
             .status(200)
             .json({ message: `Sucessful password reset for ${userUpdated.email}.` });
     }),
+
+    updatePassword: catchAsync(async (req, res, next) => {
+        const token = await authenticationService.updatePassword(
+            req.user,
+            req.body
+        );
+
+        res
+            .status(200)
+            .json({ message: "You successfully updated your password.", token });
+    }),
+
+
+    updatePasscode: catchAsync(async (req, res, next) => {
+        const patchedUser = await authenticationService.updatePasscode(req.user, req.body);
+
+        res.status(202).json({ message: `${patchedUser.fullName}, you successfully updated your passcode.` })
+    }),
 }
 
 export default controller;

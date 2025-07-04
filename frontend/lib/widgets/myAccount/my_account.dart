@@ -11,6 +11,8 @@ import 'package:frontend/utilities/forms/validators/email_validator.dart';
 import 'package:frontend/utilities/forms/validators/first_name_validator.dart';
 import 'package:frontend/utilities/forms/validators/last_name_validator.dart';
 import 'package:frontend/utilities/forms/validators/phone_number_validator.dart';
+import 'package:frontend/widgets/myAccount/change_my_passcode.dart';
+import 'package:frontend/widgets/myAccount/change_my_password.dart';
 import 'package:provider/provider.dart';
 
 class MyAccount extends StatefulWidget {
@@ -447,11 +449,41 @@ class _MyAccountState extends State<MyAccount> {
             constants.Strings.otherDetailsText,
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              showModalBottomSheet<void>(
+                isScrollControlled: true,
+                context: context,
+                builder: (BuildContext context) {
+                  return SingleChildScrollView(
+                    child: Container(
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom,
+                      ),
+                      child: const ChangeMyPasscode(),
+                    ),
+                  );
+                },
+              );
+            },
             child: const Text(constants.Strings.changePasscodeButtonText),
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              showModalBottomSheet<void>(
+                isScrollControlled: true,
+                context: context,
+                builder: (BuildContext context) {
+                  return SingleChildScrollView(
+                    child: Container(
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom,
+                      ),
+                      child: const ChangeMyPassword(),
+                    ),
+                  );
+                },
+              );
+            },
             child: const Text(constants.Strings.changePasswordButtonText),
           ),
         ],

@@ -148,7 +148,10 @@ class UserService {
         if (response.statusCode == 200) {
           return CustomResponse(
             success: true,
-            data: responseBodyJson[constants.Strings.responseDataFieldName],
+            data:
+                changeOtherAccountData == null
+                    ? responseBodyJson
+                    : responseBodyJson[constants.Strings.responseDataFieldName],
             message:
                 responseBodyJson[constants.Strings.responseMessageFieldName],
           );
