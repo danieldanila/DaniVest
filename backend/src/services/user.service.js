@@ -1,7 +1,7 @@
 import { Op } from "sequelize";
 import AppError from "../errors/appError.js";
 import NotFoundError from "../errors/notFoundError.js";
-import { BankAccount, Transaction, User } from "../models/index.js";
+import { BankAccount, Friend, Transaction, User } from "../models/index.js";
 import { generateRandomCardNumber, generateRandomCVV, generateRandomRomanianIBAN } from "../utils/bank.util.js";
 import { getDateXYearsFromNow } from "../utils/date.util.js";
 import throwValidationErrorWithMessage from "../utils/errorsWrapper.util.js";
@@ -212,6 +212,36 @@ const service = {
             return transactions;
         } else {
             throw new NotFoundError("User has no transactions.");
+        }
+    },
+
+    getUserAllFriends: async (userId) => {
+        const errors = [];
+
+        validation.idParamaterValidation(userId, "User id", errors);
+
+        const friends = await Friend.findAll({
+            include: [
+                {
+                    model: User,
+                    as: "user",
+
+                },
+                {
+                    model: User,
+                    as: "friend",
+
+                }
+            ],
+            where: {
+                userId: userId
+            }
+        })
+
+        if (friends) {
+            return friends;
+        } else {
+            throw new NotFoundError("User has no friends.");
         }
     },
 

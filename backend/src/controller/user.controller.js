@@ -61,6 +61,11 @@ const controller = {
         const transactions = await userService.getUserAllTransactions(req.params.id);
         res.status(200).json(transactions);
     }),
+
+    getUserAllFriends: catchAsync(async (req, res, next) => {
+        const transactions = await userService.getUserAllFriends(req.params.id);
+        res.status(200).json(transactions);
+    }),
 }
 
 export default controller;

@@ -25,6 +25,7 @@ class Strings {
       "Change transfer direction";
   static const String changePasscodeButtonText = "Change passcode";
   static const String changePasswordButtonText = "Change password";
+  static const String addFriendButtonText = "Add friend";
 
   static const String loginAppBarTitle = "Login into your account";
   static const String signupAppBarTitle = "Signup for a DaniVest account";
@@ -45,6 +46,7 @@ class Strings {
   static const String accountDetailsText = "Account details";
   static const String otherDetailsText = "Other";
   static const String changeMyPasswordText = "Change my password";
+  static const String noActivityRecordedText = "No activity recorded";
 
   static const String cardNumberTitle = "Card Number";
   static const String copyCardNumberTitle = "Copy the card number";
@@ -54,6 +56,9 @@ class Strings {
   static const String myAccountText = "My account";
   static const String otherAccountText = "Other account";
   static const String transferText = "Transfer";
+  static const String sentYouText = "Sent you";
+  static const String youSentText = "You sent";
+  static const String noneText = "None";
 
   // Page names
   static const String homepagePageName = "Home";
@@ -173,6 +178,7 @@ class Strings {
   static const String updateMePath = "/api/user/updateMe";
   static const String createTransaction = "/api/transaction/create";
   static const String getUserAllTransactions = "/api/user/:id/transactions";
+  static const String getUserAllFriends = "/api/user/:id/friends";
   static const String loginUserPath = "/api/auth/login";
   static const String userAuthenticatedPath = "/api/auth/me";
   static const String authPasscodePath = "/api/auth/passcode";
@@ -202,6 +208,7 @@ class Properties {
   static const double fontSizeMainTitle = 54;
   static const double fontSizeMainText = 20;
   static const double iconSize = 20;
+  static const double rowPadding = 15;
 
   static const int minimumBirthdateYear = 1920;
   static const int minimumUsernameFieldLength = 6;

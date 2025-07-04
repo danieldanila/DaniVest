@@ -107,6 +107,7 @@ User.belongsToMany(User, {
     },
 });
 User.hasMany(Friend, {
+    as: "user",
     foreignKey: {
         name: "userId",
         type: DataTypes.UUID,
@@ -116,6 +117,7 @@ User.hasMany(Friend, {
     },
 });
 Friend.belongsTo(User, {
+    as: "user",
     foreignKey: {
         name: "userId",
         type: DataTypes.UUID,
@@ -125,6 +127,7 @@ Friend.belongsTo(User, {
     },
 });
 User.hasMany(Friend, {
+    as: "friend",
     foreignKey: {
         name: "friendId",
         type: DataTypes.UUID,
@@ -134,6 +137,7 @@ User.hasMany(Friend, {
     },
 });
 Friend.belongsTo(User, {
+    as: "friend",
     foreignKey: {
         name: "friendId",
         type: DataTypes.UUID,

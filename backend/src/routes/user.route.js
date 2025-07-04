@@ -41,4 +41,7 @@ router.get("/:id/bank/other/cardNumber/:cardNumber/cvv/:cvv/expiryDate/:expiryDa
 
 router.get("/:id/transactions", authenticationMiddleware.protect, userController.getUserAllTransactions);
 
+router.get("/:id/friends", authenticationMiddleware.protect, userController.getUserAllFriends);
+
+
 export default router;

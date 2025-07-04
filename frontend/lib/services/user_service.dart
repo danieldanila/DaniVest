@@ -209,6 +209,44 @@ class UserService {
     }
   }
 
+  Future<CustomResponse> getUserAllFriends() async {
+    final authService = locator<AuthService>();
+
+    try {
+      CustomResponse customResponse = await authService.getCurrentUser();
+
+      if (customResponse.success) {
+        User user = User.fromJson(customResponse.data);
+
+        final response = await _dio.get(
+          constants.Strings.getUserAllFriends.replaceAll(":id", user.id),
+        );
+
+        final responseBodyJson = response.data;
+
+        if (response.statusCode == 200) {
+          return CustomResponse(
+            success: true,
+            data: responseBodyJson,
+            message: constants.Strings.success,
+          );
+        }
+
+        return CustomResponse(
+          success: false,
+          message: responseBodyJson[constants.Strings.responseMessageFieldName],
+        );
+      }
+
+      return CustomResponse(success: false, message: customResponse.message);
+    } catch (e) {
+      return CustomResponse(
+        success: false,
+        message: "GetUserAllFriends error: $e",
+      );
+    }
+  }
+
   Future<CustomResponse> updateMe(UpdateMeData updateMeData) async {
     try {
       final filteredData =
