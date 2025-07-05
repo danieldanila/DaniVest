@@ -7,7 +7,7 @@ import { getDateXYearsFromNow } from "../utils/date.util.js";
 import throwValidationErrorWithMessage from "../utils/errorsWrapper.util.js";
 import validation from "../validations/general.validation.js";
 import userValidation from "../validations/user.validation.js";
-import { BankAccountService as bankAccountService } from "./index.js";
+import { BankAccountService as bankAccountService, FriendService as friendService } from "./index.js";
 
 const filterObject = (object, ...allowedFields) => {
     const newObject = {};
@@ -245,6 +245,38 @@ const service = {
         }
     },
 
+    createUserNewFriend: async (loggedUser, friendBody) => {
+        const errors = [];
+        const filteredBody = filterObject(
+            friendBody,
+            "username",
+            "phoneNumber",
+            "email",
+        );
+
+        const friend = await User.findOne({
+            where: {
+                [Op.or]: [
+                    { username: filteredBody.username ? filteredBody.username : "" },
+                    { phoneNumber: filteredBody.phoneNumber ? filteredBody.phoneNumber : "" },
+                    { email: filteredBody.email ? filteredBody.email : "" }
+                ]
+            }
+        });
+
+        if (friend) {
+            const date = new Date(Date.now());
+            const formattedDate = date.toISOString().split('T')[0];
+
+            const friendCreated = await friendService.createFriend({ userId: loggedUser.id, friendId: friend.id, since: formattedDate })
+
+            return friendCreated;
+        } else {
+            errors.push("User not found.");
+            throwValidationErrorWithMessage(errors);
+
+        }
+    },
 
 };
 

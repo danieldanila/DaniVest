@@ -6,6 +6,7 @@ import 'package:frontend/models/friend.dart';
 import 'package:frontend/models/transaction.dart';
 import 'package:frontend/provider/auth_provider.dart';
 import 'package:frontend/services/user_service.dart';
+import 'package:frontend/widgets/transfer/add_friend.dart';
 import 'package:provider/provider.dart';
 
 class FriendList extends StatefulWidget {
@@ -139,6 +140,13 @@ class _FriendListState extends State<FriendList> {
     return SingleChildScrollView(
       child: Column(
         children: [
+          const Text(
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: constants.Properties.fontSizeMainText,
+            ),
+            constants.Strings.friendsTitle,
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children:
@@ -186,7 +194,7 @@ class _FriendListState extends State<FriendList> {
                       padding: EdgeInsets.only(
                         bottom: MediaQuery.of(context).viewInsets.bottom,
                       ),
-                      child: const Text("a"),
+                      child: AddFriend(updateFriends: _initData),
                     ),
                   );
                 },

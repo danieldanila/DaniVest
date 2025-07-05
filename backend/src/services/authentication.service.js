@@ -191,7 +191,7 @@ const service = {
         const user = await User.findOne({
             where: {
                 passwordResetToken: hashedToken,
-                passwordResetExpires: { [Op.gt]: Date.now() },
+                passwordResetExpires: { [Op.gt]: Date.now().toString() },
             },
         });
 

@@ -66,6 +66,13 @@ const controller = {
         const transactions = await userService.getUserAllFriends(req.params.id);
         res.status(200).json(transactions);
     }),
+
+    createUserNewFriend: catchAsync(async (req, res, next) => {
+        const friendCreated = await userService.createUserNewFriend(req.user, req.body);
+        res.status(200).json({
+            message: `You successfully added a new friend, friends since ${friendCreated.since}.`,
+        });
+    }),
 }
 
 export default controller;

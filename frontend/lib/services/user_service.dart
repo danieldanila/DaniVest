@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:frontend/di/service_locator.dart';
+import 'package:frontend/models/add_new_friend_data.dart';
 import 'package:frontend/models/change_other_account_data.dart';
 import 'package:frontend/models/custom_response.dart';
 
@@ -274,6 +275,41 @@ class UserService {
       );
     } catch (e) {
       return CustomResponse(success: false, message: "UpdateMe error: $e");
+    }
+  }
+
+  Future<CustomResponse> createNewUserFriend(
+    AddNewFriendData addNewFriendData,
+  ) async {
+    try {
+      final filteredData =
+          addNewFriendData.toJson()..removeWhere((key, value) => value == null);
+
+      final response = await _dio.post(
+        constants.Strings.createNewUserFriendPath,
+        data: jsonEncode(filteredData),
+      );
+
+      final responseBodyJson = response.data;
+
+      if (response.statusCode == 200) {
+        return CustomResponse(
+          success: true,
+          data: responseBodyJson[constants.Strings.responseDataFieldName],
+          message: responseBodyJson[constants.Strings.responseMessageFieldName],
+        );
+      }
+
+      return CustomResponse(
+        success: false,
+        message:
+            responseBodyJson[constants.Strings.responseMessageFieldName][0],
+      );
+    } catch (e) {
+      return CustomResponse(
+        success: false,
+        message: "CreateNewUserFriend error: $e",
+      );
     }
   }
 }

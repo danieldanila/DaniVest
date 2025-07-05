@@ -18,6 +18,7 @@ class Strings {
   static const String signupButtonMessage = "Signup";
   static const String logoutButtonMessage = "Logout";
   static const String sendButtonMessage = "Send";
+  static const String saveButtonMessage = "Save";
   static const String seeAllTransactions = "See all transactions";
   static const String shareToOhterApps = "Share to ohter app";
   static const String changeButtonMessage = "Change";
@@ -26,10 +27,14 @@ class Strings {
   static const String changePasscodeButtonText = "Change passcode";
   static const String changePasswordButtonText = "Change password";
   static const String addFriendButtonText = "Add friend";
+  static const String addNewFriendText = "Add new friend";
+  static const String onlyOneFieldMustBeCompletedText =
+      "Only one field must be completed";
 
   static const String loginAppBarTitle = "Login into your account";
   static const String signupAppBarTitle = "Signup for a DaniVest account";
   static const String homepageAppBarTitle = "DaniVest";
+  static const String friendsTitle = "Friends";
   static const String alreadyHasAccount = "Already have an account?";
   static const String forgotMyPassword = "Forgot my password";
   static const String successfulLogout = "You successfully logout";
@@ -121,6 +126,7 @@ class Strings {
   static const String currentPasscodeFieldHint = "Enter current passcode";
 
   static const String ibanFieldLabel = "IBAN";
+  static const String ibanFieldHint = "Enter a IBAN";
 
   static const String localizedReasonBiometric = "Login to gain access";
 
@@ -179,6 +185,7 @@ class Strings {
   static const String createTransaction = "/api/transaction/create";
   static const String getUserAllTransactions = "/api/user/:id/transactions";
   static const String getUserAllFriends = "/api/user/:id/friends";
+  static const String createNewUserFriendPath = "/api/user/createNewFriend";
   static const String loginUserPath = "/api/auth/login";
   static const String userAuthenticatedPath = "/api/auth/me";
   static const String authPasscodePath = "/api/auth/passcode";
