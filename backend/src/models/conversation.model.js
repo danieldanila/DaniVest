@@ -3,6 +3,15 @@ import Database from "../configs/database.config.js";
 import User from "./user.model.js";
 
 const Conversation = Database.define("Conversation", {
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        validate: {
+            notEmpty: true,
+            isUUID: 4,
+        }
+    },
     userId: {
         type: DataTypes.UUID,
         allowNull: false,

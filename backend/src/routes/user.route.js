@@ -43,6 +43,8 @@ router.get("/:id/transactions", authenticationMiddleware.protect, userController
 
 router.get("/:id/friends", authenticationMiddleware.protect, userController.getUserAllFriends);
 
+router.get("/:id/conversations", authenticationMiddleware.protect, userController.getUserAllConversations);
+
 router.post("/createNewFriend", authenticationMiddleware.protect, userController.createUserNewFriend);
 
 

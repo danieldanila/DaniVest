@@ -73,7 +73,7 @@ class UserService {
     }
   }
 
-  Future<CustomResponse> getUserBankAccount() async {
+  Future<CustomResponse> getUserBankAccount({String? userId}) async {
     final authService = locator<AuthService>();
 
     try {
@@ -83,7 +83,10 @@ class UserService {
         User user = User.fromJson(customResponse.data);
 
         final response = await _dio.get(
-          constants.Strings.getUserBankAccount.replaceAll(":id", user.id),
+          constants.Strings.getUserBankAccount.replaceAll(
+            ":id",
+            userId ?? user.id,
+          ),
         );
 
         final responseBodyJson = response.data;
@@ -244,6 +247,44 @@ class UserService {
       return CustomResponse(
         success: false,
         message: "GetUserAllFriends error: $e",
+      );
+    }
+  }
+
+  Future<CustomResponse> getUserAllConversations() async {
+    final authService = locator<AuthService>();
+
+    try {
+      CustomResponse customResponse = await authService.getCurrentUser();
+
+      if (customResponse.success) {
+        User user = User.fromJson(customResponse.data);
+
+        final response = await _dio.get(
+          constants.Strings.getUserAllConversations.replaceAll(":id", user.id),
+        );
+
+        final responseBodyJson = response.data;
+
+        if (response.statusCode == 200) {
+          return CustomResponse(
+            success: true,
+            data: responseBodyJson,
+            message: constants.Strings.success,
+          );
+        }
+
+        return CustomResponse(
+          success: false,
+          message: responseBodyJson[constants.Strings.responseMessageFieldName],
+        );
+      }
+
+      return CustomResponse(success: false, message: customResponse.message);
+    } catch (e) {
+      return CustomResponse(
+        success: false,
+        message: "GetUserAllConversations error: $e",
       );
     }
   }

@@ -67,6 +67,11 @@ const controller = {
         res.status(200).json(transactions);
     }),
 
+    getUserAllConversations: catchAsync(async (req, res, next) => {
+        const conversations = await userService.getUserAllConversations(req.params.id);
+        res.status(200).json(conversations);
+    }),
+
     createUserNewFriend: catchAsync(async (req, res, next) => {
         const friendCreated = await userService.createUserNewFriend(req.user, req.body);
         res.status(200).json({

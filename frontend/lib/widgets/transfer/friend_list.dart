@@ -6,6 +6,7 @@ import 'package:frontend/models/friend.dart';
 import 'package:frontend/models/transaction.dart';
 import 'package:frontend/provider/auth_provider.dart';
 import 'package:frontend/services/user_service.dart';
+import 'package:frontend/utilities/navigation/app_navigator.dart';
 import 'package:frontend/widgets/transfer/add_friend.dart';
 import 'package:provider/provider.dart';
 
@@ -154,31 +155,40 @@ class _FriendListState extends State<FriendList> {
                   final friend = entry.key;
                   final transactions = entry.value;
 
-                  return Padding(
-                    padding: const EdgeInsets.all(
-                      constants.Properties.rowPadding,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Icon(Icons.person),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(friend.friendName),
-                            Text(
-                              transactions.isNotEmpty
-                                  ? "${((authProvider.user!.id == transactions[0].receiverId || transactions[0].senderId == transactions[0].receiverId) ? constants.Strings.sentYouText : constants.Strings.youSentText)} ${transactions[0].formattedAmount} ${constants.Strings.defaultCurrency}"
-                                  : constants.Strings.noActivityRecordedText,
-                            ),
-                          ],
-                        ),
-                        Text(
-                          transactions.isNotEmpty
-                              ? transactions[0].formattedOnlyDate
-                              : constants.Strings.noneText,
-                        ),
-                      ],
+                  return GestureDetector(
+                    onTap: () {
+                      AppNavigator.navigateToFriendTransactionDetailsPage(
+                        context,
+                        friend,
+                        transactions,
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(
+                        constants.Properties.rowPadding,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Icon(Icons.person),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(friend.friendName),
+                              Text(
+                                transactions.isNotEmpty
+                                    ? "${((authProvider.user!.id == transactions[0].receiverId || transactions[0].senderId == transactions[0].receiverId) ? constants.Strings.sentYouText : constants.Strings.youSentText)} ${transactions[0].formattedAmount} ${constants.Strings.defaultCurrency}"
+                                    : constants.Strings.noActivityRecordedText,
+                              ),
+                            ],
+                          ),
+                          Text(
+                            transactions.isNotEmpty
+                                ? transactions[0].formattedOnlyDate
+                                : constants.Strings.noneText,
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 }).toList(),

@@ -1,7 +1,7 @@
 import { Op } from "sequelize";
 import AppError from "../errors/appError.js";
 import NotFoundError from "../errors/notFoundError.js";
-import { BankAccount, Friend, Transaction, User } from "../models/index.js";
+import { BankAccount, Conversation, Friend, Transaction, User } from "../models/index.js";
 import { generateRandomCardNumber, generateRandomCVV, generateRandomRomanianIBAN } from "../utils/bank.util.js";
 import { getDateXYearsFromNow } from "../utils/date.util.js";
 import throwValidationErrorWithMessage from "../utils/errorsWrapper.util.js";
@@ -242,6 +242,39 @@ const service = {
             return friends;
         } else {
             throw new NotFoundError("User has no friends.");
+        }
+    },
+
+    getUserAllConversations: async (userId) => {
+        const errors = [];
+
+        validation.idParamaterValidation(userId, "User id", errors);
+
+        const conversations = await Conversation.findAll({
+            include: [
+                {
+                    model: User,
+                    as: "senderUser",
+
+                },
+                {
+                    model: User,
+                    as: "receiverUser",
+
+                }
+            ],
+            where: {
+                [Op.or]: [
+                    { '$senderUser.id$': userId },
+                    { '$receiverUser.id$': userId }
+                ]
+            }
+        })
+
+        if (conversations) {
+            return conversations;
+        } else {
+            throw new NotFoundError("User has no conversations.");
         }
     },
 

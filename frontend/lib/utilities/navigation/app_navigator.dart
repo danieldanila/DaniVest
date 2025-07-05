@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/friend.dart';
+import 'package:frontend/models/transaction.dart';
 import 'package:frontend/screens/add_withdraw_money.dart';
 import 'package:frontend/screens/main_navigation.dart';
 import 'package:frontend/screens/my_account.dart';
@@ -9,6 +11,7 @@ import 'package:frontend/screens/login.dart';
 import 'package:frontend/screens/signup.dart';
 import 'package:frontend/screens/transactions.dart';
 import 'package:frontend/screens/transfer.dart';
+import 'package:frontend/screens/friend_transaction_details.dart';
 
 class AppNavigator {
   static void replaceToStartPage(BuildContext context) {
@@ -113,6 +116,23 @@ class AppNavigator {
       context,
       MaterialPageRoute(
         builder: (context) => ResetPasswordScreen(token: token),
+      ),
+    );
+  }
+
+  static void navigateToFriendTransactionDetailsPage(
+    BuildContext context,
+    Friend friend,
+    List<Transaction> transactions,
+  ) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder:
+            (context) => FriendTransactionDetailsScreen(
+              friend: friend,
+              friendTransactions: transactions,
+            ),
       ),
     );
   }

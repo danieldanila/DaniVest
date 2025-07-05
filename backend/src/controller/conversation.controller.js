@@ -5,7 +5,7 @@ const controller = {
     createConversation: catchAsync(async (req, res, next) => {
         const newConversation = await conversationService.createConversation(req.body);
 
-        res.status(201).json({ message: `Conversation betwen '${newConversation.userId}' and '${newConversation.friendId}' created.` })
+        res.status(201).json({ message: `Conversation betwen '${newConversation.userId}' and '${newConversation.friendId}' created.`, data: newConversation })
 
     }),
 

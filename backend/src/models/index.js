@@ -147,6 +147,7 @@ Friend.belongsTo(User, {
     },
 });
 User.hasMany(Conversation, {
+    as: "senderUser",
     foreignKey: {
         name: "userId",
         type: DataTypes.UUID,
@@ -156,6 +157,7 @@ User.hasMany(Conversation, {
     },
 });
 Conversation.belongsTo(User, {
+    as: "senderUser",
     foreignKey: {
         name: "userId",
         type: DataTypes.UUID,
@@ -165,6 +167,7 @@ Conversation.belongsTo(User, {
     },
 });
 User.hasMany(Conversation, {
+    as: "receiverUser",
     foreignKey: {
         name: "friendId",
         type: DataTypes.UUID,
@@ -174,6 +177,7 @@ User.hasMany(Conversation, {
     },
 });
 Conversation.belongsTo(User, {
+    as: "receiverUser",
     foreignKey: {
         name: "friendId",
         type: DataTypes.UUID,

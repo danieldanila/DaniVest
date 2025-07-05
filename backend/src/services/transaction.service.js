@@ -38,7 +38,33 @@ const service = {
         if (errors.length === 0) {
             const newTransaction = await Transaction.create(transactionBody);
 
-            return newTransaction;
+            const populatedTransaction = await Transaction.findOne({
+                where: {
+                    id: newTransaction.id
+                },
+                include: [
+                    {
+                        model: BankAccount,
+                        as: "sender",
+                        include: [
+                            {
+                                model: User
+                            }
+                        ]
+                    },
+                    {
+                        model: BankAccount,
+                        as: "receiver",
+                        include: [
+                            {
+                                model: User
+                            }
+                        ]
+                    }
+                ]
+            });
+
+            return populatedTransaction;
         } else {
             throwValidationErrorWithMessage(errors);
         }

@@ -30,6 +30,7 @@ class Strings {
   static const String addNewFriendText = "Add new friend";
   static const String onlyOneFieldMustBeCompletedText =
       "Only one field must be completed";
+  static const String friendSinceText = "Friends since: ";
 
   static const String loginAppBarTitle = "Login into your account";
   static const String signupAppBarTitle = "Signup for a DaniVest account";
@@ -52,6 +53,7 @@ class Strings {
   static const String otherDetailsText = "Other";
   static const String changeMyPasswordText = "Change my password";
   static const String noActivityRecordedText = "No activity recorded";
+  static const String sendMoneyText = "Send money";
 
   static const String cardNumberTitle = "Card Number";
   static const String copyCardNumberTitle = "Copy the card number";
@@ -128,6 +130,12 @@ class Strings {
   static const String ibanFieldLabel = "IBAN";
   static const String ibanFieldHint = "Enter a IBAN";
 
+  static const String detailsFieldLabel = "Details";
+  static const String detailsFieldHint = "Enter details";
+
+  static const String messageFieldLabel = "Message";
+  static const String messageFieldHint = "Type a message";
+
   static const String localizedReasonBiometric = "Login to gain access";
 
   // Generic error
@@ -183,8 +191,10 @@ class Strings {
       "/api/user/:id/bank/other/cardNumber/:cardNumber/cvv/:cvv/expiryDate/:expiryDate";
   static const String updateMePath = "/api/user/updateMe";
   static const String createTransaction = "/api/transaction/create";
+  static const String createConversationPath = "/api/conversation/create";
   static const String getUserAllTransactions = "/api/user/:id/transactions";
   static const String getUserAllFriends = "/api/user/:id/friends";
+  static const String getUserAllConversations = "/api/user/:id/conversations";
   static const String createNewUserFriendPath = "/api/user/createNewFriend";
   static const String loginUserPath = "/api/auth/login";
   static const String userAuthenticatedPath = "/api/auth/me";
@@ -208,13 +218,17 @@ class Properties {
   static const double textButtonPadding = 5;
   static const double containerHorizontalMargin = 50;
   static const double containerVerticalMargin = 50;
+  static const double listVerticalMargin = 10;
   static const double sizedBoxHeight = 50;
   static const double sizedBoxWidth = 5;
   static const double amountFieldWidth = 70;
   static const double columnSpacing = 10;
   static const double fontSizeMainTitle = 54;
   static const double fontSizeMainText = 20;
+  static const double fontSizeMediumText = 15;
+  static const double fonstSizeSmallText = 10;
   static const double iconSize = 20;
+  static const double largeIconSize = 40;
   static const double rowPadding = 15;
 
   static const int minimumBirthdateYear = 1920;

@@ -39,6 +39,10 @@ const validation = {
             isUpdateRequest
         );
 
+        if (conversation.id) {
+            generalValidation.uuidValidation(conversation.id, "Conversation id", errors);
+        }
+
         return errors;
     },
 };

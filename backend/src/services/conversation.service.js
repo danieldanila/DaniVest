@@ -1,5 +1,5 @@
 import NotFoundError from "../errors/notFoundError.js";
-import { Conversation } from "../models/index.js";
+import { Conversation, User } from "../models/index.js";
 import throwValidationErrorWithMessage from "../utils/errorsWrapper.util.js";
 import validation from "../validations/general.validation.js";
 import conversationValidation from "../validations/conversation.validation.js";
@@ -17,7 +17,25 @@ const service = {
         if (errors.length === 0) {
             const newConversation = await Conversation.create(conversationBody);
 
-            return newConversation;
+            const populatedConversation = await Conversation.findOne({
+                where: {
+                    id: newConversation.id
+                },
+                include: [
+                    {
+                        model: User,
+                        as: "senderUser",
+
+                    },
+                    {
+                        model: User,
+                        as: "receiverUser",
+
+                    }
+                ],
+            });
+
+            return populatedConversation;
         } else {
             throwValidationErrorWithMessage(errors);
         }
