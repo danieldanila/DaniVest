@@ -179,7 +179,7 @@ class Strings {
 
   // Back-end server details
   static const String backendScheme = "http";
-  static const String backendHost = "192.168.1.35";
+  static const String backendHost = "192.168.1.33";
   static const String backendPort = "3000";
   static const String backendURL = "$backendScheme://$backendHost:$backendPort";
 
@@ -203,6 +203,7 @@ class Strings {
   static const String resetPasswordPath = "/api/auth/resetPassword";
   static const String updateMyPasswordPath = "/api/auth/updateMyPassword";
   static const String updateMyPasscodePath = "/api/auth/updateMyPasscode";
+  static const String createKeyPressEvent = "/api/keypressevent/create";
 
   // Standard response field names
   static const String responseMessageFieldName = "message";
@@ -246,4 +247,5 @@ class Properties {
   static const int transactionPageIndex = 3;
   static const int myAccountPageIndex = 4;
   static const int timerSeconds = 1;
+  static int appStartEpochMillis = DateTime.now().millisecondsSinceEpoch;
 }

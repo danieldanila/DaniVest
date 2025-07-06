@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/di/service_locator.dart';
 import 'package:frontend/models/forgot_password_data.dart';
 import 'package:frontend/services/user_service.dart';
+import 'package:frontend/tracking/tracking_text_controller.dart';
 import 'package:frontend/utilities/forms/validators/email_validator.dart';
 import 'package:frontend/constants/constants.dart' as constants;
 
@@ -13,7 +14,7 @@ class ModalBottomSheet extends StatefulWidget {
 }
 
 class _ModalBottomSheetState extends State<ModalBottomSheet> {
-  final TextEditingController emailController = TextEditingController();
+  final TrackingTextController emailController = TrackingTextController();
 
   String? _message;
 
@@ -61,6 +62,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
           children: [
             const Text(constants.Strings.forgotMyPassword),
             TextFormField(
+              enableSuggestions: false,
               controller: emailController,
               validator: emailValidator,
               keyboardType: TextInputType.text,

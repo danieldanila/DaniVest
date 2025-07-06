@@ -7,6 +7,7 @@ import 'package:frontend/models/transaction_data.dart';
 import 'package:frontend/constants/constants.dart' as constants;
 import 'package:frontend/services/transaction_service.dart';
 import 'package:frontend/services/user_service.dart';
+import 'package:frontend/tracking/tracking_text_controller.dart';
 import 'package:frontend/utilities/forms/validators/amount_validator.dart';
 import 'package:frontend/utilities/forms/validators/details_validator.dart';
 import 'package:intl/intl.dart';
@@ -31,8 +32,8 @@ class _SendMoneyState extends State<SendMoney> {
   late BankAccount _userBankAccount;
   late BankAccount _friendBankAccount;
 
-  final TextEditingController amountController = TextEditingController();
-  final TextEditingController detailsController = TextEditingController();
+  final TrackingTextController amountController = TrackingTextController();
+  final TrackingTextController detailsController = TrackingTextController();
 
   String? _message;
 
@@ -128,6 +129,7 @@ class _SendMoneyState extends State<SendMoney> {
               ),
             ),
             TextFormField(
+              enableSuggestions: false,
               controller: detailsController,
               validator: detailsValidator,
               keyboardType: TextInputType.text,

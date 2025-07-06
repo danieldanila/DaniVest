@@ -5,6 +5,7 @@ import BankAccount from "./bankAccount.model.js";
 import Transaction from "./transaction.model.js";
 import Friend from "./friend.model.js";
 import Conversation from "./conversation.model.js";
+import KeyPressEvent from "./keyPressEvent.model.js";
 
 User.hasMany(BankAccount, {
     foreignKey: {
@@ -193,5 +194,6 @@ export {
     Transaction,
     Friend,
     Conversation,
+    KeyPressEvent,
     Database,
 }

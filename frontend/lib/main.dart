@@ -3,6 +3,7 @@ import 'package:frontend/di/service_locator.dart';
 import 'package:frontend/provider/auth_provider.dart';
 import 'package:frontend/screens/start.dart';
 import 'package:frontend/constants/constants.dart' as constants;
+import 'package:frontend/tracking/app_tracker.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -14,11 +15,13 @@ void main() async {
   await authProvider.tryAutoLogin();
 
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
-      ],
-      child: const MyApp(),
+    AppTracker(
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
+        ],
+        child: const MyApp(),
+      ),
     ),
   );
 }

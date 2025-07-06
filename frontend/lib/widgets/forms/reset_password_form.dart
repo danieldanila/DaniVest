@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/constants/constants.dart' as constants;
 import 'package:frontend/models/reset_password_data.dart';
 import 'package:frontend/provider/auth_provider.dart';
+import 'package:frontend/tracking/tracking_text_controller.dart';
 import 'package:frontend/utilities/forms/validators/password_validator.dart';
 import 'package:frontend/utilities/forms/validators/confirm_password_validator.dart';
 import 'package:frontend/utilities/navigation/app_navigator.dart';
@@ -19,9 +20,9 @@ class ResetPasswordForm extends StatefulWidget {
 class _ResetPasswordFormState extends State<ResetPasswordForm> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+  final TrackingTextController passwordController = TrackingTextController();
+  final TrackingTextController confirmPasswordController =
+      TrackingTextController();
 
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;

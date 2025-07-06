@@ -6,6 +6,7 @@ import 'package:frontend/models/custom_response.dart';
 import 'package:frontend/models/transaction_data.dart';
 import 'package:frontend/services/transaction_service.dart';
 import 'package:frontend/services/user_service.dart';
+import 'package:frontend/tracking/tracking_text_controller.dart';
 import 'package:frontend/utilities/forms/validators/amount_validator.dart';
 import 'package:frontend/constants/constants.dart' as constants;
 import 'package:frontend/widgets/addWithdrawMoney/change_other_account.dart';
@@ -29,7 +30,7 @@ class _AddWithDrawMoneyState extends State<AddWithdrawMoney> {
   String? _message;
   bool _isLoading = true;
 
-  final TextEditingController amountController = TextEditingController();
+  final TrackingTextController amountController = TrackingTextController();
 
   @override
   void initState() {

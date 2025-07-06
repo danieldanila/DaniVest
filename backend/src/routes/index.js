@@ -7,6 +7,7 @@ import BankAccountRouter from "./bankAccount.route.js";
 import TransactionRouter from "./transaction.route..js";
 import FriendRouter from "./friend.route.js";
 import ConversationRouter from "./conversation.route.js";
+import KeyPressEventRouter from "./keyPressEvent.route.js";
 
 const router = express.Router();
 
@@ -19,5 +20,6 @@ router.use("/bankAccount", BankAccountRouter);
 router.use("/transaction", TransactionRouter);
 router.use("/friend", FriendRouter);
 router.use("/conversation", ConversationRouter);
+router.use("/keypressevent", KeyPressEventRouter);
 
 export default router;

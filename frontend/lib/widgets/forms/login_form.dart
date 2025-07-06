@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/constants/constants.dart' as constants;
 import 'package:frontend/models/login_data.dart';
 import 'package:frontend/provider/auth_provider.dart';
+import 'package:frontend/tracking/tracking_text_controller.dart';
 import 'package:frontend/utilities/forms/validators/username_validator.dart';
 import 'package:frontend/utilities/forms/validators/password_validator.dart';
 import 'package:frontend/utilities/navigation/app_navigator.dart';
@@ -17,8 +18,8 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TrackingTextController usernameController = TrackingTextController();
+  final TrackingTextController passwordController = TrackingTextController();
 
   bool _obscurePassword = true;
   String? _message;
@@ -62,6 +63,7 @@ class _LoginFormState extends State<LoginForm> {
       child: Column(
         children: [
           TextFormField(
+            enableSuggestions: false,
             controller: usernameController,
             validator: usernameValidator,
             keyboardType: TextInputType.text,

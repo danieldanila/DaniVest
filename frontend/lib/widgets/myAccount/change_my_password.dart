@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/di/service_locator.dart';
 import 'package:frontend/models/change_my_password_data.dart';
 import 'package:frontend/services/auth_service.dart';
+import 'package:frontend/tracking/tracking_text_controller.dart';
 import 'package:frontend/utilities/forms/validators/confirm_password_validator.dart';
 import 'package:frontend/constants/constants.dart' as constants;
 import 'package:frontend/utilities/forms/validators/password_validator.dart';
@@ -14,11 +15,11 @@ class ChangeMyPassword extends StatefulWidget {
 }
 
 class _ChangeMyPasswordState extends State<ChangeMyPassword> {
-  final TextEditingController currentPasswordController =
-      TextEditingController();
-  final TextEditingController newPasswordController = TextEditingController();
-  final TextEditingController newPasswordConfirmController =
-      TextEditingController();
+  final TrackingTextController currentPasswordController =
+      TrackingTextController();
+  final TrackingTextController newPasswordController = TrackingTextController();
+  final TrackingTextController newPasswordConfirmController =
+      TrackingTextController();
 
   String? _message;
   bool _obscureCurrentPassword = true;

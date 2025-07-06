@@ -4,6 +4,7 @@ import 'package:frontend/models/conversation.dart';
 import 'package:frontend/models/conversation_data.dart';
 import 'package:frontend/constants/constants.dart' as constants;
 import 'package:frontend/services/conversation_service.dart';
+import 'package:frontend/tracking/tracking_text_controller.dart';
 import 'package:frontend/utilities/forms/validators/message_validator.dart';
 import 'package:intl/intl.dart';
 
@@ -24,7 +25,7 @@ class SendMessage extends StatefulWidget {
 }
 
 class _SendMessageState extends State<SendMessage> {
-  final TextEditingController messageController = TextEditingController();
+  final TrackingTextController messageController = TrackingTextController();
 
   String? _message;
 
@@ -81,6 +82,7 @@ class _SendMessageState extends State<SendMessage> {
           children: [
             Expanded(
               child: TextFormField(
+                enableSuggestions: false,
                 controller: messageController,
                 validator: messageValidator,
                 keyboardType: TextInputType.text,

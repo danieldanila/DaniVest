@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/services/conversation_service.dart';
 import 'package:frontend/services/token_service.dart';
+import 'package:frontend/services/tracking_events_service.dart';
 import 'package:frontend/services/transaction_service.dart';
 import 'package:frontend/services/user_service.dart';
 import 'package:get_it/get_it.dart';
@@ -41,6 +42,9 @@ void setupLocator() {
   );
   locator.registerLazySingleton<ConversationService>(
     () => ConversationService(locator<Dio>()),
+  );
+  locator.registerLazySingleton<TrackingEventsService>(
+    () => TrackingEventsService(locator<Dio>()),
   );
   locator.registerLazySingleton<TokenService>(() => TokenService());
   locator.registerLazySingleton<FlutterSecureStorage>(

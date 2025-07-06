@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/di/service_locator.dart';
 import 'package:frontend/models/change_other_account_data.dart';
 import 'package:frontend/services/user_service.dart';
+import 'package:frontend/tracking/tracking_text_controller.dart';
 import 'package:frontend/utilities/forms/validators/card_number_validator.dart';
 import 'package:frontend/utilities/forms/validators/cvv_validator.dart';
 import 'package:frontend/constants/constants.dart' as constants;
@@ -21,9 +22,9 @@ class ChangeOtherAccount extends StatefulWidget {
 }
 
 class _ChangeOtherAccountState extends State<ChangeOtherAccount> {
-  final TextEditingController cardNumberController = TextEditingController();
-  final TextEditingController expiryDateController = TextEditingController();
-  final TextEditingController cvvController = TextEditingController();
+  final TrackingTextController cardNumberController = TrackingTextController();
+  final TrackingTextController expiryDateController = TrackingTextController();
+  final TrackingTextController cvvController = TrackingTextController();
 
   String? _message;
 
@@ -79,6 +80,7 @@ class _ChangeOtherAccountState extends State<ChangeOtherAccount> {
           children: [
             const Text(constants.Strings.changeOtherAccount),
             TextFormField(
+              enableSuggestions: false,
               controller: cardNumberController,
               validator: cardNumberValidator,
               keyboardType: TextInputType.text,
@@ -88,6 +90,7 @@ class _ChangeOtherAccountState extends State<ChangeOtherAccount> {
               ),
             ),
             TextFormField(
+              enableSuggestions: false,
               controller: expiryDateController,
               validator: expiryDateValidator,
               keyboardType: TextInputType.text,
@@ -97,6 +100,7 @@ class _ChangeOtherAccountState extends State<ChangeOtherAccount> {
               ),
             ),
             TextFormField(
+              enableSuggestions: false,
               controller: cvvController,
               validator: cvvValidator,
               keyboardType: TextInputType.text,

@@ -3,6 +3,7 @@ import 'package:frontend/di/service_locator.dart';
 import 'package:frontend/models/add_new_friend_data.dart';
 import 'package:frontend/constants/constants.dart' as constants;
 import 'package:frontend/services/user_service.dart';
+import 'package:frontend/tracking/tracking_text_controller.dart';
 import 'package:frontend/utilities/forms/validators/email_validator.dart';
 import 'package:frontend/utilities/forms/validators/phone_number_validator.dart';
 import 'package:frontend/utilities/forms/validators/username_validator.dart';
@@ -20,9 +21,9 @@ class _AddFriendState extends State<AddFriend> {
   final GlobalKey<FormState> phoneNumberKey = GlobalKey<FormState>();
   final GlobalKey<FormState> emailKey = GlobalKey<FormState>();
 
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController phoneNumberController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
+  final TrackingTextController usernameController = TrackingTextController();
+  final TrackingTextController phoneNumberController = TrackingTextController();
+  final TrackingTextController emailController = TrackingTextController();
 
   String? _message;
 
@@ -76,6 +77,7 @@ class _AddFriendState extends State<AddFriend> {
           Form(
             key: usernameKey,
             child: TextFormField(
+              enableSuggestions: false,
               controller: usernameController,
               validator: usernameValidator,
               keyboardType: TextInputType.text,
@@ -100,9 +102,10 @@ class _AddFriendState extends State<AddFriend> {
           Form(
             key: emailKey,
             child: TextFormField(
+              enableSuggestions: false,
               controller: emailController,
               validator: emailValidator,
-              keyboardType: TextInputType.emailAddress,
+              keyboardType: TextInputType.text,
               decoration: const InputDecoration(
                 labelText: constants.Strings.emailFieldLabel,
                 hintText: constants.Strings.emailFieldHint,

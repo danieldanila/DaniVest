@@ -7,6 +7,7 @@ import 'package:frontend/models/custom_response.dart';
 import 'package:frontend/models/update_me.dart';
 import 'package:frontend/provider/auth_provider.dart';
 import 'package:frontend/services/user_service.dart';
+import 'package:frontend/tracking/tracking_text_controller.dart';
 import 'package:frontend/utilities/forms/validators/email_validator.dart';
 import 'package:frontend/utilities/forms/validators/first_name_validator.dart';
 import 'package:frontend/utilities/forms/validators/last_name_validator.dart';
@@ -36,10 +37,10 @@ class _MyAccountState extends State<MyAccount> {
   bool _isEditModeLastName = false;
   bool _isEditModePhoneNumber = false;
 
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController phoneNumberController = TextEditingController();
+  final TrackingTextController emailController = TrackingTextController();
+  final TrackingTextController firstNameController = TrackingTextController();
+  final TrackingTextController lastNameController = TrackingTextController();
+  final TrackingTextController phoneNumberController = TrackingTextController();
 
   @override
   void initState() {
@@ -173,9 +174,10 @@ class _MyAccountState extends State<MyAccount> {
                           ? Form(
                             key: emailFormKey,
                             child: TextFormField(
+                              enableSuggestions: false,
                               controller: emailController,
                               validator: emailValidator,
-                              keyboardType: TextInputType.emailAddress,
+                              keyboardType: TextInputType.text,
                               decoration: const InputDecoration(
                                 labelText: constants.Strings.emailFieldLabel,
                                 hintText: constants.Strings.emailFieldHint,
@@ -233,9 +235,10 @@ class _MyAccountState extends State<MyAccount> {
                           ? Form(
                             key: firstNameKey,
                             child: TextFormField(
+                              enableSuggestions: false,
                               controller: firstNameController,
                               validator: firstNameValidator,
-                              keyboardType: TextInputType.name,
+                              keyboardType: TextInputType.text,
                               decoration: const InputDecoration(
                                 labelText:
                                     constants.Strings.firstNameFieldLabel,
@@ -294,9 +297,10 @@ class _MyAccountState extends State<MyAccount> {
                           ? Form(
                             key: lastNameKey,
                             child: TextFormField(
+                              enableSuggestions: false,
                               controller: lastNameController,
                               validator: lastNameValidator,
-                              keyboardType: TextInputType.name,
+                              keyboardType: TextInputType.text,
                               decoration: const InputDecoration(
                                 labelText: constants.Strings.lastNameFieldLabel,
                                 hintText: constants.Strings.lastNameFieldHint,
@@ -356,7 +360,7 @@ class _MyAccountState extends State<MyAccount> {
                             child: TextFormField(
                               controller: phoneNumberController,
                               validator: phoneNumberValidator,
-                              keyboardType: TextInputType.name,
+                              keyboardType: TextInputType.phone,
                               decoration: const InputDecoration(
                                 labelText:
                                     constants.Strings.phoneNumberFieldLabel,

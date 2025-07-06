@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/constants/constants.dart' as constants;
 import 'package:frontend/models/signup_data.dart';
 import 'package:frontend/provider/auth_provider.dart';
+import 'package:frontend/tracking/tracking_text_controller.dart';
 import 'package:frontend/utilities/forms/validators/username_validator.dart';
 import 'package:frontend/utilities/forms/validators/email_validator.dart';
 import 'package:frontend/utilities/forms/validators/first_name_validator.dart';
@@ -23,15 +24,15 @@ class SignupForm extends StatefulWidget {
 class _SignupFormState extends State<SignupForm> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController phoneNumberController = TextEditingController();
-  final TextEditingController birthdateController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+  final TrackingTextController usernameController = TrackingTextController();
+  final TrackingTextController emailController = TrackingTextController();
+  final TrackingTextController firstNameController = TrackingTextController();
+  final TrackingTextController lastNameController = TrackingTextController();
+  final TrackingTextController phoneNumberController = TrackingTextController();
+  final TrackingTextController birthdateController = TrackingTextController();
+  final TrackingTextController passwordController = TrackingTextController();
+  final TrackingTextController confirmPasswordController =
+      TrackingTextController();
 
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
@@ -114,6 +115,7 @@ class _SignupFormState extends State<SignupForm> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TextFormField(
+            enableSuggestions: false,
             controller: usernameController,
             validator: usernameValidator,
             keyboardType: TextInputType.text,
@@ -123,27 +125,30 @@ class _SignupFormState extends State<SignupForm> {
             ),
           ),
           TextFormField(
+            enableSuggestions: false,
             controller: emailController,
             validator: emailValidator,
-            keyboardType: TextInputType.emailAddress,
+            keyboardType: TextInputType.text,
             decoration: const InputDecoration(
               labelText: constants.Strings.emailFieldLabel,
               hintText: constants.Strings.emailFieldHint,
             ),
           ),
           TextFormField(
+            enableSuggestions: false,
             controller: firstNameController,
             validator: firstNameValidator,
-            keyboardType: TextInputType.name,
+            keyboardType: TextInputType.text,
             decoration: const InputDecoration(
               labelText: constants.Strings.firstNameFieldLabel,
               hintText: constants.Strings.firstNameFieldHint,
             ),
           ),
           TextFormField(
+            enableSuggestions: false,
             controller: lastNameController,
             validator: lastNameValidator,
-            keyboardType: TextInputType.name,
+            keyboardType: TextInputType.text,
             decoration: const InputDecoration(
               labelText: constants.Strings.lastNameFieldLabel,
               hintText: constants.Strings.lastNameFieldHint,
