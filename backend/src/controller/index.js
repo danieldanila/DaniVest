@@ -6,6 +6,7 @@ import TransactionController from "./transaction.controller.js";
 import FriendController from "./friend.controller.js";
 import ConversationController from "./conversation.controller.js";
 import KeyPressEventController from "./keyPressEvent.controller.js";
+import OneFingerTouchEventController from "./oneFingerTouchEvent.controller.js";
 
 export {
     DatabaseController,
@@ -15,5 +16,6 @@ export {
     TransactionController,
     FriendController,
     ConversationController,
-    KeyPressEventController
+    KeyPressEventController,
+    OneFingerTouchEventController
 };
