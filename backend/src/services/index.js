@@ -7,6 +7,7 @@ import FriendService from "./friend.service.js";
 import ConversationService from "./conversation.service.js";
 import KeyPressEventService from "./keyPressEvent.service.js";
 import OneFingerTouchEventService from "./oneFingerTouchEvent.service.js";
+import TouchEventService from "./touchEvent.service.js";
 
 export {
     DatabaseService,
@@ -17,5 +18,6 @@ export {
     FriendService,
     ConversationService,
     KeyPressEventService,
-    OneFingerTouchEventService
+    OneFingerTouchEventService,
+    TouchEventService
 }

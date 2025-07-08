@@ -9,6 +9,7 @@ import FriendRouter from "./friend.route.js";
 import ConversationRouter from "./conversation.route.js";
 import KeyPressEventRouter from "./keyPressEvent.route.js";
 import OneFingerTouchEventRouter from "./oneFingerTouchEvent.route.js";
+import TouchEventRouter from "./touchEvent.route.js";
 
 const router = express.Router();
 
@@ -22,6 +23,7 @@ router.use("/transaction", TransactionRouter);
 router.use("/friend", FriendRouter);
 router.use("/conversation", ConversationRouter);
 router.use("/keypressevent", KeyPressEventRouter);
-router.use("/onefingertouchevent", OneFingerTouchEventRouter)
+router.use("/onefingertouchevent", OneFingerTouchEventRouter);
+router.use("/touchevent", TouchEventRouter);
 
 export default router;

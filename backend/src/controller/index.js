@@ -7,6 +7,7 @@ import FriendController from "./friend.controller.js";
 import ConversationController from "./conversation.controller.js";
 import KeyPressEventController from "./keyPressEvent.controller.js";
 import OneFingerTouchEventController from "./oneFingerTouchEvent.controller.js";
+import TouchEventController from "./touchEvent.controller.js";
 
 export {
     DatabaseController,
@@ -17,5 +18,6 @@ export {
     FriendController,
     ConversationController,
     KeyPressEventController,
-    OneFingerTouchEventController
+    OneFingerTouchEventController,
+    TouchEventController
 };

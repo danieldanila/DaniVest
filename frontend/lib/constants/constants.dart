@@ -203,9 +203,10 @@ class Strings {
   static const String resetPasswordPath = "/api/auth/resetPassword";
   static const String updateMyPasswordPath = "/api/auth/updateMyPassword";
   static const String updateMyPasscodePath = "/api/auth/updateMyPasscode";
-  static const String createKeyPressEvent = "/api/keypressevent/create";
-  static const String createOneFingerTouchEvent =
+  static const String createKeyPressEventPath = "/api/keypressevent/create";
+  static const String createOneFingerTouchEventPath =
       "/api/onefingertouchevent/create";
+  static const String createTouchEventPath = "/api/touchevent/create";
 
   // Standard response field names
   static const String responseMessageFieldName = "message";

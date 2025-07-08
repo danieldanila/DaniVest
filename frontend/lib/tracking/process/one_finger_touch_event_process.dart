@@ -119,7 +119,7 @@ Future<void> handleOneFingerTouchEvent(
   }
 }
 
-void flushOneFingerTouchEventBufferToDatabase(
+Future<void> flushOneFingerTouchEventBufferToDatabase(
   List<OneFingerTouchEvent> events,
 ) async {
   for (final event in events) {

@@ -5,6 +5,7 @@ import 'package:frontend/models/custom_response.dart';
 import 'package:frontend/constants/constants.dart' as constants;
 import 'package:frontend/models/key_press_event.dart';
 import 'package:frontend/models/one_finger_touch_event.dart';
+import 'package:frontend/models/touch_event.dart';
 
 class TrackingEventsService {
   final Dio _dio;
@@ -16,7 +17,7 @@ class TrackingEventsService {
   ) async {
     try {
       final response = await _dio.post(
-        constants.Strings.createKeyPressEvent,
+        constants.Strings.createKeyPressEventPath,
         data: jsonEncode(keyPressEvent),
       );
 
@@ -45,7 +46,7 @@ class TrackingEventsService {
   ) async {
     try {
       final response = await _dio.post(
-        constants.Strings.createOneFingerTouchEvent,
+        constants.Strings.createOneFingerTouchEventPath,
         data: jsonEncode(oneFingerTouchEvent),
       );
 
@@ -69,6 +70,33 @@ class TrackingEventsService {
         success: false,
         message: "OneFingerTouchEvent error: $e",
       );
+    }
+  }
+
+  Future<CustomResponse> createTouchEvent(TouchEvent touchEvent) async {
+    try {
+      final response = await _dio.post(
+        constants.Strings.createTouchEventPath,
+        data: jsonEncode(touchEvent),
+      );
+
+      final responseBodyJson = response.data;
+
+      if (response.statusCode == 201) {
+        return CustomResponse(
+          success: true,
+          data: responseBodyJson,
+          message: responseBodyJson[constants.Strings.responseMessageFieldName],
+        );
+      }
+
+      return CustomResponse(
+        success: false,
+        message:
+            responseBodyJson[constants.Strings.responseMessageFieldName][0],
+      );
+    } catch (e) {
+      return CustomResponse(success: false, message: "TouchEvent error: $e");
     }
   }
 }

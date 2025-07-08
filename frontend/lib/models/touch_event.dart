@@ -1,11 +1,11 @@
-class OneFingerTouchEvent {
-  const OneFingerTouchEvent({
+class TouchEvent {
+  const TouchEvent({
     required this.SYSTIME,
-    required this.PRESSTIME,
+    required this.EVENTTIME,
     required this.ACTIVITYID,
-    required this.TAPID,
-    required this.TAP_TYPE,
-    required this.ACTION_TYPE,
+    required this.POINTER_COUNT,
+    required this.POINTERID,
+    required this.ACTIONID,
     required this.X,
     required this.Y,
     required this.CONTACT_SIZE,
@@ -13,23 +13,23 @@ class OneFingerTouchEvent {
   });
 
   final int SYSTIME;
-  final int PRESSTIME;
+  final int EVENTTIME;
   final int ACTIVITYID;
-  final int TAPID;
-  final int TAP_TYPE;
-  final int ACTION_TYPE;
+  final int POINTER_COUNT;
+  final int POINTERID;
+  final int ACTIONID;
   final double X;
   final double Y;
   final double CONTACT_SIZE;
   final int PHONE_ORIENTATION;
 
-  OneFingerTouchEvent.fromJson(Map<String, dynamic> json)
+  TouchEvent.fromJson(Map<String, dynamic> json)
     : SYSTIME = json["SYSTIME"] as int,
-      PRESSTIME = json["PRESSTIME"] as int,
+      EVENTTIME = json["EVENTTIME"] as int,
       ACTIVITYID = json["ACTIVITYID"] as int,
-      TAPID = json["TAPID"] as int,
-      TAP_TYPE = json["TAP_TYPE"] as int,
-      ACTION_TYPE = json["ACTION_TYPE"] as int,
+      POINTER_COUNT = json["POINTER_COUNT"] as int,
+      POINTERID = json["POINTERID"] as int,
+      ACTIONID = json["ACTIONID"] as int,
       X = json["X"] as double,
       Y = json["Y"] as double,
       CONTACT_SIZE = json["CONTACT_SIZE"] as double,
@@ -37,36 +37,36 @@ class OneFingerTouchEvent {
 
   Map<String, dynamic> toJson() => {
     "SYSTIME": SYSTIME,
-    "PRESSTIME": PRESSTIME,
+    "EVENTTIME": EVENTTIME,
     "ACTIVITYID": ACTIVITYID,
-    "TAPID": TAPID,
-    "TAP_TYPE": TAP_TYPE,
-    "ACTION_TYPE": ACTION_TYPE,
+    "POINTER_COUNT": POINTER_COUNT,
+    "POINTERID": POINTERID,
+    "ACTIONID": ACTIONID,
     "X": X,
     "Y": Y,
     "CONTACT_SIZE": CONTACT_SIZE,
     "PHONE_ORIENTATION": PHONE_ORIENTATION,
   };
 
-  OneFingerTouchEvent copyWith({
+  TouchEvent copyWith({
     int? SYSTIME,
-    int? PRESSTIME,
+    int? EVENTTIME,
     int? ACTIVITYID,
-    int? TAPID,
-    int? TAP_TYPE,
-    int? ACTION_TYPE,
+    int? POINTER_COUNT,
+    int? POINTERID,
+    int? ACTIONID,
     double? X,
     double? Y,
     double? CONTACT_SIZE,
     int? PHONE_ORIENTATION,
   }) {
-    return OneFingerTouchEvent(
+    return TouchEvent(
       SYSTIME: SYSTIME ?? this.SYSTIME,
-      PRESSTIME: PRESSTIME ?? this.PRESSTIME,
+      EVENTTIME: EVENTTIME ?? this.EVENTTIME,
       ACTIVITYID: ACTIVITYID ?? this.ACTIVITYID,
-      TAPID: TAPID ?? this.TAPID,
-      TAP_TYPE: TAP_TYPE ?? this.TAP_TYPE,
-      ACTION_TYPE: ACTION_TYPE ?? this.ACTION_TYPE,
+      POINTER_COUNT: POINTER_COUNT ?? this.POINTER_COUNT,
+      POINTERID: POINTERID ?? this.POINTERID,
+      ACTIONID: ACTIONID ?? this.ACTIONID,
       X: X ?? this.X,
       Y: Y ?? this.Y,
       CONTACT_SIZE: CONTACT_SIZE ?? this.CONTACT_SIZE,
