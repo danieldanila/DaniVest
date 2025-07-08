@@ -20,25 +20,23 @@ class TrackingTextController extends TextEditingController {
 
   bool _globalHandleKeyEvent(KeyEvent event) {
     if (event is KeyDownEvent) {
-      final keyName = event.logicalKey.debugName ?? 'Unknown Key';
-      final keyId = event.logicalKey.keyId ?? 'Unknown Key Id';
+      final keyName = event.logicalKey.debugName ?? "Unknown Key";
+      final keyId = event.logicalKey.keyId;
 
       TrackingService.instance.logKeyEvent(
         keyId: keyId,
         keyName: keyName,
-        eventType: 'down',
+        eventType: "down",
       );
-      print("Global Key Down: $keyName"); // For debugging
     } else if (event is KeyUpEvent) {
-      final keyName = event.logicalKey.debugName ?? 'Unknown Key';
-      final keyId = event.logicalKey.keyId ?? 'Unknown Key Id';
+      final keyName = event.logicalKey.debugName ?? "Unknown Key";
+      final keyId = event.logicalKey.keyId;
 
       TrackingService.instance.logKeyEvent(
         keyId: keyId,
         keyName: keyName,
-        eventType: 'up',
+        eventType: "up",
       );
-      print("Global Key Up: $keyName"); // For debugging
     }
 
     return false;

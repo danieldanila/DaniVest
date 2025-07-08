@@ -4,6 +4,7 @@ import 'package:frontend/provider/auth_provider.dart';
 import 'package:frontend/screens/start.dart';
 import 'package:frontend/constants/constants.dart' as constants;
 import 'package:frontend/tracking/app_tracker.dart';
+import 'package:frontend/tracking/session_tracker.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -15,6 +16,9 @@ void main() async {
   await authProvider.tryAutoLogin();
 
   print("App started at: ${constants.Properties.appStartEpochMillis}");
+
+  int sessionNumber = await SessionTracker.incrementSessionCount();
+  print("User session #: $sessionNumber");
 
   runApp(
     AppTracker(

@@ -1,8 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend/di/service_locator.dart';
 import 'package:frontend/models/key_press_event.dart';
 import 'package:frontend/services/tracking_events_service.dart';
 import 'package:frontend/constants/constants.dart' as constants;
+import 'package:frontend/tracking/session_counter_manager.dart';
+import 'package:frontend/utilities/tracking/tracking_utils.dart';
 
 class TrackingService {
   static final TrackingService instance = TrackingService._();
@@ -42,26 +45,29 @@ class TrackingService {
   }
 
   void logKeyEvent({
-    required keyId,
+    required int keyId,
     required String keyName,
     required String eventType,
-  }) {
+  }) async {
     int epochMillis = DateTime.now().millisecondsSinceEpoch;
     int pressType = eventType == "down" ? 0 : 1;
+    int phoneOrientation = await getNativeDeviceOrientation();
+    int activityId = await getActivityId("key");
+
+    if (pressType == 1) {
+      SessionCounterManager.increment("key");
+    }
 
     final keyPressEventData = KeyPressEvent(
       SYSTIME: epochMillis,
       PRESSTIME: epochMillis - constants.Properties.appStartEpochMillis,
-      ACTIVITYID: 270701,
+      ACTIVITYID: activityId,
       PRESSTYPE: pressType,
       KEYID: keyId,
-      PHONE_ORIENTATION: 0,
+      PHONE_ORIENTATION: phoneOrientation,
     );
-    handleKeyPressEvent(keyPressEventData);
+    await handleKeyPressEvent(keyPressEventData);
 
-    print(
-      'Raw Key Event - Type: $eventType, Key Name: $keyName, Key Id: $keyId',
-    );
-    // Implement your actual raw key event logging logic here
+    print("Key Event - Type: $eventType, Key Name: $keyName, Key Id: $keyId");
   }
 }

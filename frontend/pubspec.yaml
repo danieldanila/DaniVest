@@ -43,6 +43,9 @@ dependencies:
   app_links: ^6.4.0
   intl: ^0.20.2
   share_plus: ^11.0.0
+  crypto: ^3.0.6
+  native_device_orientation: ^2.0.3
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:
