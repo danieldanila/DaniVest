@@ -207,6 +207,8 @@ class Strings {
   static const String createOneFingerTouchEventPath =
       "/api/onefingertouchevent/create";
   static const String createTouchEventPath = "/api/touchevent/create";
+  static const String createScrollEventPath = "/api/scrollevent/create";
+  static const String createStrokeEventPath = "/api/strokeevent/create";
 
   // Standard response field names
   static const String responseMessageFieldName = "message";

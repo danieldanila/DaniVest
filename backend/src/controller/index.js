@@ -8,6 +8,8 @@ import ConversationController from "./conversation.controller.js";
 import KeyPressEventController from "./keyPressEvent.controller.js";
 import OneFingerTouchEventController from "./oneFingerTouchEvent.controller.js";
 import TouchEventController from "./touchEvent.controller.js";
+import ScrollEventController from "./scrollEvent.controller.js";
+import StrokeEventController from "./strokeEvent.controller.js";
 
 export {
     DatabaseController,
@@ -19,5 +21,7 @@ export {
     ConversationController,
     KeyPressEventController,
     OneFingerTouchEventController,
-    TouchEventController
+    TouchEventController,
+    ScrollEventController,
+    StrokeEventController
 };

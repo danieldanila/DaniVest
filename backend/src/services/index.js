@@ -8,6 +8,8 @@ import ConversationService from "./conversation.service.js";
 import KeyPressEventService from "./keyPressEvent.service.js";
 import OneFingerTouchEventService from "./oneFingerTouchEvent.service.js";
 import TouchEventService from "./touchEvent.service.js";
+import ScrollEventService from "./scrollEvent.service.js";
+import StrokeEventService from "./strokeEvent.service.js";
 
 export {
     DatabaseService,
@@ -19,5 +21,7 @@ export {
     ConversationService,
     KeyPressEventService,
     OneFingerTouchEventService,
-    TouchEventService
+    TouchEventService,
+    ScrollEventService,
+    StrokeEventService
 }

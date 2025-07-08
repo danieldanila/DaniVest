@@ -10,6 +10,8 @@ import ConversationRouter from "./conversation.route.js";
 import KeyPressEventRouter from "./keyPressEvent.route.js";
 import OneFingerTouchEventRouter from "./oneFingerTouchEvent.route.js";
 import TouchEventRouter from "./touchEvent.route.js";
+import ScrollEventRouter from "./scrollEvent.route.js";
+import StrokeEventRouter from "./strokeEvent.route.js";
 
 const router = express.Router();
 
@@ -25,5 +27,7 @@ router.use("/conversation", ConversationRouter);
 router.use("/keypressevent", KeyPressEventRouter);
 router.use("/onefingertouchevent", OneFingerTouchEventRouter);
 router.use("/touchevent", TouchEventRouter);
+router.use("/scrollevent", ScrollEventRouter);
+router.use("/strokevent", StrokeEventRouter);
 
 export default router;

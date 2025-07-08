@@ -7,7 +7,9 @@ import Friend from "./friend.model.js";
 import Conversation from "./conversation.model.js";
 import KeyPressEvent from "./keyPressEvent.model.js";
 import OneFingerTouchEvent from "./oneFingerTouchEvent.model.js";
-import TouchEvent from "./touchEvent.model.js";;
+import TouchEvent from "./touchEvent.model.js";
+import ScrollEvent from "./scrollEvent.model.js";
+import StrokeEvent from "./strokeEvent.model.js";
 
 User.hasMany(BankAccount, {
     foreignKey: {
@@ -199,5 +201,7 @@ export {
     KeyPressEvent,
     OneFingerTouchEvent,
     TouchEvent,
+    ScrollEvent,
+    StrokeEvent,
     database,
 }
