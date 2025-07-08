@@ -14,6 +14,8 @@ void main() async {
   final authProvider = AuthProvider();
   await authProvider.tryAutoLogin();
 
+  print("App started at: ${constants.Properties.appStartEpochMillis}");
+
   runApp(
     AppTracker(
       child: MultiProvider(

@@ -1,8 +1,8 @@
-import Database from "../configs/database.config.js";
+import database from "../configs/database.config.js";
 import DataTypes from "sequelize";
 import bcrypt from "bcrypt"
 
-const User = Database.define("User", {
+const User = database.bankApplicationDatabase.define("User", {
     id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,

@@ -1,8 +1,8 @@
 import DataTypes from "sequelize";
-import Database from "../configs/database.config.js";
+import database from "../configs/database.config.js";
 import User from "./user.model.js";
 
-const Conversation = Database.define("Conversation", {
+const Conversation = database.bankApplicationDatabase.define("Conversation", {
     id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,

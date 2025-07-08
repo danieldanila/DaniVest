@@ -1,7 +1,7 @@
-import Database from "../configs/database.config.js";
+import database from "../configs/database.config.js";
 import DataTypes from "sequelize";
 
-const Transaction = Database.define("Transaction", {
+const Transaction = database.bankApplicationDatabase.define("Transaction", {
     id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,

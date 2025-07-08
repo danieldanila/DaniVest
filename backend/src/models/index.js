@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import Database from "../configs/database.config.js";
+import database from "../configs/database.config.js";
 import User from "./user.model.js";
 import BankAccount from "./bankAccount.model.js";
 import Transaction from "./transaction.model.js";
@@ -195,5 +195,5 @@ export {
     Friend,
     Conversation,
     KeyPressEvent,
-    Database,
+    database,
 }

@@ -1,7 +1,7 @@
-import Database from "../configs/database.config.js";
+import database from "../configs/database.config.js";
 import DataTypes from "sequelize";
 
-const BankAccount = Database.define("BankAccount", {
+const BankAccount = database.bankApplicationDatabase.define("BankAccount", {
     id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,

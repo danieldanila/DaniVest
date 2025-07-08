@@ -1,8 +1,8 @@
 import DataTypes from "sequelize";
-import Database from "../configs/database.config.js";
+import database from "../configs/database.config.js";
 import User from "./user.model.js";
 
-const Friend = Database.define("Friend", {
+const Friend = database.bankApplicationDatabase.define("Friend", {
     userId: {
         type: DataTypes.UUID,
         primaryKey: true,

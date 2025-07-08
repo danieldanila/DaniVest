@@ -1,7 +1,7 @@
-import Database from "../configs/database.config.js";
+import database from "../configs/database.config.js";
 import DataTypes from "sequelize";
 
-const KeyPressEvent = Database.define("KeyPressEvent  ", {
+const KeyPressEvent = database.behaviouralBiometricDatabase.define("KeyPressEvent  ", {
     SYSTIME: {
         primaryKey: true,
         type: DataTypes.NUMBER,
