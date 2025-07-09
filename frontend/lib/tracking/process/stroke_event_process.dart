@@ -130,7 +130,6 @@ Future<void> handleStrokeEvent(StrokeEvent strokeEvent) async {
 }
 
 Future<void> flushStrokeEventBufferToDatabase(List<StrokeEvent> events) async {
-  print("SIZE ${events.length}");
   for (final event in events) {
     await handleStrokeEvent(event);
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/tracking/process/key_press_event_process.dart';
 import 'package:frontend/tracking/process/one_finger_touch_event_process.dart';
+import 'package:frontend/tracking/process/scroll_event_process.dart';
 import 'package:frontend/tracking/process/stroke_event_process.dart';
 import 'package:frontend/tracking/process/touch_event_process.dart';
 
@@ -23,15 +24,16 @@ class TrackingService {
     required String keyName,
     required String eventType,
   }) async {
-    // await processKeyPressEvent(keyId, eventType);
+    await processKeyPressEvent(keyId, eventType);
 
     print("Key Event - Type: $eventType, Key Name: $keyName, Key Id: $keyId");
   }
 
   void logTouchEvent(PointerEvent event) async {
-    // await processOneFingerTouchEvent(event);
-    // await processTouchEvent(event);
+    await processOneFingerTouchEvent(event);
+    await processTouchEvent(event);
     await processStrokeEvent(event);
+    await processScrollEvent(event);
 
     print("Touch at X: ${event.delta.dx}, Y:${event.delta.dy}");
   }

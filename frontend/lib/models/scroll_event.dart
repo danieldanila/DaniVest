@@ -24,11 +24,11 @@ class ScrollEvent {
   final double START_X;
   final double START_Y;
   final double START_SIZE;
-  final double CURRENT_X;
-  final double CURRENT_Y;
-  final double CURRENT_SIZE;
-  final double DISTANCE_X;
-  final double DISTANCE_Y;
+  final double? CURRENT_X;
+  final double? CURRENT_Y;
+  final double? CURRENT_SIZE;
+  final double? DISTANCE_X;
+  final double? DISTANCE_Y;
   final int PHONE_ORIENTATION;
 
   ScrollEvent.fromJson(Map<String, dynamic> json)
@@ -40,11 +40,11 @@ class ScrollEvent {
       START_X = json["START_X"] as double,
       START_Y = json["START_Y"] as double,
       START_SIZE = json["START_SIZE"] as double,
-      CURRENT_X = json["CURRENT_X"] as double,
-      CURRENT_Y = json["CURRENT_Y"] as double,
-      CURRENT_SIZE = json["CURRENT_SIZE"] as double,
-      DISTANCE_X = json["DISTANCE_X"] as double,
-      DISTANCE_Y = json["DISTANCE_Y"] as double,
+      CURRENT_X = json["CURRENT_X"] as double?,
+      CURRENT_Y = json["CURRENT_Y"] as double?,
+      CURRENT_SIZE = json["CURRENT_SIZE"] as double?,
+      DISTANCE_X = json["DISTANCE_X"] as double?,
+      DISTANCE_Y = json["DISTANCE_Y"] as double?,
       PHONE_ORIENTATION = json["PHONE_ORIENTATION"] as int;
 
   Map<String, dynamic> toJson() => {
