@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:frontend/constants/constants.dart' as constants;
@@ -13,6 +14,7 @@ enum TapState { idle, waitingSecondTap, inDoubleTap }
 List<OneFingerTouchEvent> _oneFingerTouchEventBuffer = [];
 
 TapState _tapState = TapState.idle;
+Timer? _touchInactivityFlushTimer;
 int _firstTapDownTime = 0;
 
 Future<void> processOneFingerTouchEvent(PointerEvent event) async {
@@ -26,7 +28,7 @@ Future<void> processOneFingerTouchEvent(PointerEvent event) async {
   switch (_tapState) {
     case TapState.idle:
       if (isDown) {
-        _oneFingerTouchEventBuffer = [tapEvent.copyWith(TAP_TYPE: 0)];
+        _oneFingerTouchEventBuffer.add(tapEvent.copyWith(TAP_TYPE: 0));
         _firstTapDownTime = now;
         _tapState = TapState.waitingSecondTap;
       }
@@ -38,18 +40,17 @@ Future<void> processOneFingerTouchEvent(PointerEvent event) async {
 
         Future.delayed(const Duration(milliseconds: 320), () {
           if (_tapState == TapState.waitingSecondTap) {
-            flushOneFingerTouchEventBufferToDatabase(
-              _oneFingerTouchEventBuffer,
-            );
             _tapState = TapState.idle;
           }
         });
         SessionCounterManager.increment("onefinger");
       } else if (isDown && (now - _firstTapDownTime <= 300)) {
-        for (int i = 0; i < _oneFingerTouchEventBuffer.length; i++) {
+        bool edited = false;
+        for (int i = _oneFingerTouchEventBuffer.length - 1; i >= 0; i--) {
           final e = _oneFingerTouchEventBuffer[i];
-          if (e.ACTION_TYPE == 0) {
+          if (e.ACTION_TYPE == 0 && !edited) {
             _oneFingerTouchEventBuffer[i] = e.copyWith(TAP_TYPE: 2);
+            edited = true;
           }
         }
         _oneFingerTouchEventBuffer.add(tapEvent.copyWith(TAP_TYPE: 3));
@@ -62,12 +63,17 @@ Future<void> processOneFingerTouchEvent(PointerEvent event) async {
         _oneFingerTouchEventBuffer.add(tapEvent.copyWith(TAP_TYPE: 3));
       } else if (isUp) {
         _oneFingerTouchEventBuffer.add(tapEvent.copyWith(TAP_TYPE: 3));
-        flushOneFingerTouchEventBufferToDatabase(_oneFingerTouchEventBuffer);
         _tapState = TapState.idle;
         SessionCounterManager.increment("onefinger");
       }
       break;
   }
+
+  _touchInactivityFlushTimer?.cancel();
+  _touchInactivityFlushTimer = Timer(const Duration(seconds: 10), () {
+    flushOneFingerTouchEventBufferToDatabase(_oneFingerTouchEventBuffer);
+    SessionCounterManager.increment("activity_id_onefinger");
+  });
 }
 
 Future<OneFingerTouchEvent> createTouchEvent(PointerEvent event) async {
@@ -77,7 +83,7 @@ Future<OneFingerTouchEvent> createTouchEvent(PointerEvent event) async {
   double y = coordinates.dy;
   double contactArea = pi * event.radiusMajor * event.radiusMinor / 100;
   int phoneOrientation = await getNativeDeviceOrientation();
-  int activityId = await getActivityId("onefinger");
+  int activityId = await getActivityId("activity_id_onefinger");
   int tapId = SessionCounterManager.get("onefinger");
 
   int actionType;

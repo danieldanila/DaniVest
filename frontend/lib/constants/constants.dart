@@ -179,7 +179,7 @@ class Strings {
 
   // Back-end server details
   static const String backendScheme = "http";
-  static const String backendHost = "192.168.1.33";
+  static const String backendHost = "192.168.1.34";
   static const String backendPort = "3000";
   static const String backendURL = "$backendScheme://$backendHost:$backendPort";
 

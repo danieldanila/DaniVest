@@ -22,13 +22,13 @@ class TrackingService {
     required String keyName,
     required String eventType,
   }) async {
-    await processKeyPressEvent(keyId, eventType);
+    // await processKeyPressEvent(keyId, eventType);
 
     print("Key Event - Type: $eventType, Key Name: $keyName, Key Id: $keyId");
   }
 
   void logTouchEvent(PointerEvent event) async {
-    await processOneFingerTouchEvent(event);
+    // await processOneFingerTouchEvent(event);
     await processTouchEvent(event);
 
     print("Touch at X: ${event.delta.dx}, Y:${event.delta.dy}");

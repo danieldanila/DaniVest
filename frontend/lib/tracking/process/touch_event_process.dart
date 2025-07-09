@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:frontend/constants/constants.dart' as constants;
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/di/service_locator.dart';
 import 'package:frontend/models/touch_event.dart';
 import 'package:frontend/services/tracking_events_service.dart';
+import 'package:frontend/tracking/session_counter_manager.dart';
 import 'package:frontend/utilities/tracking/tracking_utils.dart';
 
 enum TapState { idle, waitingSecondTouch, inDoubleTouch }
@@ -12,6 +14,7 @@ enum TapState { idle, waitingSecondTouch, inDoubleTouch }
 List<TouchEvent> _touchEventBuffer = [];
 
 TapState _tapState = TapState.idle;
+Timer? _touchInactivityFlushTimer;
 int _firstTapDownTime = 0;
 Set<int> _activePointers = {};
 
@@ -44,7 +47,7 @@ Future<void> processTouchEvent(PointerEvent event) async {
   switch (_tapState) {
     case TapState.idle:
       if (isDown) {
-        _touchEventBuffer = [tapEvent];
+        _touchEventBuffer.add(tapEvent);
         _firstTapDownTime = now;
         _tapState = TapState.waitingSecondTouch;
       }
@@ -58,20 +61,19 @@ Future<void> processTouchEvent(PointerEvent event) async {
 
         Future.delayed(const Duration(milliseconds: 320), () {
           if (_tapState == TapState.waitingSecondTouch) {
-            flushTouchEventBufferToDatabase(_touchEventBuffer);
             _tapState = TapState.idle;
           }
         });
       } else if (isDown && (now - _firstTapDownTime <= 300)) {
         // Because of how HMOG dataset is (most likely a bug)
-        bool edited = false;
-        for (int i = _touchEventBuffer.length - 1; i >= 0; i--) {
-          final e = _touchEventBuffer[i];
-          if (e.ACTIONID == 2 && !edited) {
-            _touchEventBuffer[i] = e.copyWith(POINTER_COUNT: 2, ACTIONID: 0);
-            edited = true;
-          }
+        final previousTouchEvent =
+            _touchEventBuffer[_touchEventBuffer.length - 1];
+
+        if (previousTouchEvent.ACTIONID == 2) {
+          _touchEventBuffer[_touchEventBuffer.length - 1] = previousTouchEvent
+              .copyWith(POINTER_COUNT: 2, ACTIONID: 0);
         }
+
         _touchEventBuffer.add(tapEvent);
         _tapState = TapState.inDoubleTouch;
       }
@@ -91,13 +93,18 @@ Future<void> processTouchEvent(PointerEvent event) async {
           );
           _touchEventBuffer.add(finalTouchEvent);
 
-          flushTouchEventBufferToDatabase(_touchEventBuffer);
           _tapState = TapState.idle;
         }
       }
       break;
   }
   if (isUp) _activePointers.remove(pointer);
+
+  _touchInactivityFlushTimer?.cancel();
+  _touchInactivityFlushTimer = Timer(const Duration(seconds: 10), () {
+    flushTouchEventBufferToDatabase(_touchEventBuffer);
+    SessionCounterManager.increment("activity_id_touch");
+  });
 }
 
 Future<TouchEvent> createTouchEvent(PointerEvent event) async {
@@ -107,7 +114,7 @@ Future<TouchEvent> createTouchEvent(PointerEvent event) async {
   double y = coordinates.dy;
   double contactArea = pi * event.radiusMajor * event.radiusMinor / 100;
   int phoneOrientation = await getNativeDeviceOrientation();
-  int activityId = await getActivityId("touch");
+  int activityId = await getActivityId("activity_id_touch");
 
   int actiondId;
   if (event is PointerDownEvent) {
@@ -147,8 +154,11 @@ Future<void> handleTouchEvent(TouchEvent touchEvent) async {
 }
 
 Future<void> flushTouchEventBufferToDatabase(List<TouchEvent> events) async {
-  for (final event in events) {
+  final List<TouchEvent> eventsCopy = List.from(events);
+
+  for (final event in eventsCopy) {
     await handleTouchEvent(event);
   }
+
   _touchEventBuffer.clear();
 }
