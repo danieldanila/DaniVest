@@ -15,8 +15,8 @@ class TouchEvent {
   final int SYSTIME;
   final int EVENTTIME;
   final int ACTIVITYID;
-  final int POINTER_COUNT;
-  final int POINTERID;
+  final int? POINTER_COUNT;
+  final int? POINTERID;
   final int ACTIONID;
   final double X;
   final double Y;
@@ -27,8 +27,8 @@ class TouchEvent {
     : SYSTIME = json["SYSTIME"] as int,
       EVENTTIME = json["EVENTTIME"] as int,
       ACTIVITYID = json["ACTIVITYID"] as int,
-      POINTER_COUNT = json["POINTER_COUNT"] as int,
-      POINTERID = json["POINTERID"] as int,
+      POINTER_COUNT = json["POINTER_COUNT"] as int?,
+      POINTERID = json["POINTERID"] as int?,
       ACTIONID = json["ACTIONID"] as int,
       X = json["X"] as double,
       Y = json["Y"] as double,

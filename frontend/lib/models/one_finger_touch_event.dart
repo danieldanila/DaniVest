@@ -16,7 +16,7 @@ class OneFingerTouchEvent {
   final int PRESSTIME;
   final int ACTIVITYID;
   final int TAPID;
-  final int TAP_TYPE;
+  final int? TAP_TYPE;
   final int ACTION_TYPE;
   final double X;
   final double Y;
@@ -28,7 +28,7 @@ class OneFingerTouchEvent {
       PRESSTIME = json["PRESSTIME"] as int,
       ACTIVITYID = json["ACTIVITYID"] as int,
       TAPID = json["TAPID"] as int,
-      TAP_TYPE = json["TAP_TYPE"] as int,
+      TAP_TYPE = json["TAP_TYPE"] as int?,
       ACTION_TYPE = json["ACTION_TYPE"] as int,
       X = json["X"] as double,
       Y = json["Y"] as double,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/tracking/process/key_press_event_process.dart';
 import 'package:frontend/tracking/process/one_finger_touch_event_process.dart';
+import 'package:frontend/tracking/process/stroke_event_process.dart';
 import 'package:frontend/tracking/process/touch_event_process.dart';
 
 class TrackingService {
@@ -29,7 +30,8 @@ class TrackingService {
 
   void logTouchEvent(PointerEvent event) async {
     // await processOneFingerTouchEvent(event);
-    await processTouchEvent(event);
+    // await processTouchEvent(event);
+    await processStrokeEvent(event);
 
     print("Touch at X: ${event.delta.dx}, Y:${event.delta.dy}");
   }

@@ -17,31 +17,31 @@ class StrokeEvent {
 
   final int SYSTIME;
   final int BEGIN_TIME;
-  final int END_TIME;
+  final int? END_TIME;
   final int ACTIVITYID;
   final double START_X;
   final double START_Y;
   final double START_SIZE;
-  final double END_X;
-  final double END_Y;
-  final double END_SIZE;
-  final double SPEED_X;
-  final double SPEED_Y;
+  final double? END_X;
+  final double? END_Y;
+  final double? END_SIZE;
+  final double? SPEED_X;
+  final double? SPEED_Y;
   final int PHONE_ORIENTATION;
 
   StrokeEvent.fromJson(Map<String, dynamic> json)
     : SYSTIME = json["SYSTIME"] as int,
       BEGIN_TIME = json["BEGIN_TIME"] as int,
-      END_TIME = json["END_TIME"] as int,
+      END_TIME = json["END_TIME"] as int?,
       ACTIVITYID = json["ACTIVITYID"] as int,
       START_X = json["START_X"] as double,
       START_Y = json["START_Y"] as double,
       START_SIZE = json["START_SIZE"] as double,
-      END_X = json["END_X"] as double,
+      END_X = json["END_X"] as double?,
       END_Y = json["END_Y"] as double,
-      END_SIZE = json["END_SIZE"] as double,
-      SPEED_X = json["SPEED_X"] as double,
-      SPEED_Y = json["SPEED_Y"] as double,
+      END_SIZE = json["END_SIZE"] as double?,
+      SPEED_X = json["SPEED_X"] as double?,
+      SPEED_Y = json["SPEED_Y"] as double?,
       PHONE_ORIENTATION = json["PHONE_ORIENTATION"] as int;
 
   Map<String, dynamic> toJson() => {

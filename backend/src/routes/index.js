@@ -28,6 +28,6 @@ router.use("/keypressevent", KeyPressEventRouter);
 router.use("/onefingertouchevent", OneFingerTouchEventRouter);
 router.use("/touchevent", TouchEventRouter);
 router.use("/scrollevent", ScrollEventRouter);
-router.use("/strokevent", StrokeEventRouter);
+router.use("/strokeevent", StrokeEventRouter);
 
 export default router;

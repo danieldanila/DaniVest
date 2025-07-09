@@ -102,7 +102,7 @@ Future<OneFingerTouchEvent> createTouchEvent(PointerEvent event) async {
     PRESSTIME: epochMillis - constants.Properties.appStartEpochMillis,
     ACTIVITYID: activityId,
     TAPID: tapId,
-    TAP_TYPE: -1,
+    TAP_TYPE: null,
     ACTION_TYPE: actionType,
     X: x,
     Y: y,
