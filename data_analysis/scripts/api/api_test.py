@@ -113,7 +113,7 @@ def background_loop():
         if local_max_ts > current_last_ts:
             update_timestamp(local_max_ts)
 
-        time.sleep(10)
+        time.sleep(3)
 
 
 @asynccontextmanager

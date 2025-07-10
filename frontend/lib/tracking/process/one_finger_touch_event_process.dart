@@ -70,10 +70,13 @@ Future<void> processOneFingerTouchEvent(PointerEvent event) async {
   }
 
   _touchInactivityFlushTimer?.cancel();
-  _touchInactivityFlushTimer = Timer(const Duration(seconds: 10), () {
-    flushOneFingerTouchEventBufferToDatabase(_oneFingerTouchEventBuffer);
-    SessionCounterManager.increment("activity_id_onefinger");
-  });
+  _touchInactivityFlushTimer = Timer(
+    const Duration(seconds: constants.Properties.secondsBeforeSentToDb),
+    () {
+      flushOneFingerTouchEventBufferToDatabase(_oneFingerTouchEventBuffer);
+      SessionCounterManager.increment("activity_id_onefinger");
+    },
+  );
 }
 
 Future<OneFingerTouchEvent> createTouchEvent(PointerEvent event) async {

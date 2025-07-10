@@ -183,6 +183,11 @@ class Strings {
   static const String backendPort = "3000";
   static const String backendURL = "$backendScheme://$backendHost:$backendPort";
 
+  static const String analysisHost = "192.168.1.34"; // or "10.0.2.2"
+  static const analysisPort = "8000";
+  static const String analysisURL =
+      "$backendScheme://$analysisHost:$analysisPort";
+
   // Resources paths
   static const String createUserPath = "/api/user/create";
   static const String getUserBankAccount = "/api/user/:id/bank";
@@ -209,6 +214,8 @@ class Strings {
   static const String createTouchEventPath = "/api/touchevent/create";
   static const String createScrollEventPath = "/api/scrollevent/create";
   static const String createStrokeEventPath = "/api/strokeevent/create";
+
+  static const String latestPredictionsPath = "/latest-predictions";
 
   // Standard response field names
   static const String responseMessageFieldName = "message";
@@ -253,4 +260,5 @@ class Properties {
   static const int myAccountPageIndex = 4;
   static const int timerSeconds = 1;
   static int appStartEpochMillis = DateTime.now().millisecondsSinceEpoch;
+  static const int secondsBeforeSentToDb = 2;
 }

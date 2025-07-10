@@ -17,8 +17,12 @@ def prepare_analysis_data(df, feature_name, csv_file_path, column_name_to_predic
     df["start_timestamps"] = df["start_timestamps"].astype("int64")
 
     # Predicted value will be most likely user_id
-    y = df[column_name_to_predict]
-    X = df.drop(columns=columns_names_to_drop_array)
+    class_counts =df[column_name_to_predict].value_counts()
+    valid_classes = class_counts[class_counts >= 5].index
+    df_filtered = df[df[column_name_to_predict].isin(valid_classes)]
+
+    y = df_filtered[column_name_to_predict]
+    X = df_filtered.drop(columns=columns_names_to_drop_array)
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 

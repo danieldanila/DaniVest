@@ -20,10 +20,13 @@ Future<void> processKeyPressEvent(KeyEvent event) async {
   }
 
   _keyInactivityFlushTimer?.cancel();
-  _keyInactivityFlushTimer = Timer(const Duration(seconds: 10), () {
-    flushKeyPressEventBufferToDatabase(_keyPressEventBuffer);
-    SessionCounterManager.increment("activity_id_key");
-  });
+  _keyInactivityFlushTimer = Timer(
+    const Duration(seconds: constants.Properties.secondsBeforeSentToDb),
+    () {
+      flushKeyPressEventBufferToDatabase(_keyPressEventBuffer);
+      SessionCounterManager.increment("activity_id_key");
+    },
+  );
 }
 
 Future<KeyPressEvent> createKeyPressEvent(KeyEvent event) async {

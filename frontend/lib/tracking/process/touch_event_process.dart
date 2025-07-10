@@ -101,10 +101,13 @@ Future<void> processTouchEvent(PointerEvent event) async {
   if (isUp) _activePointers.remove(pointer);
 
   _touchInactivityFlushTimer?.cancel();
-  _touchInactivityFlushTimer = Timer(const Duration(seconds: 10), () {
-    flushTouchEventBufferToDatabase(_touchEventBuffer);
-    SessionCounterManager.increment("activity_id_touch");
-  });
+  _touchInactivityFlushTimer = Timer(
+    const Duration(seconds: constants.Properties.secondsBeforeSentToDb),
+    () {
+      flushTouchEventBufferToDatabase(_touchEventBuffer);
+      SessionCounterManager.increment("activity_id_touch");
+    },
+  );
 }
 
 Future<TouchEvent> createTouchEvent(PointerEvent event) async {

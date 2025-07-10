@@ -85,10 +85,13 @@ Future<void> processStrokeEvent(PointerEvent event) async {
   }
 
   _strokeInactivityFlushTimer?.cancel();
-  _strokeInactivityFlushTimer = Timer(const Duration(seconds: 10), () {
-    flushStrokeEventBufferToDatabase(_strokeEventBuffer);
-    SessionCounterManager.increment("activity_id_stroke");
-  });
+  _strokeInactivityFlushTimer = Timer(
+    const Duration(seconds: constants.Properties.secondsBeforeSentToDb),
+    () {
+      flushStrokeEventBufferToDatabase(_strokeEventBuffer);
+      SessionCounterManager.increment("activity_id_stroke");
+    },
+  );
 }
 
 Future<StrokeEvent> createStrokeEvent(PointerEvent event) async {

@@ -58,10 +58,13 @@ Future<void> processScrollEvent(PointerEvent event) async {
   }
 
   _scrollInactivityFlushTimer?.cancel();
-  _scrollInactivityFlushTimer = Timer(const Duration(seconds: 10), () {
-    flushScrollEventBufferToDatabase(_scrollEventBuffer);
-    SessionCounterManager.increment("activity_id_scroll");
-  });
+  _scrollInactivityFlushTimer = Timer(
+    const Duration(seconds: constants.Properties.secondsBeforeSentToDb),
+    () {
+      flushScrollEventBufferToDatabase(_scrollEventBuffer);
+      SessionCounterManager.increment("activity_id_scroll");
+    },
+  );
 }
 
 Future<ScrollEvent> createScrollEvent(PointerEvent event) async {
