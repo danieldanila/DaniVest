@@ -262,6 +262,24 @@ def read_from_database(cursor, table_names):
     return results
 
 
+def read_from_table_after_timestamp(cursor, table_name, timestamp_ms):
+    results = cursor.execute(f"select * from {table_name} where SYSTIME > {timestamp_ms}").fetchall()
+
+    return results
+
+
+def get_last_timestamp(cursor):
+    last_timestamp = cursor.execute("select last_timestamp from ProcessedRows").fetchone()
+
+    return last_timestamp[0]
+
+
+def update_last_timestamp(cursor, new_last_timestamp):
+    current_last_timestamp = get_last_timestamp(cursor)
+    if new_last_timestamp > current_last_timestamp:
+        cursor.execute(f"UPDATE ProcessedRows SET last_timestamp = {new_last_timestamp}")
+
+
 def main():
     with get_database_connection() as connection:
         with connection.cursor() as cursor:

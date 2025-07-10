@@ -2,6 +2,10 @@ from pydantic import BaseModel
 
 
 class TouchEvent(BaseModel):
+    activity_id: int
+    user_id: int
+    session_number: int
+    start_timestamps: int
     scenario: int
     hour_sin: float
     hour_cos: float

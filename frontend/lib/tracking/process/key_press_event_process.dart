@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/constants/constants.dart' as constants;
 import 'package:frontend/di/service_locator.dart';
 import 'package:frontend/models/key_press_event.dart';
@@ -10,13 +12,12 @@ import 'package:frontend/utilities/tracking/tracking_utils.dart';
 List<KeyPressEvent> _keyPressEventBuffer = [];
 Timer? _keyInactivityFlushTimer;
 
-Future<void> processKeyPressEvent(int keyId, String eventType) async {
-  final KeyPressEvent keyPressEvent = await createKeyPressEvent(
-    keyId,
-    eventType,
-  );
+Future<void> processKeyPressEvent(KeyEvent event) async {
+  final KeyPressEvent keyPressEvent = await createKeyPressEvent(event);
 
-  _keyPressEventBuffer.add(keyPressEvent);
+  if (keyPressEvent.PRESSTYPE == 0 || keyPressEvent.PRESSTYPE == 1) {
+    _keyPressEventBuffer.add(keyPressEvent);
+  }
 
   _keyInactivityFlushTimer?.cancel();
   _keyInactivityFlushTimer = Timer(const Duration(seconds: 10), () {
@@ -25,9 +26,14 @@ Future<void> processKeyPressEvent(int keyId, String eventType) async {
   });
 }
 
-Future<KeyPressEvent> createKeyPressEvent(int keyId, String eventType) async {
+Future<KeyPressEvent> createKeyPressEvent(KeyEvent event) async {
   int epochMillis = DateTime.now().millisecondsSinceEpoch;
-  int pressType = eventType == "down" ? 0 : 1;
+  int? pressType;
+  if (event is KeyDownEvent) {
+    pressType = 0;
+  } else if (event is KeyUpEvent) {
+    pressType = 1;
+  }
   int phoneOrientation = await getNativeDeviceOrientation();
   int activityId = await getActivityId("activity_id_key");
 
@@ -36,7 +42,7 @@ Future<KeyPressEvent> createKeyPressEvent(int keyId, String eventType) async {
     PRESSTIME: epochMillis - constants.Properties.appStartEpochMillis,
     ACTIVITYID: activityId,
     PRESSTYPE: pressType,
-    KEYID: keyId,
+    KEYID: event.logicalKey.keyId,
     PHONE_ORIENTATION: phoneOrientation,
   );
 }

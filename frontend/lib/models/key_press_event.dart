@@ -11,7 +11,7 @@ class KeyPressEvent {
   final int SYSTIME;
   final int PRESSTIME;
   final int ACTIVITYID;
-  final int PRESSTYPE;
+  final int? PRESSTYPE;
   final int KEYID;
   final int PHONE_ORIENTATION;
 
@@ -19,7 +19,7 @@ class KeyPressEvent {
     : SYSTIME = json["SYSTIME"] as int,
       PRESSTIME = json["PRESSTIME"] as int,
       ACTIVITYID = json["ACTIVITYID"] as int,
-      PRESSTYPE = json["PRESSTYPE"] as int,
+      PRESSTYPE = json["PRESSTYPE"] as int?,
       KEYID = json["KEYID"] as int,
       PHONE_ORIENTATION = json["PHONE_ORIENTATION"] as int;
 

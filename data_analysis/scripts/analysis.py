@@ -31,22 +31,22 @@ def init():
 
 
 def main():
-    # activity_df, touch_event_df, key_press_event_df, one_finger_touch_event_df, scroll_event_df, stroke_event_df = init()
+    activity_df, touch_event_df, key_press_event_df, one_finger_touch_event_df, scroll_event_df, stroke_event_df = init()
 
-    # key_press_event_features_df = extract_key_press_event_features(key_press_event_df)
-    # key_press_event_features_df.to_csv("..\\data\\features\\key_press_event_features.csv")
+    key_press_event_features_df = extract_key_press_event_features(key_press_event_df)
+    key_press_event_features_df.to_csv("..\\data\\features\\key_press_event_features.csv")
 
-    # one_finger_touch_event_features_df = extract_one_finger_touch_event_features(one_finger_touch_event_df)
-    # one_finger_touch_event_features_df.to_csv("..\\data\\features\\one_finger_touch_event_features.csv")
+    one_finger_touch_event_features_df = extract_one_finger_touch_event_features(one_finger_touch_event_df)
+    one_finger_touch_event_features_df.to_csv("..\\data\\features\\one_finger_touch_event_features.csv")
 
-    # scroll_event_features_df = extract_scroll_event_features(scroll_event_df)
-    # scroll_event_features_df.to_csv("..\\data\\features\\scroll_event_features.csv")
+    scroll_event_features_df = extract_scroll_event_features(scroll_event_df)
+    scroll_event_features_df.to_csv("..\\data\\features\\scroll_event_features.csv")
 
-    # stroke_event_features_df = extract_stroke_event_features(stroke_event_df)
-    # stroke_event_features_df.to_csv("..\\data\\features\\stroke_event_features.csv")
+    stroke_event_features_df = extract_stroke_event_features(stroke_event_df)
+    stroke_event_features_df.to_csv("..\\data\\features\\stroke_event_features.csv")
 
-    # touch_event_features_df = extract_touch_event_features(touch_event_df)
-    # touch_event_features_df.to_csv("..\\data\\features\\touch_event_features.csv")
+    touch_event_features_df = extract_touch_event_features(touch_event_df)
+    touch_event_features_df.to_csv("..\\data\\features\\touch_event_features.csv")
 
     print("===== KeyPressEventAnalysis =====")
     # key_press_event_analysis(None, classifier_name="k-NN")

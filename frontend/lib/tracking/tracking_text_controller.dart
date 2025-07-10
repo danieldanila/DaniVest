@@ -19,25 +19,7 @@ class TrackingTextController extends TextEditingController {
   }
 
   bool _globalHandleKeyEvent(KeyEvent event) {
-    if (event is KeyDownEvent) {
-      final keyName = event.logicalKey.debugName ?? "Unknown Key";
-      final keyId = event.logicalKey.keyId;
-
-      TrackingService.instance.logKeyEvent(
-        keyId: keyId,
-        keyName: keyName,
-        eventType: "down",
-      );
-    } else if (event is KeyUpEvent) {
-      final keyName = event.logicalKey.debugName ?? "Unknown Key";
-      final keyId = event.logicalKey.keyId;
-
-      TrackingService.instance.logKeyEvent(
-        keyId: keyId,
-        keyName: keyName,
-        eventType: "up",
-      );
-    }
+    TrackingService.instance.logKeyEvent(event);
 
     return false;
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/tracking/process/key_press_event_process.dart';
 import 'package:frontend/tracking/process/one_finger_touch_event_process.dart';
 import 'package:frontend/tracking/process/scroll_event_process.dart';
@@ -19,14 +20,18 @@ class TrackingService {
     );
   }
 
-  void logKeyEvent({
-    required int keyId,
-    required String keyName,
-    required String eventType,
-  }) async {
-    await processKeyPressEvent(keyId, eventType);
+  void logKeyEvent(KeyEvent event) async {
+    String? eventType;
+    if (event is KeyDownEvent) {
+      eventType = "down";
+    } else if (event is KeyUpEvent) {
+      eventType = "up";
+    }
+    await processKeyPressEvent(event);
 
-    print("Key Event - Type: $eventType, Key Name: $keyName, Key Id: $keyId");
+    print(
+      "Key Event - Type: $eventType, Key Name: ${event.logicalKey.debugName ?? "Unknown Key"}, Key Id: ${event.logicalKey.keyId}",
+    );
   }
 
   void logTouchEvent(PointerEvent event) async {
